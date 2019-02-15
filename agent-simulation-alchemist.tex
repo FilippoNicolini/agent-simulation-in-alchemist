@@ -218,6 +218,7 @@ In Alchemist un'incarnazione \`e un'istanza concreta del meta-modello appena des
   %label=incarnationYAML,
   %caption={First verbatim}
   %language=Java
+  %escapeinside={(*@}{@*)}
 }
 Il linguaggio da utilizzare per scrivere le simulazioni in Alchemist \`e YAML e quello che il parser del simulatore si aspetta in input \`e una mappa YAML.
 \\
@@ -282,7 +283,7 @@ Il parametro 'in' si definisce la geometria all'interno del quale verranno dispo
 Esempi di classi utilizzabili nel parametro 'in' sono ad esempio Point e Circle.
 La classe Circle necessata di quattro parametri da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
 
-Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene ricevuto alla creazione della reazione e che pu\`o essere passato per instanziare condizioni e azioni).
+Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene ricevuto alla creazione della reazione e che pu\`o essere passato per istanziare condizioni e azioni).
 Un'esempio di displacements \`e il seguente.
 \medskip
 \begin{lstlisting}[firstnumber=last,caption={Disposizione nodi e reazioni associate}]
@@ -321,7 +322,13 @@ I \textbf{\textit{Intentions}} sono piani a cui l'agente ha deciso di lavorare o
 
 Gli \textbf{\textit{Eventi}} innescano le attivit\`a reattive degli agenti il cui risultato pu\`o essere l'aggiornamento dei beliefs, la chiamata ad altri piani o la modifica di goals.
 
-Il ciclo di ragionamento di un agente avviene come descritto in figura \ref{fig:reasoningCicle}.
+
+%++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
+\section{Ciclo di ragionamento}
+Il ciclo di ragionamento, descritto in figura \ref{fig:reasoningCicle}, \`e il modo in cui l'agente prende le sue decisioni e mette in pratica le azioni.
+
+In particolare, questo ciclo di ragionamento descrive quello per gli agenti implementati in Jason.
+
 %crea l'ambiente figura;
 \begin{figure}[h] % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
@@ -331,37 +338,117 @@ Il ciclo di ragionamento di un agente avviene come descritto in figura \ref{fig:
 \end{center}
 \end{figure}
 
-%++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Ciclo di ragionamento}
-RIVEDERE IL PEZZO QUI SOTTO E CONTINUARLO....
+I rettangoli rappresentano lo stato dell'agente. I box arrotondati, i rombi e i cerchi rappresentano le funzioni usate nel ciclo di ragionamento: i primi due identificano funzioni che possono essere personalizzate dal programmatore, mentre i cerchi sono le parti fondamentali dell'interprete che non possono essre modificate. La differenza tra box arrotondati e rombi \`e che la funzione di quest'ultimi \`e di selezione: prendono in input una lista di elementi e la funzione ne sceglie uno.
+
+Il ciclo di ragionamento sar\`a analizzato nei prossimi paragrafi suddividendolo in dieci step. Gli step 1-4 sono quelli che riguardano l'agente per l'aggiornamento dei suoi beliefs relaviti al mondo e agli altri agenti. Gli step 5-10 descrivono la parte principale: uno degli eventi viene selezionato per essere gestito e permettere l'esecuzione di un'intenzione dell'agente.
+
+
+\subsubsection{(1) Percezione dell'ambiente}
+La prima azione effettuata dall'agente all'interno del ciclo di ragionamento \`e la precezione di ci\`o che lo circonda, in modo da poter aggiornare i propri beliefs sullo stato dell'ambiente. L'agente deve utilizzare quindi dei componenti capaci di percepire l'ambiente ed essere interrogati dall'agente.
 \\
+In ambito applicativo l'agente acceder\`a ai dati dei sensori, prodotti da dispositivi del mondo reale, utilizzando le opportune interfacce.
+
+
+\subsubsection{(2) Aggiornamento dei beliefs}
+Ottenuta la lista delle percezioni \`e necessario aggiornare la 'belief base', ovvero l'insieme dei beliefs dell'agente. L'aggiornamento, descritto in figura \ref{fig:reasoningCicle} dall'acronimo 'BUF' (Belief Update Function), avviene nella seguente maniera: ogni percezione che non \`e gi\`a presente nella 'belief base' viene aggiunta e viceversa i beliefs che non sono nell'elenco delle percezioni vengono rimossi.
 \\
+Ognuno dei cambiamenti effettuati nell'aggiunta o rimozione di beliefs produce un evento: quelli generati da percezioni dell'ambiente sono chiaamti \textit{eventi esterni}. Gli \textit{eventi interni} hanno, in pi\`u rispetto agli altri eventi, associata un'intenzione.
+
+
+\subsubsection{(3) Ricezione di comunicazioni da altri agenti}
+Un'altra importante sorgente di informazioni per un agente in un sistema multi-agente sono gli altri agenti. L'interprete controlla i messaggi che sono arrivati alla casella dell'agente e li rende a lui disponibili: in un ciclo di ragionamento solamente un messaggio pu\`o essere processato. Per dare rilevanza a certi messaggi \`e necessario utilizzare una funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{M}) che permette di aumentarne la priorit\`a. Di default viene utilizzata la politica FIFO (First In First Out).
+
+
+\subsubsection{(4) Selezione dei messaggi 'Socialmente accettabili'}
+Prima che i messaggi siano processati, passano all'interno di una selezione che determina se possono essere accettatti o meno dall'agente. In figura \ref{fig:reasoningCicle} \`e rappresentata dalla sigla 'SoccAcc'. L'implementazione di default accetta tutti i messaggi da tutti gli agenti. Sovrascrivendo questa funzione \`e possibile utilizzarla per far ricevere ad un agente solo certi messaggi piuttosto che altri.
+
+
+\subsubsection{(5) Selezione di un evento}
+Gli agenti BDI operano gestendo continuamente eventi, i quali rappresentano sia la precezione di cambiamenti nell'ambiente sia il cambiamento dei goal dello stesso agente.
 \\
-La prima cosa che fa un agente nel ciclo di ragionamento \`e controllare l'ambiente per aggiornare i \textit{beliefs} con lo stato attuale. Quindi \`e necessario che l'agente abbia dei componenti per percepire i cambiamenti dell'ambiente. Una volta ottenuta la lista dei cambiamenti percepiti \`e necessario aggiornare la \textit{belief base} (che contiene l'insieme dei \textit{beliefs} dell'utente allo stato attuale).
+In ogni cicli di ragionamento solo un evento pu\`o essere gestito. Ci possono essere vari eventi in attesa ma ne verr\`a selezionato solamente uno, il quale \`e scelto dalla funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{E}). Il set di eventi \`e rappresentato da una lista e i nuovi eventi sono aggiunti in fondo: l'implementazione di base della funzione seleziona il primo elemento della lista, adottando quindi una politica FIFO.
+
+I prossimi step considerano che un evento \`e stato selezionato e rimosso dalla lista di eventi in attesa. Se la lista di eventi fosse vuota, la selezione dell'evento non avverrebbe e il ciclo di ragionamento salterebbe allo step 9.
+
+\subsubsection{(6) Recupero di tutti i paini rilevanti}
+Selezionato l'evento, \`e necessario trovare un piano che permetta all'agente di agire in modo tale da getire quell'evento. La prima cosa da fare \`e recuperare dalla 'Plan Library' i piani rilevanti verificando quali tra questi abbia un evento di attivazione che pu\`o essere unificato con l'evento selezionato. L'unificazione \`e il confronto che viene fatto relativo a predicato e termini.
 \\
+Al fine di questo step si otterr\`a un set di piani rilevanti per l'evento selezionato e che nello step successivo verr\`a raffinato per ottenere il set di piani applicabili.
+
+
+\subsubsection{(7) Determinazione dei piani applicabili}
+Ogni piano ha un contesto che definisce se pu\`o essere usato in un certo momento in base alle informazioni che ha l'agente. In questo step si selezionano, tra i piani rilevanti, quelli che, in relazione alla situazione dell'agente, possono avere una possibilit\`a di successo. Per fare questo si controlla se il contesto \`e una coseguenza logica della 'belief base' dell'agente. Avere pi\`u di un piano nel set di quelli applicabili significa che in base alle conoscenza dell'agente e i suoi attuali beliefs qualsiasi di questi piani sarebbe appropriato per gestire l'evento.
+
+
+\subsubsection{(8) Selezione di un piano applicabile}
+Sebbene qualsiasi dei piani selezionati \`e adeguato, cio\`e l'esecuzione di uno di essi sar\`a sufficiente per gestire l'evento selezionato in questo ciclo di ragionamento, l'agente ne deve selezionarne solamente uno e impegnarsi ad eseguirlo. Vale a dire che l'agente avr\`a l'intenzione di perseguire l'azione determinata da quel piano e che quindi quest'ultimo sar\`a presto inserito nel set di quelli da eseguire.
 \\
-// \textbf{TODO CONTINUARE} la descrizione del ciclo di ragionamento dell'agente....
+La selezione del piano \`e fatta da una funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{O}). Ogni piano applicabile \`e considerato come una valida alternativa che l'agente ha per la gestione dell'evento. Un'evento rappresenta un particolare goal o un particolare cambiamento percepito nell'ambiente. I goal attualmente nel set degli eventi rappresentano desideri diversi che l'agente pu\`o scegliere di perseguire, mentre i piani applicabili, per uno di questi goal, rappresentano le diverse azioni che l'agente pu\`o eseguire per raggiungere quello specifico goal.
+L'ordine con cui il piano \`e selezionato dalla funzione di selezione \`e determinato dall'ordine con cui sono scritti nel codice sorgente dell'agente o dall'ordine con cui sono comunicati all'agente.
+\\
+Ci sono due modi diversi per aggiornare il set delle intenzioni che dipendono dal fatto che l'evento selezionato sia interno (cambiamento nei goals) o esterno (cambiamento percepito nell'ambiente).
+Se l'agente acquisisce una nuova informazione notificata dall'ambiente viene creata una nuova intenzione per l'agente. Ogni singola intenzione nel set delle intenzioni rappresenta un diverso punto di attenzione per l'agente. Nel prossimo step verr\`a descritto come una particolare intenzione \`e scelta per essere eseguita nel ciclo di ragionamento.
+Per quello che riguarda gli eventi interni, essi sono creati quando l'agente ottiene un nuovo goal da raggiungere. Ci\`o significa che, prima che venga ripreso il corso dell'azione che ha generato l'evento, \`e necessario trovare ed eseguire fino al completamento un piano per raggiungere tale goal. In questo caso, non sono create nuove intenzioni ma una di quelle esistenti viene spostata in alto, il che forma una pila di piani che facilita l'interprete poich\`e l'intenzione da eseguire \`e quella pi\`u in alto.
+\\
+Quando un piano \`e scelto dalla libreria, viene creata un'istanza di quel piano per essere inserita nel set delle intenzioni: la libreria dei piani non viene modificata ma \`e l'istanza che viene manipolata dall'interprete.
+
+
+\subsubsection{(9) Selezione di un intenzione per l'esecuzione}
+Assumendo di avere un evento da gestire, fino a qui nel ciclo di ragionamento abbiamo ottenuto una nuova intenzione. Tipicamente un agente ha pi\`u di un'intenzione nel set di intenzioni, ognuna delle quali rappresenta un diverso punto di attenzione e che potrebbe essere eseguita nel prossimo step del ciclo di ragionamento. Ad ogni ciclo solamente avviene l'esecuzione di una sola intenzione tra quelle che sono in attesa pronte per essere eseguite. Anche in questo caso \`e utilizzata una funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{I}). Dato che il raggiungimento di certi obiettivi sar\`a pi\`u urgente di altri, la scelta della prossima intenzione \`e molto importante per come l'agente operera\`a nell'ambiente.
+Il meccanismo \`e di tipo 'round-robin', cio\`e ogni intenzione \`e selezionata a turno e, quando viene scelta, viene eseguita solamente un'azione. Come per gli eventi, il set di intenzioni \`e gestito con politica FIFO: viene preso il primo elemento della lista e, una volta eseguito, viene aggiunto nuovamente alla fine. In questo modo viene garantita un'attenzione equa a tutte le intenzioni.
+
+
+\subsubsection{(10) Esecuzione di uno step di un'intenzione}
+Un agente ha varie intenzioni che competono tra loro per essere eseguite. Nello step precedente abbiamo scelto l'intenzione da eseguire che non \`e altro che il corpo di un piano formato da una sequenza di formule: ogni formula eseguita viene rimossa dal corpo dell'istanza del piano.
+L'intenzione viene sospesa fino a quando l'azione non viene eseguita, in attesa che l'effettore esegua l'azione e confermi al ragionatore se \`e stata eseguita o meno. L'intenzione sospesa, invece di essere restituita all'insieme di intenzioni, passa a un'altra struttura che memorizza tutte le intenzioni sospese che sono in attesa di un feedback dell'azione o di un messaggio: certi tipi di comunicazione richiedono che l'agente attenda una risposta prima che tale intenzione possa essere ulteriormente eseguita. Dato che un agente ha varie intenzioni e nuovi eventi da gestire, anche se alcune delle intenzioni sono attualmente sospese, nel prossimo ciclo di ragionamento ci sar\`a sicuramente qualche altra intenzione da eseguire.
+
+% Qui di seguito vengono elencati i tipi di formula che possono esserci nel corpo di un piano:
+% \begin{itemize}
+%   \item Azione ambientale: azione dell'agente che avr\`a effetto sull'ambiente.
+%   \item Raggiungimento di un goal: avere nuovi goals da raggiungere crea quelli che sono stati descritti come eventi interni.
+%   \item Verifica di goal: usati per verificare certe pripriet\`a dell'agente o per recuperare informazioni gi\`a presenti nella 'belief base'.
+%   \item Note mentali
+%   \item Azioni interne
+%   \item Espressioni
+% \end{itemize}
+
+\bigskip
+\bigskip
+
+Prima che un'altro ciclo di ragionamento abbia inizio, l'interprete controlla che non ci siano feedback da parte degli attuatori o eventuali nuove risposte. Dopodich\`e le intenzioni sono aggiornate e incluse di nuovo nel set delle intenzioni, in modo da avere la possibilit\`a di essere nuovamente selezionate nei prossimi cicli di ragionamento.
+
+
+
 % Modello ad agenti (JASON)
 % Il funzionamento di un agente (reasoning cicle) prevede le seguenti fasi:
 % - percezione di un cambiamento nell’environment e aggiornamento dei belief in base ai percepts ottenuti
 % - ricezione di messaggi da parte di altri agenti e selezione dei messaggi accettabili
 % - selezione di un evento tra quelli presenti nel set di quelli pending tramite politica FIFO
 % - scelta dei piani rilevanti (dal set di piani della libreria) in base all’evento corrente e, quindi, selezione (dal set di piani rilevanti) di quelli applicabili in base al contesto dell’agente
-% - selezione di un piano che verrà inserito nel set di intention dell’agente
+% - selezione di un piano che verrà inserito nel set di intention dell’agente (selezione del plan da inserire nelle intentions va in base all’ordine dei pian nella plan library)
 % - selezione e esecuzione dell’intention da eseguire
 % - se vi sono risposte disponibili, l’interprete inserisce le intention rilevanti nel set per permetterne la scelta nel prossimo ciclo
 %
 % Ad ogni ciclo vengono presi solamente un percept/messaggio, scelto un singolo evento (se disponibile) e successivamente eseguita una singola intention del piano selezionato.
 % Le parti in cui l’agente deve scegliere quale messaggio/evento/piano/intention utilizzare possono essere riprogrammate per definire per ogni agente una priorità nella selezione.
 %
-%
-% RIVEDERE
-%  selezione del plan da inserire nelle intentions va in base all’ordine dei pian nella plan library
 
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{tuProlog}
-SPIEGARE TUPROLOG
+tuProlog \`e un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile.
+
+tuProlog \`e sviluppato e mantenuto da 'aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Universit\`a di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
+
+Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
+\begin{itemize}
+  \item predicati built-in: incapsulati nel motore tuProlog.
+  \item predicati di libreria: inseriti in una libreria che viene caricata nel motore tuProlog. La libreria pu\`o essere liberamente aggiunta all'inizio o rimossa dinamicamente durante l'esecuzione. I predicati della libreria possono essere sovrascritti da quelli della teoria. Per rimuovere un singolo predicato dal motore \`e necesssario rimuovere tutta la libreria che contiene quel predicato.
+  \item predicati della teoria: inseriti in una teoria che viene caricata nel motore tuProlog. Le teorie tuProlog sono semplicemente collezioni di clausole Prolog. Le teorie possono essere liberamente aggiunte all'inizio o rimosse dinamicamente durante l'esecuzione.
+\end{itemize}
+
+Librerie e teorie, pur essendo simili, sono gestite diversamente dal motore tuProlog.
+
 
 %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
 \chapter{Progetto}
@@ -369,6 +456,8 @@ SPIEGARE TUPROLOG
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 
 Il progetto, come descritto nell'introduzione, ha come obiettivo l'implementazione del meta-modello di Alchemist attraverso la definizione di un incarnazione che modelli gli agenti all'interno del simulatore.
+
+Per la realizzazione del ciclo di ragionamento dell'utente si \`e utilizzato il motore tuProlog importato e invocato all'interno del simulatore sfruttando la libreria 'aliCE'.
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{Mapping dei modelli}
@@ -425,7 +514,7 @@ La classe \textbf{PostmanAction} sovrascrive l'implementazione del metodo \texti
 
 \bigskip
 
-Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente la teoria tuProlog dell'agente. Per lo scambio di messaggi sono state definite le teorie mostrate qui di seguito, una per l'agente Ping (\ref{lst:PingAgent}) e una per l'agente Pong (\ref{lst:PongAgent}).
+Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente la teoria tuProlog dell'agente. Per lo scambio di messaggi sono state definite le teorie mostrate qui di seguito, una per l'agente Ping (codice \ref{lst:PingAgent}) e una per l'agente Pong (codice \ref{lst:PongAgent}).
 
 
 % Style for paragraphs side by side
@@ -445,6 +534,7 @@ Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente
   %label=incarnationYAML,
   %caption={First verbatim}
   %language=Java
+  %escapeinside={(*@}{@*)}
 }
 \bigskip
 \medskip
@@ -518,6 +608,7 @@ La simulazione descritta nel codice \ref{lst:SimulazioneStessoNodo} prevede la d
   %label=incarnationYAML,
   %caption={First verbatim}
   %language=Java
+  %escapeinside={(*@}{@*)}
 }
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:SimulazioneStessoNodo},caption={Simulazione con agenti sullo stesso nodo}]
@@ -615,25 +706,11 @@ Per la simulazione \`e stato utilizzato il file di configurazione descritto nel 
 
 
 
-% ESEMPIO DI SOURCE CODE
-%\begin{lstlisting}[language=Java, frame=trBL, firstnumber=last, %escapeinside={(*@}{@*)}]
-%public Node<Object> createNode(
-%  final RandomGenerator rand,
-%  final Environment<Object,P> env,
-%  final String param) {
-%    final Node<Object> node =
-%      new AgentsContainerNode(param,
-%        (Environment<Object, Position<? extends Continuous2DEnvironment>>) env);
-%    return node;
-%}
-%\end{lstlisting}
-
-
 
 % \clearpage{\pagestyle{empty}\cleardoublepage} % vedere se serve
 \begin{thebibliography}{90} % crea l'ambiente bibliografia
 \rhead[\fancyplain{}{\bfseries \leftmark}]{\fancyplain{}{\bfseries \thepage}}
-\addcontentsline{toc}{chapter}{Bibliografia} % aggiunge la voce Bibliografia nell'indice
+% \addcontentsline{toc}{chapter}{Bibliografia} % aggiunge la voce Bibliografia nell'indice
 
 % provare anche questo comando:
 \addcontentsline{toc}{chapter}{\numberline{}{Bibliografia}}
