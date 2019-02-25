@@ -474,16 +474,25 @@ Utilizzando questo secondo caso si riuscir\`a a creare un sistema con pi\`u agen
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{Fasi di sviluppo}
-Il passo successivo \`e stato quello di stilare un piano di sviluppo per affrontare il problema attraverso step incrementali per permettere di semplificare l'implementazione di un modello complesso come quello ad agenti. Le fasi in cui \`e stato suddiviso il progetto sono state le seguenti:
+Il passo successivo \`e stato quello di stilare un piano di sviluppo per affrontare il problema attraverso step incrementali . Le parti in cui \`e stato deciso di suddividere il lavoro sono:
 \begin{enumerate}
-%\item Esecuzione di un'istruzione elementare da parte di un agente (ad esempio contatore);
-\item Scambio di messaggi tra due agenti (ad esempio ping pong): inizialmente gli agenti possono anche risiedere nello stesso nodo ma poi l'implementazione deve valere indifferentemente dal posizionamento degli agenti;
-\item Gestione del flusso di controllo attraverso l'inserimento di un operazione, come lo spostamento del nodo, prima di effettuare la risposta al messaggio. In seguito deve comprendere inoltre la percezione dell'agente verso l'ambiente;
-\item Gestione del flusso condizionato inserendo una clausola per la quale lo scambio di messaggi debba avvenire o meno;
+   \item Scambio di messaggi
+   \item Gestione flusso di controllo dell'agente
+   \item Inserimento di condizioni nel flusso di controllo
 \end{enumerate}
 
+La scelta di frammentare il probelma in sotto-problemi pi\`u semplici \`e stata presa per facilitare l'integrazione tra due i modelli e capire come utilizzarli.
+\\
+Al termine degi step sopra descritti si otterr\`a un'incarnazione che sar\`a la base per le successive implementazioni. Per completare lo sviluppo del modello ad agenti si dovr\`a provvedere a sviluppare la possibilit\`a per l'agente di:
+\begin{itemize}
+   \item spostarsi, ovvero di muovere l'entit\`a di Alchemist che lo ospita, modificando veloci\`a e direzione
+   \item ottenere la distanza dagli altri agenti
+   \item aggiungere o rimuovere belief dalla belief base e innescare la notifica dell'avvenuta modifica per potervi reagire
+\end{itemize}
+
+
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Implementazione}
+\section{Approccio iniziale}
 % Definizione regole per stilizzazzione source code
 
 Dopo aver esaminato i due modelli e aver analizzato i mapping realizzati si \`e deciso di implementare la versione che riferisce l'agente alla reazione poich\`e seguendo lo schema del meta-modello di Alchemist l'implementazione risulta pi\`u immediata e espressiva.
@@ -507,14 +516,22 @@ La creazione delle condizioni \`e stata fatta istanziando la classe \textit{Abst
 L'azione da creare \`e passata dalla reazione. Qui verr\`a gestito il ciclo di ragionamento dell'agente con il metodo \textit{execute} definito nell'interfaccia \textit{Action} e saranno utilizzati i costrutti forniti dalla libreria 'alice.tuprolog' per invocare i piani della teoria dell'agente e poi gestirne il risutlato in Alchemist.
 
 
-\subsection{Scambio di messaggi}
+\subsection{Scambio di messaggi}\label{subsec:ScambioMessaggi}
 Per lo scambio di messaggi sono state definite le classi \textbf{SimpleAgentAction}, che estende \textit{AbstractAction}, e \textbf{PostmanAction} che \`e una specializzazione della prima. La classe SimpleAgentAction rappresenta la definizione standard di un agente e ha come propriet\`a il nome dell'agente, una mailbox formata da due code (una per la posta in entrata e una per quella in uscita) e un motore tuProlog. Al suo interno sono implementati i metodi \textit{execute} (che \`e il metodo principale in cui avviene il ciclo di ragionamento) e i metodi per la gestione delle caselle dei messaggi, le cui strutture sono definite nelle classi innestate InMessage e OutMessage rispettivamente per i messagggi in entrata e in uscita.
 \\
 La classe \textbf{PostmanAction} sovrascrive l'implementazione del metodo \textit{execute} in modo da invocare, ad ogni evento lanciato dal simulatore, un metodo nel nodo che provveder\`a a prelevare i messaggi in uscita da ogni agente e recapitarli ai corretti destinatari.
 
 \bigskip
 
-Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente la teoria tuProlog dell'agente. Per lo scambio di messaggi sono state definite le teorie mostrate qui di seguito, una per l'agente Ping (codice \ref{lst:PingAgent}) e una per l'agente Pong (codice \ref{lst:PongAgent}).
+All'interno del ciclo di ragionamento dell'agente viene richiamato il piano \textit{receive} che prende, se presente, un messaggio dalla cima della pila di quelli in entrata e ne estrae i termini (mittente e contenuto), i quali vengono passati ad un altro piano, per la gestione del messaggio, definito nella teoria dell'agente.
+\\
+Per quanto riguarda l'invio \`e stato definito il piano \textit{send} attraveso il quale, specificando destinatario e contenuto, \`e possibile notificare un messaggio ad un altro agente.
+
+I messaggi sono recapitati utilizzando strutture e metodi Java sviluppati in Alchemist che si occupano anche di aggiungerli e prelevarli all'intero della teoria dell'agente in modo che esso possa utilizzarli.
+
+\bigskip
+
+Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente la teoria tuProlog dell'agente. Per lo scambio di messaggi sono state definite le teorie mostrate qui di seguito, una per l'agente Ping (Codice sorgente \ref{lst:PingAgent}) e una per l'agente Pong (Codice sorgente \ref{lst:PongAgent}).
 
 
 % Style for paragraphs side by side
@@ -588,7 +605,7 @@ Come si pu\`o notare, l'agente Ping ha al suo interno la definizione del piano '
 
 Per avviare una simulazione utilizzando l'incarnazione ad agenti appena descritta sono stati testati due file di confiurazioni diversi.
 \\
-La simulazione descritta nel codice \ref{lst:SimulazioneStessoNodo} prevede la dispozizione di tre agenti (ping\_agent, pong\_agent e postman) che risiedono all'interno di un unico nodo, mentre quella descritta nel codice \ref{lst:SimulazioneNodiDiversi} posiziona ogni agente su un nodo diveso. Lo spazio in cui sono posizionati i nodi nello spazio \`e in entrambi i casi un cerchio con centro (0,0) di raggio 2.
+La simulazione descritta nel Codice sorgente \ref{lst:SimulazioneStessoNodo} prevede la dispozizione di tre agenti (ping\_agent, pong\_agent e postman) che risiedono all'interno di un unico nodo, mentre quella descritta nel Codice sorgente \ref{lst:SimulazioneNodiDiversi} posiziona ogni agente su un nodo diveso. Lo spazio in cui sono posizionati i nodi nello spazio \`e in entrambi i casi un cerchio con centro (0,0) di raggio 2.
 
 % style for general source code
 \lstset{
@@ -661,21 +678,22 @@ La simulazione descritta nel codice \ref{lst:SimulazioneStessoNodo} prevede la d
 
 
 \subsection{Spostamento del nodo}
-Dopo aver realizzato lo scambio di messaggi si \`e passati alla realizzazione dello spostamento del nodo che ospita l'agente e alla percezione che l'agente pu\`o avere dell'ambiente nel quale \`e inserito.
+Terminato lo sviluppo dello scambio di messaggi ci si \`e resi conto che lo sviluppo delle parti di gestione del flusso di controllo e di inserimento di condizioni al suo interno fossero realizzabili con poco sforzo. Quindi si \`e passati alla  realizzazione dello spostamento del nodo che ospita l'agente.
 
 Per realizzare lo spostamento sono stati inseriti nella classe AgentsContainerNode tre campi per memorizzare la velocit\`a di spostamento del nodo, la direzione o angolo dello spostamento (rappresentata da un valore compreso tra 0-360) e il momento della simulazione in cui \`e avvenuto l'ultimo aggiornamento della posizione.
-Oltre a queste propriet\`a sono stati inseriti anche i metodi per aggiornarne i valori: per la velocit\`a il valore viene semplicemente sovrascritto mentre per la direzione si \`e deciso di fornire la possibilit\`a di scegliere se settare un certo valore o aggiungere un delta al valore corrente. Prima di aggiornare direzione o velocit\`a viene invocato il metodo per lo spostamento del nodo poich\`e \`e necessario attuare la variazione di posizione avvenuta dal precedente aggiornamento.
+Oltre a queste propriet\`a sono stati inseriti anche i metodi per recuperare e aggiornare tali valori. Prima di aggiornare direzione o velocit\`a viene invocato il metodo per lo spostamento del nodo poich\`e \`e necessario attuare la variazione di posizione avvenuta nel periodo di tempo trascorso dal precedente aggiornamento.
 \\
-Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e viene chiamato ad ogni ciclo ci ragionamento per effettuare l'aggiornamento della posizone del nodo che ospita l'agente. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicato per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
+Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e ad ogni ciclo ci ragionamento effettua l'aggiornamento della posizone del nodo che ospita l'agente. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicato per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
 
 \bigskip
 
-Per aggiungere la percezione dell'agente relativa alla posizone del nodo che lo ospita all'interno dell'ambiente \`e stata modificata la teoria dell'agente. \`E stato aggiunto un belief che rappresenta un bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
+Per simulare il movimeno del nodo che ospita l'agente all'interno dell'ambiente \`e stata modificata la teoria dell'agente aggiungendo un belief che rappresenta il bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Bounding-box}]
   field(5,5,-5,-5).
 \end{lstlisting}
-Dopodich\`e sono stati aggiunti dei piani per verificare se la posizione del nodo, passata come parametro, risulta all'interno del bounding box. Dal ciclo di ragionamento, utilizzando la libreria 'alice.tuprolog', viene chiamato il piano \textit{checkPosition} passandogli come termini le coordinate della posizone del nodo, le quali vengono inoltrate ai piani \textit{isInFieldX} e \textit{isInFieldY} che verificano che i valori rientrino rispettivamente nei limiti di ascisse e ordinate. Se la posizione \`e fuori da uno dei limiti viene aggiunto un belief contenente la rispettiva codifica: T(top), R(right), B(bottom), L(left).
+Dopodich\`e sono stati aggiunti dei piani per verificare se la posizione del nodo risulta all'interno del bounding box. Dal ciclo di ragionamento si risolve il piano \textit{checkPosition} utilizzando come termini le coordinate della posizone del nodo.
+I piani \textit{isInFieldX} e \textit{isInFieldY} verificano che le coordiante rientrino rispettivamente nei limiti di ascisse e ordinate, altrimenti viene aggiunto un belief contenente la seguente codifica: T(top), R(right), B(bottom), L(left).
 \medskip
 \begin{lstlisting}[firstnumber=18,caption={Piani per la gestione del bounding-box}]
   isInFieldX(X) :-
@@ -698,11 +716,102 @@ Dopodich\`e sono stati aggiunti dei piani per verificare se la posizione del nod
     isInFieldX(X),
     isInFieldY(Y).
 \end{lstlisting}
-Se presenti, i belief aggiunti per il raggiungimento dei limiti del bounding box, vengono 'consumati' all'interno del ciclo di ragionamento utilizzando la libreria 'alice.tuProlog' e poi viene invocato il metodo \textit{changeDirectionAngle} per modificare la direzione del nodo per riportarlo all'interno dei limiti.
+Gli eventuali belief aggiunti per il raggiungimento dei limiti del bounding box, vengono 'consumati' all'interno del ciclo di ragionamento che prevede la modifica della direzione del nodo attraverso la chiamata al metodo \textit{changeDirectionAngle} per riportarlo all'interno dei limiti.
 
 \bigskip
 
-Per la simulazione \`e stato utilizzato il file di configurazione descritto nel codice \ref{lst:SimulazioneNodiDiversi} che prevede la disposizione degli agenti su nodi differenti.
+Per la simulazione \`e stato utilizzato il file di configurazione descritto nel Codice sorgente \ref{lst:SimulazioneNodiDiversi} che prevede la disposizione degli agenti su nodi differenti.
+
+
+\subsection{Aggiornamento belief base}
+Per evitare che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist, si \`e pensato di incapsulare i predicati 'asserta','assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della belief base, notifica del cambiamento tramite evento.
+\\
+La prima parte, quella dell'aggiunta o rimozione del belief dalla belief base, \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
+La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e la mappa viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della belief base avvenuta.
+
+\section{Definizione del linguaggio}
+Lo sviluppo del progetto fino a questo momento \`e stato guidato dalla realizzazione di step volti a produrre una base di partenza e delle conoscenze da poter utilizzare nel proseguimento dell'implementazione.
+Quindi si \`e voluto consolidare quanto fatto e riordinare gli sviluppi per avere una gestione uniforme e comune. Si \`e dunque deciso di sviluppare un "linguaggio" definendo una serie di piani e belief messi a disposizione del programmatore dell'agente, colui che scriver\`a le teorie degli agenti, che da utilizzare durante le simulazioni. Per fare questo si \`e partiti dai piani e belief gi\`a descritti, riorganizzandoli e poi inserendoli in una "libreria", ovvero una teoria di base caricata all'interno dell'agente.
+\\
+Per programmare l'agente sono messi a disposizione i seguenti beliefs:
+\begin{itemize}
+   \item \textbf{self(A).} Rappresenta il nome dell'agente riferito dal termine A
+   \item \textbf{belief(position(X,Y)).} Memorizza nell'agente le coordinate della posizone del nodo che lo ospita
+   \item \textbf{belief(movement(S,D)).} Mantiene le informazioni relative a velocit\`a (S) e direzione (D), rappresentata come angolo nel range 0-360, del nodo in cui \`e posizionato l'agente
+   \item \textbf{belief(distance(A,D)).} Ogni agente ha al suo interno N-1 di questi belief dove N \`e il numero totale degli agenti; rappresenta la distanza (D) di ogni agente del vicinato (A): il vicinato \`e calcolato con la linking-rule definita nella configurazione della simulazione
+\end{itemize}
+
+Per quanto riguarda i piani disponibili vi sono due tipologie: quelli che innescano un evento e quelli incocati per reagire ad un evento.
+I piani che fanno parte del primo tipo sono:
+\begin{itemize}
+   \item \textbf{sendMessage(R,M).} Consente di inviare un messaggio (M) ad un destinatario (R)
+   \item \textbf{addBelief(B).} Aggiunge un belief alla belief base
+   \item \textbf{removeBelief(B).} Rimuove un belief dalla belief base.
+\end{itemize}
+L'altra tipologia riguarda piani invocati per consentire all'agente di reagire ad un evento. Il comportamento degli agenti dipende dall'implementazione del corpo del piano definita dal programmatore dell'agente. Nella teoria dell'agente \`e possibile definire pi\`u piani per ognuna delle seguenti tipologie, tranne 'init' di cui \`e presa la prima implementazione.
+\begin{itemize}
+   \item \textbf{init.} Invocato all'inizializzazione dell'agente cio\`e la prima volta che viene eseguito il ciclo di ragionamento
+   \item \textbf{onReceivedMessage(S,M).} Richiamato per consentire di gestire il messaggio (M) ricevuto dal mittente (S)
+   \item \textbf{onAddBelief(B).} Ad ogni inserimento di belief (utilizzando il piano 'addBelief(B)') o aggiornamento della belief base (come l'aggiornamento della posizione) viene invocato questo piano passando come termine il belief
+   \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla belief base effettuata utilizzando il piano 'removeBelief(B)'
+\end{itemize}
+
+Per definire il linguaggio si \`e cercato di racchiudere tutte le caratteristiche dell'agente all'interno di una liberia di piani che fornisce una base al programmatore dell'agente e che consente di avere un'espressivit\`a maggiore potendo definirne il comportamento.
+\\
+I metodi messi a disposizione della libreria sono implementati come mostrato nella seguente porzione di codice.
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:LibreriaAgenti},caption={Libreria agenti}]
+   receiveMessage :-
+     retract(ingoing(S,M)),
+     onReceivedMessage(S,M).
+
+   sendMessage(R, M) :-
+     self(S),
+     assertz(outgoing(S,R, M)).
+
+   addBelief(B) :-
+     assertz(belief(B)),
+     assertz(added_belief(B)).
+
+   removeBelief(B) :-
+     retract(belief(B)),
+     assertz(removed_belief(B)).
+\end{lstlisting}
+
+\bigskip
+
+Le parti gi\`a sviluppate in precedenza sono state riprese, riorganizzate e adattate alla libreria appena descritta.
+Il ciclo di ragionamento dell'agente eseguito da Alchemist nelle simulazioni \`e quindi ora formato dalle chiamate a funzione descritte nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento}.
+\medskip
+\begin{lstlisting}[language=Java,firstnumber=1,label={lst:ImplementazioneCicloDiRagionamento},caption={Implementazione ciclo di ragionamento}]
+   handleIncomingMessages();
+
+   getMessage();
+
+   positionUpdate();
+
+   getBeliefBaseChanges();
+
+   notifyBeliefBaseChanges();
+
+   hanldeOutGoingMessages();
+\end{lstlisting}
+
+Il metodo \textbf{\textit{handleIncomingMessages}} preleva dalla casella di posta in entrata eventuali messaggi presenti e li inserisce nella teoria dell'agente sotto forma di belief 'ingoing(S,M)', dove S \`e il mittente e M il messaggio.
+\\
+La chiamata successiva al metodo \textbf{\textit{getMessage}} tenta di risolvere il goal 'receive', presente nella libreria dell'agente, che prevede la rimozione del belief 'ingoing' e, come descritto nel Codice sorgente \ref{lst:LibreriaAgenti}, conseguentemente invoca il piano 'onReceiveMessage' passandogli i termini appena recuperati: in base alla implementazioni del piano definite per l'agente si avranno comportamenti diversi.
+\\
+Il terzo metodo invocato, \textbf{\textit{positionUpdate}}, riguarda l'aggiornamento della posizione. Per prima cosa viene calcolata la nuova posizione, rimossa la precedente dalla teoria dell'agente e quindi inserita quella nuova. L'aggiornamento della posizione produce due azioni: la preparazione per la notifica dell'evento di aggiornamento e la chiamata al metodo \textit{agentsDistancesUpdate}. La prima avviene aggiungendo il belief nella mappa delle notifiche dei cambiamenti della belief base mentre la seconda prevede il calcolo della distanza di ogni agente da quello agente corrente; questa seconda azione comporta la rimozione dei belief gi\`a presente e l'inserimento di quelli nuovi, e quindi una modifica della belief base,che comporta l'aggiunta dei belief alla mappa per la notifica degli eventi.
+\\
+Il metodo \textbf{\textit{getBeliefBaseChanges}} recupera dalla teoria dell'agente i belief del tipo 'added\_belief(B)' o 'removed\_belief(B)', ovvero quelli aggiunti da chiamate ai piani 'addBelief(B)' o 'removeBelief(B)'. Per ogni belief aggiunto o rimosso lo aggiunge alla mappa per la notifica degli eventi.
+\\
+Nel metodo \textbf{\textit{notifyBeliefBaseChanges}} viene presa la mappa con tutti i belief aggiunti in precedenza e per ogni belief viene invocato il piano 'onAddBelief(B)' o 'onRemoveBelief(B)' a seconda che il piano sia stato rispettivamente aggiunto o rimosso dalla belief base. Nel caso della posizione e della distanza tra gli agenti, per gestire l'aggiornamento, viene inserito, e quindi notificato, solamente il belief di aggiunta.
+\\
+Al termine del ciclo di ragionamento viene invocato il metodo \textbf{\textit{hanldeOutGoingMessages}} che recupera dalla teoria dell'agente tutti i belief del tipo 'outgoing(S,R,M)', dove S \`e il mittente, R il destinatario e M il contenuto del messaggio, e li inserisce nella casella di posta in uscita dell'agene.
+
+\bigskip
+
+Come spiegato nella sezione \ref{subsec:ScambioMessaggi} lo scambio di messaggi avviene grazie all'agente 'postman' istanza della classe PostmanAction e che nel suo ciclo di ragionamento ha come unico compito quello di prelevare dalla coda in uscita di ogni agente i messaggi e inserendoli nella coda in entrata del destinatario. Per fare ci\`o sono stati implementati due metodi nella classe SimpleAgentAction per recuperare la lista dei messaggi da inviare, liberando quindi la casella di posta in uscita, e per inserire un nuovo messaggio nella casella di posta in entrata, la quale verr\`a svuotata dal metodo \textbf{\textit{handleIncomingMessages}} al prossimo ciclo di ragionamento.
 
 
 
