@@ -104,7 +104,7 @@
 % \ldots
 Questo lavoro ha l'obiettivo di implementare sul simulatore Alchemist il modello ad agenti.
 
-Alchemist \`e un meta-simulatore estendibile, ispirato alla chimica stocastica e adatto al calcolo pervasivo e ai sistemi distribuiti. Fornisce un meta-modello flessibile, sul quale gli sviluppatori legano le proprie astrazioni, realizzando una 'incarnazione'.
+Alchemist \`e un meta-simulatore estendibile, ispirato alla chimica stocastica e adatto al calcolo pervasivo e ai sistemi distribuiti. Fornisce un meta-modello flessibile, sul quale gli sviluppatori legano le proprie astrazioni, realizzando un'incarnazione.
 
 Il modello ad agenti a cui si fa riferimento \`e quello BDI (Beliefs, Desires, Intentions) che \`e ispirato al modello del comportamento umano.
 
@@ -178,12 +178,12 @@ Il valore da associare ad una molecola \`e detto \textbf{\textit{Concentrazione}
 \end{center}
 \end{figure}
 
-Una \textbf{\textit{Reazione}} \`e un qualsiasi evento che pu\`o cambiare lo stato dell'environment ed \`e. definita tramite una lista di condizioni, una o pi\`u azioni.
+Una \textbf{\textit{Reazione}} \`e un qualsiasi evento che pu\`o cambiare lo stato dell'environment ed \`e definita tramite una distribuzione temporale, una lista di condizioni e una o pi\`u azioni.
 \\La frequenza con cui avvengono dipende da:
 \begin{itemize}
 \item un parametro statico di frequenza;
 \item il valore di ogni condizione;
-\item un'equazione di frequenza che combina il tasso statico e il valore delle condizioni restituendo la frequenza istantanea;
+\item un'equazione di frequenza che combina il parametro statico e il valore delle condizioni restituendo la frequenza istantanea;
 \item una distribuzione temporale.
 \end{itemize}
 Ogni nodo contiene un set di reazioni che pu\`o essere anche vuoto.
@@ -230,7 +230,7 @@ La sezione \textbf{incarnation} \`e obbligatoria. Il parser YAML si aspetta una 
   incarnation: agent
 \end{lstlisting}
 
-Nelle prossime occorrenze, dove si utilizza la chiave 'type' il valore associato fa riferimento al nome di una classe. Se il nome passato non \`e completo, ovvero non \`e comprensivo del percorso fino alla classe, Alchemist provveder\`a a cercare la classe tra i packages.
+Nel resto della sezione, il valore associato alla chiave 'type' fa riferimento al nome di una classe. Se il nome passato non \`e completo, ovvero non \`e comprensivo del percorso fino alla classe, Alchemist provveder\`a a cercare la classe tra i packages.
 
 Per dichiarare variabili che poi potranno essere richiamate all'interno del file di configurazione della simulazione si pu\`o procedere in questo modo.
 \medskip
@@ -243,7 +243,7 @@ Per dichiarare variabili che poi potranno essere richiamate all'interno del file
       par: "value"
 \end{lstlisting}
 
-Con la keyword \textbf{environment} si pu\`o scegliere quale definizione di ambiente utilizzare per la simulazione.
+Utilizzando la keyword \textbf{environment} si pu\`o scegliere quale definizione di ambiente utilizzare per la simulazione.
 \medskip
 \begin{lstlisting}[firstnumber=last,caption={Environment}]
   environment:
@@ -257,12 +257,13 @@ Questo parametro \`e opzionale e di default \`e uno spazio continuo bidimensiona
     type: Continuous2DEnvironment
 \end{lstlisting}
 
+La keyword \textbf{positions} consente di specificare il tipo delle coordinate della simulazione. La psizione riflette lo spazio fisico: per esempio non si potr\`a utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una citt\`a visto che dati due punti A e B, nel mondo reale la distanza AB \`e diversa da quella BA.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Default environment}]
+  positions:
+    type: LatLongPosition
+\end{lstlisting}
 
-\textbf{POSITION}
-\\
-\textbf{TODO POSITION??}
-\\
-\\
 I collegamenti tra i nodi che verranno utilizzati nella simulazione sono specificati nella sezione \textbf{network-model}. Un esempio per la costruzione di collegamenti \`e il seguente.
 \medskip
 \begin{lstlisting}[firstnumber=last,caption={Funzione linking-rule}]
@@ -278,12 +279,12 @@ Anche questo \`e un parametro opzionale e di default non ci sono collegamenti, o
 \end{lstlisting}
 
 Il posizionamento dei nodi viene gestito dalla sezione \textbf{displacements}. Questa sezione pu\`o contenere uno o pi\`u definizioni di disposizioni per i nodi.
-Il parametro 'in' si definisce la geometria all'interno del quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro 'programs' definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
+Il parametro 'in' definisce la geometria all'interno del quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro 'programs' definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
 \\
-Esempi di classi utilizzabili nel parametro 'in' sono ad esempio Point e Circle.
-La classe Circle necessata di quattro parametri da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
+Esempi di classi utilizzabili nel parametro 'in' sono Point e Circle.
+La classe Circle necessita di quattro parametri, da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
 
-Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene ricevuto alla creazione della reazione e che pu\`o essere passato per istanziare condizioni e azioni).
+Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene passato alla creazione della reazione e che pu\`o essere utilizzato per istanziare condizioni e azioni).
 Un'esempio di displacements \`e il seguente.
 \medskip
 \begin{lstlisting}[firstnumber=last,caption={Disposizione nodi e reazioni associate}]
@@ -318,7 +319,7 @@ I \textbf{\textit{Beliefs}} sono informazioni dello stato dell'agente, ovvero ci
 
 I \textbf{\textit{Desires}} sono tutti i possibili piani che l'agente potrebbe eseguire. Rappresentano gli obiettivi o le situazioni che l'agente vorrebbe realizzare o portare a termine. I \textbf{goals} sono desires che l'agente persegue attivamente: per questo motivo, in generale, i piani desiderabili possono non essere coerenti tra loro mentre i goals \`e bene che lo siano.
 
-I \textbf{\textit{Intentions}} sono piani a cui l'agente ha deciso di lavorare o a cui sta gi\`a lavorando. I piani sono sequenze di azioni che un agente pu\`o eseguire per raggiungere una intention. I piani possono contenerne altri al loro interno.
+Le \textbf{\textit{Intentions}} sono piani a cui l'agente ha deciso di lavorare o a cui sta gi\`a lavorando. I piani sono sequenze di azioni che un agente pu\`o eseguire per raggiungere una intention. I piani possono contenerne altri al loro interno.
 
 Gli \textbf{\textit{Eventi}} innescano le attivit\`a reattive degli agenti il cui risultato pu\`o essere l'aggiornamento dei beliefs, la chiamata ad altri piani o la modifica di goals.
 
@@ -366,12 +367,12 @@ Prima che i messaggi siano processati, passano all'interno di una selezione che 
 \subsubsection{(5) Selezione di un evento}
 Gli agenti BDI operano gestendo continuamente eventi, i quali rappresentano sia la precezione di cambiamenti nell'ambiente sia il cambiamento dei goal dello stesso agente.
 \\
-In ogni cicli di ragionamento solo un evento pu\`o essere gestito. Ci possono essere vari eventi in attesa ma ne verr\`a selezionato solamente uno, il quale \`e scelto dalla funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{E}). Il set di eventi \`e rappresentato da una lista e i nuovi eventi sono aggiunti in fondo: l'implementazione di base della funzione seleziona il primo elemento della lista, adottando quindi una politica FIFO.
+In ogni ciclo di ragionamento solo un evento pu\`o essere gestito. Ci possono essere vari eventi in attesa ma ne verr\`a selezionato solamente uno, il quale \`e scelto dalla funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{E}). Il set di eventi \`e rappresentato da una lista e i nuovi eventi sono aggiunti in fondo: l'implementazione di base della funzione seleziona il primo elemento della lista, adottando quindi una politica FIFO.
 
 I prossimi step considerano che un evento \`e stato selezionato e rimosso dalla lista di eventi in attesa. Se la lista di eventi fosse vuota, la selezione dell'evento non avverrebbe e il ciclo di ragionamento salterebbe allo step 9.
 
 \subsubsection{(6) Recupero di tutti i paini rilevanti}
-Selezionato l'evento, \`e necessario trovare un piano che permetta all'agente di agire in modo tale da getire quell'evento. La prima cosa da fare \`e recuperare dalla 'Plan Library' i piani rilevanti verificando quali tra questi abbia un evento di attivazione che pu\`o essere unificato con l'evento selezionato. L'unificazione \`e il confronto che viene fatto relativo a predicato e termini.
+Selezionato l'evento, \`e necessario trovare un piano che permetta all'agente di agire in modo tale da gestire quell'evento. La prima cosa da fare \`e recuperare dalla 'Plan Library' i piani rilevanti, verificando quali tra questi abbia un evento di attivazione che pu\`o essere unificato con l'evento selezionato. L'unificazione \`e il confronto che viene fatto relativo a predicato e termini.
 \\
 Al fine di questo step si otterr\`a un set di piani rilevanti per l'evento selezionato e che nello step successivo verr\`a raffinato per ottenere il set di piani applicabili.
 
@@ -394,7 +395,7 @@ Quando un piano \`e scelto dalla libreria, viene creata un'istanza di quel piano
 
 
 \subsubsection{(9) Selezione di un intenzione per l'esecuzione}
-Assumendo di avere un evento da gestire, fino a qui nel ciclo di ragionamento abbiamo ottenuto una nuova intenzione. Tipicamente un agente ha pi\`u di un'intenzione nel set di intenzioni, ognuna delle quali rappresenta un diverso punto di attenzione e che potrebbe essere eseguita nel prossimo step del ciclo di ragionamento. Ad ogni ciclo solamente avviene l'esecuzione di una sola intenzione tra quelle che sono in attesa pronte per essere eseguite. Anche in questo caso \`e utilizzata una funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{I}). Dato che il raggiungimento di certi obiettivi sar\`a pi\`u urgente di altri, la scelta della prossima intenzione \`e molto importante per come l'agente operera\`a nell'ambiente.
+Assumendo di avere un evento da gestire, fino a questo momento nel ciclo di ragionamento abbiamo ottenuto una nuova intenzione. Tipicamente un agente ha pi\`u di un'intenzione nel set di intenzioni, ognuna delle quali rappresenta un diverso punto di attenzione e che potrebbe essere eseguita nel prossimo step del ciclo di ragionamento. Ad ogni ciclo avviene l'esecuzione di una sola intenzione, tra quelle che sono in attesa pronte per essere eseguite. Anche in questo caso \`e utilizzata una funzione di selezione (indicata in figura \ref{fig:reasoningCicle} da S\textsubscript{I}). Dato che il raggiungimento di certi obiettivi sar\`a pi\`u urgente di altri, la scelta della prossima intenzione \`e molto importante per come l'agente operer\`a nell'ambiente.
 Il meccanismo \`e di tipo 'round-robin', cio\`e ogni intenzione \`e selezionata a turno e, quando viene scelta, viene eseguita solamente un'azione. Come per gli eventi, il set di intenzioni \`e gestito con politica FIFO: viene preso il primo elemento della lista e, una volta eseguito, viene aggiunto nuovamente alla fine. In questo modo viene garantita un'attenzione equa a tutte le intenzioni.
 
 
@@ -464,17 +465,18 @@ Per la realizzazione del ciclo di ragionamento dell'utente si \`e utilizzato il 
 Il primo passo nell'evoluzione del progetto \`e stata l'analisi del mapping tra i due modelli, necessaria per individuare eventuali incongruenze o evidenziare opportunit\`a a livello applicativo e maggiore espressivit\`a.
 Nei mapping effettuati si \`e cercato quindi di individuare l'entit\`a del meta-modello di Alchemist che offrisse maggiori opportunit\`a espressive per la definizione dell'agente.
 
-Nella prima prova, l'agente \`e stato riferito ad un nodo da cui ne deriva che l'environment sar\`a lo spazio che conterr\`a tutti gli agenti mentre, internamente al nodo, le molecole e le concentrazioni saranno utilizzate per gestire i beliefs dell'agente e le reazioni che saranno riferite ai piani utilizzando le condizioni come clausola per far scattare le azioni.
+Nella prima prova, l'agente \`e stato riferito ad un nodo, da cui ne deriva che l'environment sar\`a lo spazio che conterr\`a tutti gli agenti. Internamente al nodo, le molecole e le concentrazioni saranno utilizzate per gestire i beliefs dell'agente e le reazioni che saranno riferite ai piani utilizzando le condizioni come clausola per far scattare le azioni.
 \\
 Questo tipo di mapping consente di realizzare simulazioni di sistemi non complessi in cui vi \`e un solo 'livello' di agenti che interagiscono tra loro. Questa affermazione pu\`o essere compresa meglio analizzando il secondo tentativo che \`e stato effettuato.
 
-Nel secondo mapping, l'agente \`e stato spostato pi\`u internamente al nodo riferendolo ad una reazione facendo diventare il nodo stesso uno spazio per gli agenti. In questo modo l'environment sar\`a uno spazio in cui possono essere presenti pi\`u nodi, i quali a loro volta potranno contenere un set di agenti. La frequenza con cui gli eventi di Alchemist sono innescati dipende, oltre che dai parametri passati nella configurazione della simulazione, anche dalle condizioni definite per quello specifico agente: questo influisce sul numero di volte in cui viene eseguita un'azione.
+Nel secondo mapping, l'agente \`e stato spostato pi\`u internamente al nodo riferendolo ad una reazione facendo diventare il nodo stesso uno spazio per gli agenti. In questo modo l'environment sar\`a uno spazio in cui possono essere presenti pi\`u nodi, i quali a loro volta potranno contenere un set di agenti.
 \\
 Utilizzando questo secondo caso si riuscir\`a a creare un sistema con pi\`u agenti all'interno di un singolo nodo, che in ambito applicativo pu\`o essere riferito ad un device, il quale si muover\`a nello spazio insieme ad altri nodi, contenitori di altri agenti.
 
+La frequenza con cui gli eventi di Alchemist sono innescati dipende, oltre che dai parametri passati nella configurazione della simulazione, anche dalle condizioni definite per quello specifico agente: questo influisce sul numero di volte in cui viene eseguita un'azione.
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{Fasi di sviluppo}
-Il passo successivo \`e stato quello di stilare un piano di sviluppo per affrontare il problema attraverso step incrementali . Le parti in cui \`e stato deciso di suddividere il lavoro sono:
+Il passo successivo \`e stato quello di stilare un piano di sviluppo per affrontare il problema attraverso step incrementali. Le parti in cui \`e stato deciso di suddividere il lavoro iniziale sono:
 \begin{enumerate}
    \item Scambio di messaggi
    \item Gestione flusso di controllo dell'agente
@@ -505,31 +507,27 @@ All'interno dell'implementazione delle azioni di Alchemist sar\`a quindi caricat
 \subsection{Definizione incarnazione}
 Lo sviluppo \`e partito dalla definizione della classe \textbf{AgentIncarnation} che implementa l'interfaccia \textit{Incarnation}. I metodi definiti nell'interfaccia consentono di caratterizzare l'incarnazione nella creazione delle varie entit\`a del modello (nodi, distribuzioni temporali, reazioni, condizioni, azioni).
 
-Per la creazione del nodo si \`e definita la classe \textbf{AgentsContainerNode} che estende \textit{AbstractNode}. Questa classe ha tra le sue propriet\`a il riferiemnto all'environment in cui si trova il nodo e una struttura dati composta da coppie chiave e valore in cui la chiave \`e il nome dell'agente e il valore \`e il riferimento all'azione dell'agente.
+Per la creazione del \textbf{nodo} si \`e definita la classe \textbf{AgentsContainerNode} che estende \textit{AbstractNode}. Questa classe ha tra le sue propriet\`a il riferiemnto all'environment in cui si trova il nodo e una struttura dati composta da coppie chiave e valore (in cui la chiave \`e il nome dell'agente e il valore \`e il riferimento all'azione dell'agente).
 
-La distribuzione temporale di ogni reazione \`e stata realizzata istanziando la classe \textit{DiracComb} inizializzata con il parametro recuperato dal file di configurazione della simulazione. La classe permette di emettere eventi ad un intervallo temporale specificato dal parametro passato.
+La \textbf{distribuzione temporale} di ogni reazione \`e stata realizzata istanziando la classe \textit{DiracComb} inizializzata con il parametro recuperato dal file di configurazione della simulazione. La classe permette di emettere eventi ad un intervallo temporale specificato dal parametro passato.
 
-Per le reazioni \`e stata definita la classe \textbf{AgentReaction} che implementa \textit{AbstractReaction} e che rappresenta l'agente e che contiene le condizioni che devono verificarsi per far avvenire le azioni che sono il fulcro dell'agente. Come propriet\`a della classe \`e presente solo una stringa che memorizza il nome dell'agente.
+Per le \textbf{reazioni} \`e stata definita la classe \textbf{AgentReaction} che implementa \textit{AbstractReaction} e che rappresenta l'agente e che contiene le condizioni che devono verificarsi per far avvenire le azioni, che sono il fulcro dell'agente. Come propriet\`a della classe \`e presente solo una stringa che memorizza il nome dell'agente.
 \\
-La creazione delle condizioni \`e stata fatta istanziando la classe \textit{AbstractCondition} e implementando i metodi mancanti dell'interfaccia Condition: \textit{getContext} (definisce la profondit\`a della condizione GLOBAL,LOCAL,NEIGHBORHOOD), \textit{getPropensityContribution} (permette di influenzare la velocit\`a della reazione che decide se utilizzare o meno questo parametro), \textit{isValid} (definisce la clausola per la valit\`a della condizione).
+La creazione delle \textbf{condizioni} \`e stata fatta istanziando la classe \textit{AbstractCondition} e implementando i metodi mancanti dell'interfaccia Condition: \textit{getContext} (definisce la profondit\`a della condizione tra GLOBAL, NEIGHBORHOOD, LOCAL), \textit{getPropensityContribution} (permette di influenzare la velocit\`a della reazione che decide se utilizzare o meno questo parametro), \textit{isValid} (definisce la clausola per la valit\`a della condizione).
 \\
-L'azione da creare \`e passata dalla reazione. Qui verr\`a gestito il ciclo di ragionamento dell'agente con il metodo \textit{execute} definito nell'interfaccia \textit{Action} e saranno utilizzati i costrutti forniti dalla libreria 'alice.tuprolog' per invocare i piani della teoria dell'agente e poi gestirne il risutlato in Alchemist.
+L'\textbf{azione} da creare \`e passata dalla reazione. Qui verr\`a gestito il ciclo di ragionamento dell'agente con il metodo \textit{execute} definito nell'interfaccia \textit{Action} e saranno utilizzati i costrutti forniti dalla libreria 'alice.tuprolog' per invocare i piani della teoria dell'agente e poi gestirne il risutlato in Alchemist.
 
 
 \subsection{Scambio di messaggi}\label{subsec:ScambioMessaggi}
 Per lo scambio di messaggi sono state definite le classi \textbf{SimpleAgentAction}, che estende \textit{AbstractAction}, e \textbf{PostmanAction} che \`e una specializzazione della prima. La classe SimpleAgentAction rappresenta la definizione standard di un agente e ha come propriet\`a il nome dell'agente, una mailbox formata da due code (una per la posta in entrata e una per quella in uscita) e un motore tuProlog. Al suo interno sono implementati i metodi \textit{execute} (che \`e il metodo principale in cui avviene il ciclo di ragionamento) e i metodi per la gestione delle caselle dei messaggi, le cui strutture sono definite nelle classi innestate InMessage e OutMessage rispettivamente per i messagggi in entrata e in uscita.
-\\
-La classe \textbf{PostmanAction} sovrascrive l'implementazione del metodo \textit{execute} in modo da invocare, ad ogni evento lanciato dal simulatore, un metodo nel nodo che provveder\`a a prelevare i messaggi in uscita da ogni agente e recapitarli ai corretti destinatari.
-
-\bigskip
 
 All'interno del ciclo di ragionamento dell'agente viene richiamato il piano \textit{receive} che prende, se presente, un messaggio dalla cima della pila di quelli in entrata e ne estrae i termini (mittente e contenuto), i quali vengono passati ad un altro piano, per la gestione del messaggio, definito nella teoria dell'agente.
 \\
 Per quanto riguarda l'invio \`e stato definito il piano \textit{send} attraveso il quale, specificando destinatario e contenuto, \`e possibile notificare un messaggio ad un altro agente.
 
-I messaggi sono recapitati utilizzando strutture e metodi Java sviluppati in Alchemist che si occupano anche di aggiungerli e prelevarli all'intero della teoria dell'agente in modo che esso possa utilizzarli.
+I messaggi sono gestiti utilizzando strutture e metodi Java sviluppati in Alchemist che si occupano anche di aggiungerli e prelevarli dalla teoria dell'agente in modo che esso possa utilizzarli e inserirli nelle opportune code della mailbox.
 
-\bigskip
+La classe \textbf{PostmanAction} sovrascrive l'implementazione del metodo \textit{execute} in modo da invocare, ad ogni evento lanciato dal simulatore, un metodo che provveder\`a a prelevare i messaggi dalla coda in uscita da ogni agente e recapitarli ai corretti destinatari inserendoli nella coda di quelli in entrata.
 
 Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente la teoria tuProlog dell'agente. Per lo scambio di messaggi sono state definite le teorie mostrate qui di seguito, una per l'agente Ping (Codice sorgente \ref{lst:PingAgent}) e una per l'agente Pong (Codice sorgente \ref{lst:PongAgent}).
 
@@ -601,11 +599,11 @@ send(R, M) :-
 
 \bigskip
 
-Come si pu\`o notare, l'agente Ping ha al suo interno la definizione del piano 'init' che consente l'invio del primo messaggio dando il via allo scambio con l'agente Pong.
+Come si pu\`o notare, l'agente Ping ha al suo interno la definizione del piano 'init' che consente l'invio del primo messaggio, che da il via allo scambio con l'agente Pong.
 
 Per avviare una simulazione utilizzando l'incarnazione ad agenti appena descritta sono stati testati due file di confiurazioni diversi.
 \\
-La simulazione descritta nel Codice sorgente \ref{lst:SimulazioneStessoNodo} prevede la dispozizione di tre agenti (ping\_agent, pong\_agent e postman) che risiedono all'interno di un unico nodo, mentre quella descritta nel Codice sorgente \ref{lst:SimulazioneNodiDiversi} posiziona ogni agente su un nodo diveso. Lo spazio in cui sono posizionati i nodi nello spazio \`e in entrambi i casi un cerchio con centro (0,0) di raggio 2.
+La simulazione descritta nel Codice sorgente \ref{lst:SimulazioneStessoNodo} prevede la dispozizione di tre agenti (ping\_agent, pong\_agent e postman) che risiedono all'interno di un unico nodo, mentre quella descritta nel Codice sorgente \ref{lst:SimulazioneNodiDiversi} posiziona ogni agente su un nodo diveso. Gli agenti ping\_agent e pong\_agent sono istanze della classe SimpleAgentAction, mente postman \`e istanza della classe PostmanAction. Lo spazio in cui sono posizionati i nodi nello spazio \`e in entrambi i casi un cerchio con centro (0,0) di raggio 2.
 
 % style for general source code
 \lstset{
@@ -680,37 +678,61 @@ La simulazione descritta nel Codice sorgente \ref{lst:SimulazioneStessoNodo} pre
 \subsection{Spostamento del nodo}
 Terminato lo sviluppo dello scambio di messaggi ci si \`e resi conto che lo sviluppo delle parti di gestione del flusso di controllo e di inserimento di condizioni al suo interno fossero realizzabili con poco sforzo. Quindi si \`e passati alla  realizzazione dello spostamento del nodo che ospita l'agente.
 
-Per realizzare lo spostamento sono stati inseriti nella classe AgentsContainerNode tre campi per memorizzare la velocit\`a di spostamento del nodo, la direzione o angolo dello spostamento (rappresentata da un valore compreso tra 0-360) e il momento della simulazione in cui \`e avvenuto l'ultimo aggiornamento della posizione.
-Oltre a queste propriet\`a sono stati inseriti anche i metodi per recuperare e aggiornare tali valori. Prima di aggiornare direzione o velocit\`a viene invocato il metodo per lo spostamento del nodo poich\`e \`e necessario attuare la variazione di posizione avvenuta nel periodo di tempo trascorso dal precedente aggiornamento.
+Per realizzare lo spostamento sono stati inseriti nella classe AgentsContainerNode tre campi per memorizzare la velocit\`a di spostamento del nodo, la direzione o angolo dello spostamento (rappresentata da un valore espresso in radianti) e il tempo della simulazione in cui \`e avvenuto l'ultimo aggiornamento della posizione.
+Oltre a queste propriet\`a sono stati inseriti anche i metodi per recuperare e aggiornare tali valori.
+% Prima di modificare direzione o velocit\`a viene invocato il metodo per lo spostamento del nodo poich\`e \`e necessario attuare la variazione di posizione avvenuta nel periodo di tempo trascorso dal precedente aggiornamento.
 \\
-Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e ad ogni ciclo ci ragionamento effettua l'aggiornamento della posizone del nodo che ospita l'agente. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicato per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
+Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e ad ogni ciclo ci ragionamento effettua l'aggiornamento della posizone del nodo che ospita l'agente. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicata per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
 
-\bigskip
 
-Per simulare il movimeno del nodo che ospita l'agente all'interno dell'ambiente \`e stata modificata la teoria dell'agente aggiungendo un belief che rappresenta il bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
+Per simulare il movimeno del nodo che ospita l'agente all'interno dell'ambiente \`e stata modificata la teoria degli agenti ping e pong (indicata rispettivamente nei Codici sorgenti \ref{lst:PingAgent} e \ref{lst:PongAgent}) aggiungendo un belief che rappresenta il bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Bounding-box}]
   field(5,5,-5,-5).
 \end{lstlisting}
 Dopodich\`e sono stati aggiunti dei piani per verificare se la posizione del nodo risulta all'interno del bounding box. Dal ciclo di ragionamento si risolve il piano \textit{checkPosition} utilizzando come termini le coordinate della posizone del nodo.
-I piani \textit{isInFieldX} e \textit{isInFieldY} verificano che le coordiante rientrino rispettivamente nei limiti di ascisse e ordinate, altrimenti viene aggiunto un belief contenente la seguente codifica: T(top), R(right), B(bottom), L(left).
+I piani \textit{isInFieldX} e \textit{isInFieldY} verificano che le coordinate rientrino rispettivamente nei limiti di ascisse e ordinate, altrimenti viene aggiunto un belief contenente la seguente codifica: T(top), R(right), B(bottom), L(left).
 \medskip
 \begin{lstlisting}[firstnumber=18,caption={Piani per la gestione del bounding-box}]
   isInFieldX(X) :-
     field(T,R,B,L),
-    (
-      not (X =< R) -> asserta(reachedLimit('R'));
-      not (X >= L) -> asserta(reachedLimit('L'));
-      true
-    ).
+    R =< X,
+    asserta(reachedLimit('R')).
+
+  isInFieldX(X) :-
+    field(T,R,B,L),
+    R > X,
+    true.
+
+  isInFieldX(X) :-
+    field(T,R,B,L),
+    L >= X,
+    asserta(reachedLimit('L')).
+
+  isInFieldX(X) :-
+    field(T,R,B,L),
+    L < X,
+    true.
 
   isInFieldY(Y) :-
     field(T,R,B,L),
-    (
-      not (Y =< T) -> asserta(reachedLimit('T'));
-      not (Y >= B) -> asserta(reachedLimit('B'));
-      true
-    ).
+    T =< Y,
+    asserta(reachedLimit('T')).
+
+  isInFieldY(Y) :-
+    field(T,R,B,L),
+    T > Y,
+    true.
+
+  isInFieldY(Y) :-
+    field(T,R,B,L),
+    B >= Y,
+    asserta(reachedLimit('B')).
+
+  isInFieldY(Y) :-
+    field(T,R,B,L),
+    B < Y,
+    true.
 
   checkPosition(X,Y) :-
     isInFieldX(X),
@@ -724,20 +746,32 @@ Per la simulazione \`e stato utilizzato il file di configurazione descritto nel 
 
 
 \subsection{Aggiornamento belief base}
-Per evitare che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist, si \`e pensato di incapsulare i predicati 'asserta','assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della belief base, notifica del cambiamento tramite evento.
+Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta','assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della belief base, notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
 \\
 La prima parte, quella dell'aggiunta o rimozione del belief dalla belief base, \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
-La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e la mappa viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della belief base avvenuta.
+La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e quest'ultima viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della belief base avvenuta e dove il B \`e il termine recuperato precedentemente.
+La definizione dei piani per aggiungere e rimuovere i belief \`e la seguente.
+\medskip
+\begin{lstlisting}[firstnumber=1,caption={Piani per la gestione del bounding-box}]
+addBelief(B) :-
+  assertz(belief(B)),
+  assertz(added_belief(B)).
+
+removeBelief(B) :-
+  retract(belief(B)),
+  assertz(removed_belief(B)).
+\end{lstlisting}
+
 
 \section{Definizione del linguaggio}
 Lo sviluppo del progetto fino a questo momento \`e stato guidato dalla realizzazione di step volti a produrre una base di partenza e delle conoscenze da poter utilizzare nel proseguimento dell'implementazione.
-Quindi si \`e voluto consolidare quanto fatto e riordinare gli sviluppi per avere una gestione uniforme e comune. Si \`e dunque deciso di sviluppare un "linguaggio" definendo una serie di piani e belief messi a disposizione del programmatore dell'agente, colui che scriver\`a le teorie degli agenti, che da utilizzare durante le simulazioni. Per fare questo si \`e partiti dai piani e belief gi\`a descritti, riorganizzandoli e poi inserendoli in una "libreria", ovvero una teoria di base caricata all'interno dell'agente.
+Quindi si \`e voluto consolidare quanto fatto e riordinare gli sviluppi per avere una gestione uniforme e comune. Si \`e dunque deciso di sviluppare un 'linguaggio' definendo una serie di piani e belief messi a disposizione del programmatore dell'agente (colui che scriver\`a le teorie degli agenti) per permettergli di definire i comportamenti degli agenti per le simulazioni. Per fare questo si \`e partiti dai piani e belief gi\`a descritti, riorganizzandoli e poi inserendoli in una 'libreria', ovvero una teoria di base caricata all'interno dell'agente.
 \\
 Per programmare l'agente sono messi a disposizione i seguenti beliefs:
 \begin{itemize}
    \item \textbf{self(A).} Rappresenta il nome dell'agente riferito dal termine A
    \item \textbf{belief(position(X,Y)).} Memorizza nell'agente le coordinate della posizone del nodo che lo ospita
-   \item \textbf{belief(movement(S,D)).} Mantiene le informazioni relative a velocit\`a (S) e direzione (D), rappresentata come angolo nel range 0-360, del nodo in cui \`e posizionato l'agente
+   \item \textbf{belief(movement(S,D)).} Mantiene le informazioni relative a velocit\`a (S) e direzione (D), rappresentata come angolo in radianti, del nodo in cui \`e posizionato l'agente
    \item \textbf{belief(distance(A,D)).} Ogni agente ha al suo interno N-1 di questi belief dove N \`e il numero totale degli agenti; rappresenta la distanza (D) di ogni agente del vicinato (A): il vicinato \`e calcolato con la linking-rule definita nella configurazione della simulazione
 \end{itemize}
 
@@ -748,17 +782,17 @@ I piani che fanno parte del primo tipo sono:
    \item \textbf{addBelief(B).} Aggiunge un belief alla belief base
    \item \textbf{removeBelief(B).} Rimuove un belief dalla belief base.
 \end{itemize}
-L'altra tipologia riguarda piani invocati per consentire all'agente di reagire ad un evento. Il comportamento degli agenti dipende dall'implementazione del corpo del piano definita dal programmatore dell'agente. Nella teoria dell'agente \`e possibile definire pi\`u piani per ognuna delle seguenti tipologie, tranne 'init' di cui \`e presa la prima implementazione.
+L'altra tipologia riguarda piani invocati per consentire all'agente di reagire ad un evento. Il comportamento degli agenti dipende dall'implementazione del corpo del piano definita dal programmatore dell'agente. Nella teoria dell'agente \`e possibile definire pi\`u piani per ognuna delle seguenti tipologie: solo per 'init' \`e possibile definire una sola implementazione.
 \begin{itemize}
    \item \textbf{init.} Invocato all'inizializzazione dell'agente cio\`e la prima volta che viene eseguito il ciclo di ragionamento
    \item \textbf{onReceivedMessage(S,M).} Richiamato per consentire di gestire il messaggio (M) ricevuto dal mittente (S)
-   \item \textbf{onAddBelief(B).} Ad ogni inserimento di belief (utilizzando il piano 'addBelief(B)') o aggiornamento della belief base (come l'aggiornamento della posizione) viene invocato questo piano passando come termine il belief
-   \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla belief base effettuata utilizzando il piano 'removeBelief(B)'
+   \item \textbf{onAddBelief(B).} Ad ogni inserimento di nuovi belief o aggiornamento della belief base (come quello per la posizione o la distanza dagli altri agenti) viene invocato questo piano passando come termine il belief
+   \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla belief base
 \end{itemize}
 
-Per definire il linguaggio si \`e cercato di racchiudere tutte le caratteristiche dell'agente all'interno di una liberia di piani che fornisce una base al programmatore dell'agente e che consente di avere un'espressivit\`a maggiore potendo definirne il comportamento.
+Per definire il linguaggio si \`e cercato di racchiudere tutte le caratteristiche dell'agente all'interno di una liberia di piani che fornisce una base al programmatore dell'agente e che consente di avere un'espressivit\`a maggiore potendo definire il comportamento delle parti scatenate dagli eventi.
 \\
-I metodi messi a disposizione della libreria sono implementati come mostrato nella seguente porzione di codice.
+I metodi messi a disposizione della libreria sono implementati come mostrato nel Codice sorgente \ref{lst:LibreriaAgenti}.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:LibreriaAgenti},caption={Libreria agenti}]
    receiveMessage :-
@@ -786,7 +820,7 @@ Il ciclo di ragionamento dell'agente eseguito da Alchemist nelle simulazioni \`e
 \begin{lstlisting}[language=Java,firstnumber=1,label={lst:ImplementazioneCicloDiRagionamento},caption={Implementazione ciclo di ragionamento}]
    handleIncomingMessages();
 
-   getMessage();
+   readMessage();
 
    positionUpdate();
 
@@ -799,9 +833,9 @@ Il ciclo di ragionamento dell'agente eseguito da Alchemist nelle simulazioni \`e
 
 Il metodo \textbf{\textit{handleIncomingMessages}} preleva dalla casella di posta in entrata eventuali messaggi presenti e li inserisce nella teoria dell'agente sotto forma di belief 'ingoing(S,M)', dove S \`e il mittente e M il messaggio.
 \\
-La chiamata successiva al metodo \textbf{\textit{getMessage}} tenta di risolvere il goal 'receive', presente nella libreria dell'agente, che prevede la rimozione del belief 'ingoing' e, come descritto nel Codice sorgente \ref{lst:LibreriaAgenti}, conseguentemente invoca il piano 'onReceiveMessage' passandogli i termini appena recuperati: in base alla implementazioni del piano definite per l'agente si avranno comportamenti diversi.
+La chiamata successiva al metodo \textbf{\textit{readMessage}} tenta di risolvere il goal 'receive', presente nella libreria dell'agente, che prevede la rimozione del belief 'ingoing' e, come descritto nel Codice sorgente \ref{lst:LibreriaAgenti}, conseguentemente invoca il piano 'onReceiveMessage' passandogli i termini appena recuperati: in base alla implementazioni del piano definite per l'agente si avranno comportamenti diversi.
 \\
-Il terzo metodo invocato, \textbf{\textit{positionUpdate}}, riguarda l'aggiornamento della posizione. Per prima cosa viene calcolata la nuova posizione, rimossa la precedente dalla teoria dell'agente e quindi inserita quella nuova. L'aggiornamento della posizione produce due azioni: la preparazione per la notifica dell'evento di aggiornamento e la chiamata al metodo \textit{agentsDistancesUpdate}. La prima avviene aggiungendo il belief nella mappa delle notifiche dei cambiamenti della belief base mentre la seconda prevede il calcolo della distanza di ogni agente da quello agente corrente; questa seconda azione comporta la rimozione dei belief gi\`a presente e l'inserimento di quelli nuovi, e quindi una modifica della belief base,che comporta l'aggiunta dei belief alla mappa per la notifica degli eventi.
+Il terzo metodo invocato, \textbf{\textit{positionUpdate}}, riguarda l'aggiornamento della posizione. Per prima cosa viene calcolata la nuova posizione, poi rimossa la precedente dalla teoria dell'agente e quindi inserita quella nuova. L'aggiornamento della posizione produce due azioni: la preparazione per la notifica dell'evento di aggiornamento e la chiamata al metodo \textit{agentsDistancesUpdate}. La prima avviene aggiungendo il belief nella mappa delle notifiche dei cambiamenti della belief base mentre la seconda prevede il calcolo della distanza di ogni agente da quello agente corrente; questa seconda azione comporta la rimozione dei belief gi\`a presenti e l'inserimento di quelli nuovi, e quindi una modifica della belief base, che comporta l'aggiunta dei belief alla mappa per la notifica degli eventi.
 \\
 Il metodo \textbf{\textit{getBeliefBaseChanges}} recupera dalla teoria dell'agente i belief del tipo 'added\_belief(B)' o 'removed\_belief(B)', ovvero quelli aggiunti da chiamate ai piani 'addBelief(B)' o 'removeBelief(B)'. Per ogni belief aggiunto o rimosso lo aggiunge alla mappa per la notifica degli eventi.
 \\
@@ -812,6 +846,132 @@ Al termine del ciclo di ragionamento viene invocato il metodo \textbf{\textit{ha
 \bigskip
 
 Come spiegato nella sezione \ref{subsec:ScambioMessaggi} lo scambio di messaggi avviene grazie all'agente 'postman' istanza della classe PostmanAction e che nel suo ciclo di ragionamento ha come unico compito quello di prelevare dalla coda in uscita di ogni agente i messaggi e inserendoli nella coda in entrata del destinatario. Per fare ci\`o sono stati implementati due metodi nella classe SimpleAgentAction per recuperare la lista dei messaggi da inviare, liberando quindi la casella di posta in uscita, e per inserire un nuovo messaggio nella casella di posta in entrata, la quale verr\`a svuotata dal metodo \textbf{\textit{handleIncomingMessages}} al prossimo ciclo di ragionamento.
+
+
+\section{Rifattorizzazione incarnazione}
+Terminata la definizione del linguaggio \`e stata effettuata una rifattorizzazione delle classi che compongono l'incarnazione, principalmente per quanto rigurda la struttura creata per l'implementazione dell'agente.
+La situazione prima della rifattorizzazione prevedeva che la classe di Alchemist \textit{AbstractAction} fosse estesa da \textbf{SimpleAgentAction}, la quale implementava i metodi per la gestione del ciclo di ragionamento per l'agente. Quest'ultima veniva poi estesa da \textbf{PostmanAction}.
+
+Con la rifattorizzazione si \`e voluto creare una struttura con una classe principale che implementa i metodi per gestire il comportamento degli agenti e che sia estesa da altre classi che implementino il ciclo di ragionamento invocando i metodi della classe padre.
+\\
+Seguendo questa logica \`e stata creata la classe astratta \textbf{AbstracAgent} che estende \textit{AbstractAction} e che, dei metodi rimasti da implementare dell'interfaccia \textit{Action}, definisce solamente \textit{getContext} lasciando alla classe dell'agente che si vuole creare la capacit\`a di implementare \textit{execute} e \textit{cloneAction} rispettivamente utilizzati per il ciclo di ragionamento e per clonare l'azione.
+Nella classe astratta creata, sono stati quindi definite le variabili per la gestione dell'agente come quelle per le code dei messaggi (entrata e uscita), il motore tuProlog e una struttura per la notifica dei cambiamenti della belief base. Nel costruttore viene caricata inoltre la libreria definita nel Codice sorgente \ref{lst:LibreriaAgenti} nella quale sono descritti i piani che definiscono il linguaggio che sono invocabili nella teoria dell'agente. Inoltre la classe contiene i metodi per il comportamento dell'agente nel ciclo di ragionamento descritti nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento} e quelli per l'inizializzazione. Quest'ultima rappresenta la prima esecuzione del ciclo di ragionamento dell'agente e che quindi racchiude delle istruzioni basilari per la sua corretta operativit\`a: i metodi in questione sono \textit{inizializeAgent} e \textit{initReasoning}.
+
+Estendendo classe appena descritta \`e stata creata \textbf{SimpleAgent} che racchiude tutte le caratteristiche principali di un agente descritte precedentememte. Alla sua istanzazione, oltre a richiamare il costruttore del padre, carica nel motore tuProlog il file contenente la sua teoria. Oltre al costruttore sono presenti i metodi \textit{execute} e \textit{cloneAction}. L'implementazione del primo \`e mostrata nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} mentre la seconda \`e semplicemente la creazione di una nuova istanza dell'oggetto che prende il nome 'cloned\_' seguito dal nome dell'agente (es. per l'agente 'pong' verr\`a creato l'agente 'cloned\_pong').
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:SimpleAgentReasoningCycle},caption={Simple Agent Reasoning Cycle}]
+   if (!this.isInitialized()) {
+      //Agent's first reasoning cycle
+      this.inizializeAgent();
+
+      this.initReasoning();
+   } else {
+      //Agent's reasoning cycle
+
+      this.handleIncomingMessages();
+
+      this.readMessage();
+
+      this.positionUpdate();
+
+      this.getBeliefBaseChanges();
+
+      this.notifyBeliefBaseChanges();
+
+      this.hanldeOutGoingMessages();
+   }
+\end{lstlisting}
+
+Allo stesso modo di \textbf{SimpleAgent} \`e stato creata la classe \textbf{PostmanAgent} che nel costruttore non carica nessuna teoria e nel ciclo di ragionamento esegue una sola operazione, ovvero quella di prelevare i messaggi in uscita dai vari agenti e recapitarli al corretto destinatario. La sua implementazione del metodo \textit{execute} \`e descritta nel Codice sorgente \ref{lst:PostmanAgentReasoningCycle}.
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:PostmanAgentReasoningCycle},caption={Postman Agent Reasoning Cycle}]
+   getNode().postman();
+\end{lstlisting}
+
+
+\bigskip
+
+Le altre parti dell'incarnazione ad agenti sono \textbf{AgentReaction} (oggetto che contiene l'agente e la condizione di esecuzione del ciclo di ragionamento) e \textbf{AgentsContainerNode} (che rappresenta il nodo che contiene gli agenti).
+
+TERMINARE
+
+%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
+\chapter{Spatial Tuples}
+Terminata l'implementazione dei componenti che consentono di definire il comportamento di un agente quali scambio di messaggi, spostamento del nodo e aggiornamenro della belief base si \`e passati all'implementazione dell'estensione di Spatial Tuples per gli agenti.
+Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente dove:
+\begin{itemize}
+   \item le tuple sono posizinoate nel mondo fisico e si possono muovere;
+   \item il comportamento delle primitive di coordinamento pu\`o dipendere dalla propriet\`a spaziali del coordinameto degli agenti;
+   \item lo spazio di tuple pu\`o essere concepito come un livello virtuale che aumenta la realt\`a fisica.
+\end{itemize}
+
+Spatial Tuples supporta esplicitamente la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo. In questa estensione le informazioni hanno una posizione e una estensione nello spazio fisico: lo spazio di tuple \`e quindi concepito come un aumento della realt\`a fisica dove le tuple rappresentano uno strato di informaizoni associate ad un'informazione spaziale.
+Una volta che la tupla \`e associata ad una regione o posizione, le informazioni sono propriet\`a che possono essere attribuite a quella porzione di spazio fisico.
+
+Le primitive che permettono la comunicazione sono:
+\begin{itemize}
+   \item out(t): emette tuple spaziali t e le associa ad una regione
+   \item rd(tt): ricerca tuple che corrispondano al template tt e le ritorna
+   \item in(tt): ricerca tuple che corrispondano al template tt e le consuma
+\end{itemize}
+
+Le richieste in Spatial Tuples sono sospensive e non deterministiche. Sospensive perch\`e se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata la tupla. Il non determinismo deriva dal fatto che se ci fossero pi\`u tuple che corrispondono al template ne viene scelta una casualmente.
+
+Le tuple spaziali possono essere associate a posizioni o regioni in modo diretto o indiretto. Le operazioni dirette associano direttamente la tupla spaziale ad una posizione o una regione. Quelle indirette, invece, associano tuple a componenti situati e vale anche se la regione in cui si trova il componente cambia nel tempo: finch\`e non viene rimossa, la tupla \`e associata alla regione del componente in cui \`e situata.
+
+
+\section{Implementazione modello}
+Per inserire il modello appena descritto all'interno dell'incarnazione sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente per permettere agli agenti di comunicare con lo spazio di tuple.
+
+Sono stati quindi definiti i seguenti piani:
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:PianiSpatialTuples},caption={Piani Spatial Tuples}]
+   writeTuple(T) :-
+      assertz(write(T)).
+
+   readTuple(TT) :-
+      assertz(read(TT)).
+
+   takeTuple(TT) :-
+      assertz(take(TT)).
+\end{lstlisting}
+
+I piani descritti nel Codice sorgente \ref{lst:PianiSpatialTuples} rispecchiano rispettivamente le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello.
+
+Successivamente \`e stata definite una nuova estensione della classe
+TERMINARE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
