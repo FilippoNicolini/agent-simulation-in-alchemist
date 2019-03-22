@@ -452,7 +452,7 @@ Librerie e teorie, pur essendo simili, sono gestite diversamente dal motore tuPr
 
 
 %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
-\chapter{Progetto}
+\chapter{Incarnazione agenti}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 
@@ -489,13 +489,12 @@ Al termine degi step sopra descritti si otterr\`a un'incarnazione che sar\`a la 
 \begin{itemize}
    \item spostarsi, ovvero di muovere l'entit\`a di Alchemist che lo ospita, modificando veloci\`a e direzione
    \item ottenere la distanza dagli altri agenti
-   \item aggiungere o rimuovere belief dalla belief base e innescare la notifica dell'avvenuta modifica per potervi reagire
+   \item aggiungere o rimuovere belief dalla 'belief base' e innescare la notifica dell'avvenuta modifica per potervi reagire
 \end{itemize}
 
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Approccio iniziale}
-% Definizione regole per stilizzazzione source code
+\section{Sviluppo sezioni}
 
 Dopo aver esaminato i due modelli e aver analizzato i mapping realizzati si \`e deciso di implementare la versione che riferisce l'agente alla reazione poich\`e seguendo lo schema del meta-modello di Alchemist l'implementazione risulta pi\`u immediata e espressiva.
 \\
@@ -554,7 +553,7 @@ Alla creazione di un'istanza SimpleAgentAction viene caricato il file contenente
 \bigskip
 \medskip
 \begin{minipage}{0.45\textwidth}
-\begin{lstlisting}[label={lst:PingAgent},caption={Ping agent}]
+\begin{lstlisting}[label={lst:PingAgent},caption={Teoria agente Ping}]
 init :-
   send('pong_agent','ping').
 
@@ -576,7 +575,7 @@ send(R, M) :-
 \hfill
 \begin{minipage}{0.45\textwidth}
 %\begin{tabular}{|p{\textwidth}}
-\begin{lstlisting}[label={lst:PongAgent},caption={Pong agent}]
+\begin{lstlisting}[label={lst:PongAgent},caption={Teoria agente Pong}]
 
 
 
@@ -746,10 +745,10 @@ Per la simulazione \`e stato utilizzato il file di configurazione descritto nel 
 
 
 \subsection{Aggiornamento belief base}
-Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta','assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della belief base, notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
+Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta','assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della 'belief base', notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
 \\
-La prima parte, quella dell'aggiunta o rimozione del belief dalla belief base, \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
-La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e quest'ultima viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della belief base avvenuta e dove il B \`e il termine recuperato precedentemente.
+La prima parte, quella dell'aggiunta o rimozione del belief dalla 'belief base', \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
+La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e quest'ultima viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della 'belief base' avvenuta e dove il B \`e il termine recuperato precedentemente.
 La definizione dei piani per aggiungere e rimuovere i belief \`e la seguente.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Piani per la gestione del bounding-box}]
@@ -779,15 +778,15 @@ Per quanto riguarda i piani disponibili vi sono due tipologie: quelli che innesc
 I piani che fanno parte del primo tipo sono:
 \begin{itemize}
    \item \textbf{sendMessage(R,M).} Consente di inviare un messaggio (M) ad un destinatario (R)
-   \item \textbf{addBelief(B).} Aggiunge un belief alla belief base
-   \item \textbf{removeBelief(B).} Rimuove un belief dalla belief base.
+   \item \textbf{addBelief(B).} Aggiunge un belief alla 'belief base'
+   \item \textbf{removeBelief(B).} Rimuove un belief dalla 'belief base'.
 \end{itemize}
 L'altra tipologia riguarda piani invocati per consentire all'agente di reagire ad un evento. Il comportamento degli agenti dipende dall'implementazione del corpo del piano definita dal programmatore dell'agente. Nella teoria dell'agente \`e possibile definire pi\`u piani per ognuna delle seguenti tipologie: solo per 'init' \`e possibile definire una sola implementazione.
 \begin{itemize}
    \item \textbf{init.} Invocato all'inizializzazione dell'agente cio\`e la prima volta che viene eseguito il ciclo di ragionamento
    \item \textbf{onReceivedMessage(S,M).} Richiamato per consentire di gestire il messaggio (M) ricevuto dal mittente (S)
-   \item \textbf{onAddBelief(B).} Ad ogni inserimento di nuovi belief o aggiornamento della belief base (come quello per la posizione o la distanza dagli altri agenti) viene invocato questo piano passando come termine il belief
-   \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla belief base
+   \item \textbf{onAddBelief(B).} Ad ogni inserimento di nuovi belief o aggiornamento della 'belief base' (come quello per la posizione o la distanza dagli altri agenti) viene invocato questo piano passando come termine il belief
+   \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla 'belief base'
 \end{itemize}
 
 Per definire il linguaggio si \`e cercato di racchiudere tutte le caratteristiche dell'agente all'interno di una liberia di piani che fornisce una base al programmatore dell'agente e che consente di avere un'espressivit\`a maggiore potendo definire il comportamento delle parti scatenate dagli eventi.
@@ -835,11 +834,11 @@ Il metodo \textbf{\textit{handleIncomingMessages}} preleva dalla casella di post
 \\
 La chiamata successiva al metodo \textbf{\textit{readMessage}} tenta di risolvere il goal 'receive', presente nella libreria dell'agente, che prevede la rimozione del belief 'ingoing' e, come descritto nel Codice sorgente \ref{lst:LibreriaAgenti}, conseguentemente invoca il piano 'onReceiveMessage' passandogli i termini appena recuperati: in base alla implementazioni del piano definite per l'agente si avranno comportamenti diversi.
 \\
-Il terzo metodo invocato, \textbf{\textit{positionUpdate}}, riguarda l'aggiornamento della posizione. Per prima cosa viene calcolata la nuova posizione, poi rimossa la precedente dalla teoria dell'agente e quindi inserita quella nuova. L'aggiornamento della posizione produce due azioni: la preparazione per la notifica dell'evento di aggiornamento e la chiamata al metodo \textit{agentsDistancesUpdate}. La prima avviene aggiungendo il belief nella mappa delle notifiche dei cambiamenti della belief base mentre la seconda prevede il calcolo della distanza di ogni agente da quello agente corrente; questa seconda azione comporta la rimozione dei belief gi\`a presenti e l'inserimento di quelli nuovi, e quindi una modifica della belief base, che comporta l'aggiunta dei belief alla mappa per la notifica degli eventi.
+Il terzo metodo invocato, \textbf{\textit{positionUpdate}}, riguarda l'aggiornamento della posizione. Per prima cosa viene calcolata la nuova posizione, poi rimossa la precedente dalla teoria dell'agente e quindi inserita quella nuova. L'aggiornamento della posizione produce due azioni: la preparazione per la notifica dell'evento di aggiornamento e la chiamata al metodo \textit{getNeighborhoodDistances}. La prima avviene aggiungendo il belief nella mappa delle notifiche dei cambiamenti della 'belief base' mentre la seconda prevede il calcolo della distanza di ogni agente da quello agente corrente: questa seconda azione opera l'aggiornamento dei belief e quindi una modifica della 'belief base', che comporta l'aggiunta dei belief alla mappa per la notifica degli eventi.
 \\
 Il metodo \textbf{\textit{getBeliefBaseChanges}} recupera dalla teoria dell'agente i belief del tipo 'added\_belief(B)' o 'removed\_belief(B)', ovvero quelli aggiunti da chiamate ai piani 'addBelief(B)' o 'removeBelief(B)'. Per ogni belief aggiunto o rimosso lo aggiunge alla mappa per la notifica degli eventi.
 \\
-Nel metodo \textbf{\textit{notifyBeliefBaseChanges}} viene presa la mappa con tutti i belief aggiunti in precedenza e per ogni belief viene invocato il piano 'onAddBelief(B)' o 'onRemoveBelief(B)' a seconda che il piano sia stato rispettivamente aggiunto o rimosso dalla belief base. Nel caso della posizione e della distanza tra gli agenti, per gestire l'aggiornamento, viene inserito, e quindi notificato, solamente il belief di aggiunta.
+Nel metodo \textbf{\textit{notifyBeliefBaseChanges}} viene presa la mappa con tutti i belief aggiunti in precedenza e per ogni belief viene invocato il piano 'onAddBelief(B)' o 'onRemoveBelief(B)' a seconda che il piano sia stato rispettivamente aggiunto o rimosso dalla 'belief base'. Nel caso della posizione e della distanza tra gli agenti, per gestire l'aggiornamento, viene inserito, e quindi notificato, solamente il belief di aggiunta.
 \\
 Al termine del ciclo di ragionamento viene invocato il metodo \textbf{\textit{hanldeOutGoingMessages}} che recupera dalla teoria dell'agente tutti i belief del tipo 'outgoing(S,R,M)', dove S \`e il mittente, R il destinatario e M il contenuto del messaggio, e li inserisce nella casella di posta in uscita dell'agene.
 
@@ -850,14 +849,14 @@ Come spiegato nella sezione \ref{subsec:ScambioMessaggi} lo scambio di messaggi 
 
 \section{Rifattorizzazione incarnazione}
 Terminata la definizione del linguaggio \`e stata effettuata una rifattorizzazione delle classi che compongono l'incarnazione, principalmente per quanto rigurda la struttura creata per l'implementazione dell'agente.
-La situazione prima della rifattorizzazione prevedeva che la classe di Alchemist \textit{AbstractAction} fosse estesa da \textbf{SimpleAgentAction}, la quale implementava i metodi per la gestione del ciclo di ragionamento per l'agente. Quest'ultima veniva poi estesa da \textbf{PostmanAction}.
+Lo stato dell'arte prima della rifattorizzazione prevedeva che la classe di Alchemist \textit{AbstractAction} fosse estesa da \textbf{SimpleAgentAction}, la quale implementava i metodi per la gestione del ciclo di ragionamento per l'agente. Quest'ultima veniva poi estesa da \textbf{PostmanAction}.
 
-Con la rifattorizzazione si \`e voluto creare una struttura con una classe principale che implementa i metodi per gestire il comportamento degli agenti e che sia estesa da altre classi che implementino il ciclo di ragionamento invocando i metodi della classe padre.
+Con la rifattorizzazione, si \`e voluto creare una struttura con una classe principale che implementa i metodi per gestire il comportamento degli agenti e che sia estesa da altre classi, le quali implementino il ciclo di ragionamento invocando i metodi della classe padre.
 \\
-Seguendo questa logica \`e stata creata la classe astratta \textbf{AbstracAgent} che estende \textit{AbstractAction} e che, dei metodi rimasti da implementare dell'interfaccia \textit{Action}, definisce solamente \textit{getContext} lasciando alla classe dell'agente che si vuole creare la capacit\`a di implementare \textit{execute} e \textit{cloneAction} rispettivamente utilizzati per il ciclo di ragionamento e per clonare l'azione.
-Nella classe astratta creata, sono stati quindi definite le variabili per la gestione dell'agente come quelle per le code dei messaggi (entrata e uscita), il motore tuProlog e una struttura per la notifica dei cambiamenti della belief base. Nel costruttore viene caricata inoltre la libreria definita nel Codice sorgente \ref{lst:LibreriaAgenti} nella quale sono descritti i piani che definiscono il linguaggio che sono invocabili nella teoria dell'agente. Inoltre la classe contiene i metodi per il comportamento dell'agente nel ciclo di ragionamento descritti nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento} e quelli per l'inizializzazione. Quest'ultima rappresenta la prima esecuzione del ciclo di ragionamento dell'agente e che quindi racchiude delle istruzioni basilari per la sua corretta operativit\`a: i metodi in questione sono \textit{inizializeAgent} e \textit{initReasoning}.
+Seguendo questa logica \`e stata creata la classe astratta \textbf{AbstracAgent} che estende \textit{AbstractAction} e che, dei metodi rimasti da implementare dell'interfaccia \textit{Action}, definisce solamente \textit{getContext} lasciando alla classe dell'agente che si vuole creare la capacit\`a di implementare \textit{execute} e \textit{cloneAction}, rispettivamente utilizzati per il ciclo di ragionamento e per clonare l'azione.
+Nella classe astratta creata, sono state quindi definite le variabili per la gestione dell'agente, tra cui quelle per le code dei messaggi (entrata e uscita), il motore tuProlog e una struttura per la notifica dei cambiamenti della 'belief base'. Nel costruttore viene caricata inoltre la libreria definita nel Codice sorgente \ref{lst:LibreriaAgenti} nella quale sono descritti i piani che definiscono il linguaggio e invocabili nella teoria dell'agente. Inoltre la classe contiene i metodi per il comportamento dell'agente nel ciclo di ragionamento descritti nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento} e quelli per l'inizializzazione. Quest'ultima è identificata come la prima esecuzione del ciclo di ragionamento dell'agente e che quindi racchiude delle istruzioni basilari per la sua corretta operativit\`a: i metodi in questione sono \textit{inizializeAgent} e \textit{initReasoning}.
 
-Estendendo classe appena descritta \`e stata creata \textbf{SimpleAgent} che racchiude tutte le caratteristiche principali di un agente descritte precedentememte. Alla sua istanzazione, oltre a richiamare il costruttore del padre, carica nel motore tuProlog il file contenente la sua teoria. Oltre al costruttore sono presenti i metodi \textit{execute} e \textit{cloneAction}. L'implementazione del primo \`e mostrata nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} mentre la seconda \`e semplicemente la creazione di una nuova istanza dell'oggetto che prende il nome 'cloned\_' seguito dal nome dell'agente (es. per l'agente 'pong' verr\`a creato l'agente 'cloned\_pong').
+Estendendo la classe appena descritta \`e stata creata \textbf{SimpleAgent} che racchiude tutte le caratteristiche principali di un agente descritte precedentememte. Alla sua istanzazione, oltre a richiamare il costruttore del padre, carica nel motore tuProlog il file contenente la sua teoria. Gli unici metodi rimasti da definire per creare l'agente sono \textit{execute} e \textit{cloneAction}. L'implementazione del primo \`e mostrata nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} mentre la seconda \`e semplicemente la creazione di una nuova istanza dell'oggetto che prende il nome 'cloned\_' seguito dal nome dell'agente (es. per l'agente 'pong' verr\`a creato l'agente 'cloned\_pong').
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:SimpleAgentReasoningCycle},caption={Simple Agent Reasoning Cycle}]
    if (!this.isInitialized()) {
@@ -882,7 +881,7 @@ Estendendo classe appena descritta \`e stata creata \textbf{SimpleAgent} che rac
    }
 \end{lstlisting}
 
-Allo stesso modo di \textbf{SimpleAgent} \`e stato creata la classe \textbf{PostmanAgent} che nel costruttore non carica nessuna teoria e nel ciclo di ragionamento esegue una sola operazione, ovvero quella di prelevare i messaggi in uscita dai vari agenti e recapitarli al corretto destinatario. La sua implementazione del metodo \textit{execute} \`e descritta nel Codice sorgente \ref{lst:PostmanAgentReasoningCycle}.
+Allo stesso modo di \textbf{SimpleAgent} \`e stato creata la classe \textbf{PostmanAgent} che, nel costruttore non carica nessuna teoria e, nel suo ciclo di ragionamento esegue una sola operazione, ovvero quella di prelevare i messaggi in uscita dai vari agenti e recapitarli al corretto destinatario. La sua implementazione del metodo \textit{execute} \`e descritta nel Codice sorgente \ref{lst:PostmanAgentReasoningCycle}.
 
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:PostmanAgentReasoningCycle},caption={Postman Agent Reasoning Cycle}]
@@ -893,18 +892,26 @@ Allo stesso modo di \textbf{SimpleAgent} \`e stato creata la classe \textbf{Post
 \bigskip
 
 Le altre parti dell'incarnazione ad agenti sono \textbf{AgentReaction} (oggetto che contiene l'agente e la condizione di esecuzione del ciclo di ragionamento) e \textbf{AgentsContainerNode} (che rappresenta il nodo che contiene gli agenti).
+\\
+La reazione, creata nell'incarnazione utilizzando la classe \textbf{AgentReaction}, \`e il contenitore pi\`u aderente all'agente. Infatti la reazione \`e composta da una condizione (che \`e sempre verificata) e l'azione, ovvero l'agente. Il superamento della condizione permette di scatenare il ciclo di ragionamento dell'agente.
+La classe \textbf{AgentsContainerNode} crea un luogo in cui uno o pi\`u agenti posson risiedere. Il nodo ha al suo interno le variabili per impostare la veloci\`a e la direzione (calcolata in radianti), una mappa degli agenti presenti all'interno del nodo e il riferimento all'ambiente in cui \`e contenuto. Nel nodo sono definiti i metodi per conoscere la posizione del nodo, modificarne velocit\`a e direzione, calcolarne lo spostamento del nodo e recuperare le distanze dagli altri agenti.
 
-TERMINARE
+\bigskip
+
+Con questa rifattorizzazione si conclude la prima fase del progetto che ha permesso di integrare all'interno del simulatore Alchemist il modello ad agenti. L'implementazione dell'agente realizzata permette di scambiare messaggi con gli altri agenti, spostare il nodo in cui risiede e gestire l'aggiornamento della 'belief base'. \`E possibile creare simulazioni di agenti e per ognuno caricare una teoria nella quale \`e definito il loro comportamento.
 
 %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
 \chapter{Spatial Tuples}
-Terminata l'implementazione dei componenti che consentono di definire il comportamento di un agente quali scambio di messaggi, spostamento del nodo e aggiornamenro della belief base si \`e passati all'implementazione dell'estensione di Spatial Tuples per gli agenti.
+Terminata l'implementazione dei componenti che consentono di definire il comportamento di un agente quali scambio di messaggi, spostamento del nodo e aggiornamenro della 'belief base' si \`e passati all'implementazione dell'estensione di Spatial Tuples per gli agenti.
 Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente dove:
 \begin{itemize}
    \item le tuple sono posizinoate nel mondo fisico e si possono muovere;
    \item il comportamento delle primitive di coordinamento pu\`o dipendere dalla propriet\`a spaziali del coordinameto degli agenti;
    \item lo spazio di tuple pu\`o essere concepito come un livello virtuale che aumenta la realt\`a fisica.
 \end{itemize}
+
+
+\section{Modello}\label{ModelloSpatialTuples}
 
 Spatial Tuples supporta esplicitamente la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo. In questa estensione le informazioni hanno una posizione e una estensione nello spazio fisico: lo spazio di tuple \`e quindi concepito come un aumento della realt\`a fisica dove le tuple rappresentano uno strato di informaizoni associate ad un'informazione spaziale.
 Una volta che la tupla \`e associata ad una regione o posizione, le informazioni sono propriet\`a che possono essere attribuite a quella porzione di spazio fisico.
@@ -916,15 +923,15 @@ Le primitive che permettono la comunicazione sono:
    \item in(tt): ricerca tuple che corrispondano al template tt e le consuma
 \end{itemize}
 
-Le richieste in Spatial Tuples sono sospensive e non deterministiche. Sospensive perch\`e se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata la tupla. Il non determinismo deriva dal fatto che se ci fossero pi\`u tuple che corrispondono al template ne viene scelta una casualmente.
+Le richieste in Spatial Tuples sono sospensive e non deterministiche. Sospensive perch\`e se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata la tupla. Il non determinismo, invece, deriva dal fatto che se ci fossero pi\`u tuple che corrispondono al template ne viene scelta una casualmente.
 
 Le tuple spaziali possono essere associate a posizioni o regioni in modo diretto o indiretto. Le operazioni dirette associano direttamente la tupla spaziale ad una posizione o una regione. Quelle indirette, invece, associano tuple a componenti situati e vale anche se la regione in cui si trova il componente cambia nel tempo: finch\`e non viene rimossa, la tupla \`e associata alla regione del componente in cui \`e situata.
 
 
 \section{Implementazione modello}
-Per inserire il modello appena descritto all'interno dell'incarnazione sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente per permettere agli agenti di comunicare con lo spazio di tuple.
+Per inserire il modello appena descritto all'interno dell'incarnazione sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente per permettergli di fer comunicare gli agenti con lo spazio di tuple.
 
-Sono stati quindi definiti i seguenti piani:
+Sono stati quindi definiti i seguenti piani che rispecchiano rispettivamente le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello Spaital Tuples e sono state aggiunte alla libreria tuProlog degli agenti dell'incarnazione.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:PianiSpatialTuples},caption={Piani Spatial Tuples}]
    writeTuple(T) :-
@@ -937,43 +944,235 @@ Sono stati quindi definiti i seguenti piani:
       assertz(take(TT)).
 \end{lstlisting}
 
-I piani descritti nel Codice sorgente \ref{lst:PianiSpatialTuples} rispecchiano rispettivamente le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello.
+I piani cos\`i descritti si occupano semplicemente di creare un wrapper per aggiungere un nuovo belief nella teoria.
 
-Successivamente \`e stata definite una nuova estensione della classe
-TERMINARE
+Successivamente, per modellare le posizioni degli spazi di tuple, \`e stata definita la classe \textbf{Blackboard} che estende da \textbf{AbstractAgent} e implementa una specializzazione dell'agente. Questa classe rappresenta un punto situato nello spazio che pu\`o contenere informazioni: gli agenti possono, attraverso le primitive descritte nel Codice sorgente \ref{lst:PianiSpatialTuples}, scrivere tuple oppure leggere o prendere quelle che corrispondono al template passato.
+All'interno della classe sono state create due liste una per le richieste in entrata e una per quelle in attesa. La classe espone il metodo \textit{insertRequest} al quale sono passati la tupla/template, l'istanza dell'agente e l'azione da eseguire (\textit{write}/\textit{read}/\textit{take}). La richiesta viene aggiunta alla coda e processata nel ciclo di ragionamento di questo agente. In base alla tipologia di azione vengono invocati i diversi metodi interni \textit{writeOnBlackboard}, \textit{readOnBlackboard}, \textit{takeOnBlackboard} per la gestioni della richiesta.
+Come detto nella sezione \ref{ModelloSpatialTuples}, se le operazioni richieste non possono essere effettuate vengono sospese e inserite nella coda di quelle in attesa: questa lista viene iterata, come quella delle richieste in entrata, ad ogni ciclo di ragionamento.
+\\
+Per le richieste di tipo \textit{read} e \textit{take}, se l'operazione di match del template va a successo deve essere notificata all'agente la tupla letta/prelevata. Questa azione \`e fatta inserendo nella struttura di notifica dei belif dell'agente un nuovo elemento, che \`e la tupla recuperata dallo spazio di tuple, e che verr\`a notificata nel prossimo ciclo di ragionamento dell'agente.
+
+Per completare l'implementazione \`e necessario definire un metodo nella classe AbstracAgent che consente agli agenti, durante il loro ciclo di ragionamento, di recuperari i belief inseriti con i piani descritti nel Codice sorgente \ref{lst:PianiSpatialTuples} e di inserirli nello spazio di tuple. \`E stato quindi implementato il metodo \textit{retrieveTuples} che per prima cosa recupera tutte le tuple dalla teoria dell'agente e poi in base al tipo di azione esegue delle operazioni diverse.
+\\
+Se l'azione \`e \textit{write}, recupera l'agente di tipo Blackboard pi\`u vicino e se lo trova invoca il metodo per inserire la richiesta.
+\\
+Diversamente, se l'azione \`e \textit{read} o \textit{take}, viene recuperata la lista di agenti di tipo Blackboard presenti nel suo vicinato. Per ognuno degli agenti della lista viene inserita la richiesta in modo tale da estendere la ricerca della tupla che corrisponda al template.
+
+\section{Simulazione}
+Per testare l'incarnazione con l'implementazione del modello appena descritto \`e stato utilizzato il pattern di coordinazioen 'breadcrumbs'. L'esempio prodotto utilizza due agenti, Hansel e Gretel, che si muovono all'interno di un'ambiente in cui sono presenti altri agenti utilizzati come spazi di tuple situati. L'agente Hansel si sposter\`a casualmente nell'ambiente lasciando le briciole negli spazi di tuple pi\`u vicini al suo passaggio, mentre l'agente Gretel dovr\`a muoversi alla ricerca delle briciole e una volta che ne ha individuata una iniziare a seguire le altre per raggiungere Hansel.
+
+Per realizzare questa simulazione \`e stato scritto il file di configurazione indicato dal Codice sorgente \ref{lst:SimulazioneBreadcrumbs}.
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:SimulazioneBreadcrumbs},caption={Simulazione modello Spatial Tuples con modello di coordinazione breadcrumbs}]
+   incarnation: agent
+
+   network-model:
+   type: ConnectWithinDistance
+   parameters: [0.5]
+
+   displacements:
+   - in: {type: Circle, parameters: [1,-1.8,2,0.2]}
+   programs:
+      -
+        - time-distribution: 1
+          program: "hansel"
+
+   - in: {type: Circle, parameters: [1,-1.5,4,0.2]}
+   programs:
+      -
+        - time-distribution: 1
+          program: "gretel"
+
+   - in: {type: Circle, parameters: [1500,2,2,4.5]}
+   programs:
+      -
+        - time-distribution: 1
+          program: "blackboard"
+\end{lstlisting}
+
+Le teorie degli agenti utilizzate in questa simulazione sono indicate qui di seguito.
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:Hansel},caption={Teoria agente Hansel}]
+   init :-
+       writeTuple(breadcrumb(hansel,here)),
+       removeBelief(movement(S,D)),
+       addBelief(movement(0.027,4.8)),
+       addBelief(counter(0,0)),
+       addBelief(spiralCorner(0.08)),
+       takeTuple(stop(hansel)).
+
+   onAddBelief(position(X,Y)) :-
+       removeBelief(counter(C1,C2)),
+       handlePosition(C1,C2,X,Y).
+
+   handlePosition(C1,C2,X,Y) :-
+       C1 < 300,
+       C2 < 10,
+       C1N is C1 + 1,
+       C2N is C2 + 1,
+       addBelief(counter(C1N,C2N)),
+       writeTuple(breadcrumb(hansel,here)).
+
+   handlePosition(C1,C2,X,Y) :-
+       C1 < 300,
+       C1N is C1 + 1,
+       C2 >= 10,
+       addBelief(counter(C1N,0)),
+       removeBelief(movement(S,D)),
+       belief(spiralCorner(V)),
+       D1 is D + V,
+       addBelief(movement(S,D1)).
+
+   handlePosition(C1,C2,X,Y) :-
+       C1 >= 300,
+       C2N is C2 + 1,
+       addBelief(counter(0,C2N)),
+       removeBelief(spiralCorner(V)),
+       TEMP is V * 0.30,
+       V1 is V + TEMP,
+       addBelief(spiralCorner(V1)).
 
 
+   onAddBelief(distance(_,_)) :-
+       true.
 
+   onAddBelief(distance(_,_,_)) :-
+       true.
 
+   onAddBelief(movement(_,_)) :-
+       true.
 
+   onRemoveBelief(movement(_,_)) :-
+       true.
 
+   onAddBelief(counter(C1,C2)) :-
+       true.
 
+   onRemoveBelief(counter(C1,C2)) :-
+       true.
 
+   onAddBelief(spiralCorner(V)) :-
+       true.
 
+   onRemoveBelief(spiralCorner(V)) :-
+       true.
 
+   onResponseMessage(msg(stop(hansel),X,Y)) :-
+       removeBelief(movement(_,D)),
+       addBelief(movement(0,D)),
+       writeTuple(stop(gretel)).
+\end{lstlisting}
 
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:Gretel},caption={Teoria agente Gretel}]
+   init :-
+       removeBelief(movement(S,D)),
+       addBelief(movement(0.027,4.3)),
+       takeTuple(breadcrumb(hansel,here)),
+       addBelief(counter(0)),
+       takeTuple(stop(gretel)).
 
+   onAddBelief(position(X,Y)) :-
+       removeBelief(counter(C)),
+       handlePosition(C,X,Y),
+       checkDistance.
 
+   handlePosition(C,X,Y) :-
+       C < 15,
+       C1 is C + 1,
+       addBelief(counter(C1)).
 
+   handlePosition(C,X,Y) :-
+       C >= 15,
+       addBelief(counter(0)),
+       removeBelief(movement(S,D)),
+       D1 is D + 0.08,
+       addBelief(movement(S,D1)).
 
+   onAddBelief(distance(A,ND,OD)) :-
+       true.
 
+   onAddBelief(distance(A,ND)) :-
+       true.
 
+   onAddBelief(movement(_,_)) :-
+       true.
 
+   onRemoveBelief(movement(_,_)) :-
+       true.
 
+   onAddBelief(counter(C)) :-
+       true.
 
+   onRemoveBelief(counter(C)) :-
+       true.
 
+   onResponseMessage(msg(stop(gretel),X,Y)) :-
+       removeBelief(movement(_,D)),
+       addBelief(movement(0,D)).
 
+   onResponseMessage(msg(breadcrumb(hansel,here),X,Y)) :-
+       removeBelief(counter(_)),
+       addBelief(counter(0)),
+       changeDirection(X,Y).
 
+   checkDistance :-
+       belief(distance(hansel,D)),
+       D < 0.08,
+       writeTuple(stop(hansel)).
 
+   checkDistance :-
+       takeTuple(breadcrumb(hansel,here)).
 
+   changeDirection(X2,Y2) :-
+       belief(position(X1,Y1)),
+       DX is X2 - X1,
+       DY is Y2 - Y1,
+       calculateAtan(DY,DX).
 
+   calculateAtan(DY,DX) :-
+       DX > 0,
+       RAD is atan(DY / DX),
+       removeBelief(movement(S,D)),
+       addBelief(movement(S,RAD)).
 
+   calculateAtan(DY,DX) :-
+       DX < 0,
+       DY >= 0,
+       TMP is atan(DY / DX),
+       RAD is TMP + 3.14,
+       removeBelief(movement(S,D)),
+       addBelief(movement(S,RAD)).
 
+   calculateAtan(DY,DX) :-
+       DX < 0,
+       DY < 0,
+       TMP is atan(DY / DX),
+       RAD is TMP - 3.14,
+       removeBelief(movement(S,D)),
+       addBelief(movement(S,RAD)).
 
+   calculateAtan(DY,DX) :-
+       DX == 0,
+       DY > 0,
+       RAD is 3.14 / 2,
+       removeBelief(movement(S,D)),
+       addBelief(movement(S,RAD)).
 
+   calculateAtan(DY,DX) :-
+       DX == 0,
+       DY < 0,
+       RAD is -3.14 / 2,
+       removeBelief(movement(S,D)),
+       addBelief(movement(S,RAD)).
+\end{lstlisting}
 
-
-
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:Blackboard},caption={Teoria per gli spazi di tuple}]
+   init :-
+       true.
+\end{lstlisting}
 
 
 % \clearpage{\pagestyle{empty}\cleardoublepage} % vedere se serve
