@@ -164,7 +164,7 @@ L'\textbf{\textit{Environment}} \`e l'astrazione dello spazio ed \`e anche l'ent
 
 \`E detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environemnt che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale \`e un entit\`a composta da un nodo centrale e da un set di nodi vicini.
 
-Un \textbf{\textit{Nodo}} \`e un contenitore di molecole e reazioni che \`e posizinato all'interno di un environment.
+Un \textbf{\textit{Nodo}} \`e un contenitore di molecole e reazioni che \`e posizionato all'interno di un environment.
 
 La \textbf{\textit{Molecola}} \`e il nome di un dato, paragonabile a quello che rappresenta il nome di una variabile per i linguaggi imperativi.
 Il valore da associare ad una molecola \`e detto \textbf{\textit{Concentrazione}}.
@@ -684,7 +684,7 @@ Oltre a queste propriet\`a sono stati inseriti anche i metodi per recuperare e a
 Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e ad ogni ciclo ci ragionamento effettua l'aggiornamento della posizone del nodo che ospita l'agente. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicata per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
 
 
-Per simulare il movimeno del nodo che ospita l'agente all'interno dell'ambiente \`e stata modificata la teoria degli agenti ping e pong (indicata rispettivamente nei Codici sorgenti \ref{lst:PingAgent} e \ref{lst:PongAgent}) aggiungendo un belief che rappresenta il bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
+Per simulare il movimento del nodo che ospita l'agente all'interno dell'ambiente \`e stata modificata la teoria degli agenti ping e pong (indicata rispettivamente nei Codici sorgenti \ref{lst:PingAgent} e \ref{lst:PongAgent}) aggiungendo un belief che rappresenta il bounding box dello spazio all'interno del quale si pu\`o muovere l'agente.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Bounding-box}]
   field(5,5,-5,-5).
@@ -774,7 +774,7 @@ Per programmare l'agente sono messi a disposizione i seguenti beliefs:
    \item \textbf{belief(distance(A,D)).} Ogni agente ha al suo interno N-1 di questi belief dove N \`e il numero totale degli agenti; rappresenta la distanza (D) di ogni agente del vicinato (A): il vicinato \`e calcolato con la linking-rule definita nella configurazione della simulazione
 \end{itemize}
 
-Per quanto riguarda i piani disponibili vi sono due tipologie: quelli che innescano un evento e quelli incocati per reagire ad un evento.
+Per quanto riguarda i piani disponibili vi sono due tipologie: quelli che innescano un evento e quelli invocati per reagire ad un evento.
 I piani che fanno parte del primo tipo sono:
 \begin{itemize}
    \item \textbf{sendMessage(R,M).} Consente di inviare un messaggio (M) ad un destinatario (R)
@@ -791,7 +791,7 @@ L'altra tipologia riguarda piani invocati per consentire all'agente di reagire a
 
 Per definire il linguaggio si \`e cercato di racchiudere tutte le caratteristiche dell'agente all'interno di una liberia di piani che fornisce una base al programmatore dell'agente e che consente di avere un'espressivit\`a maggiore potendo definire il comportamento delle parti scatenate dagli eventi.
 \\
-I metodi messi a disposizione della libreria sono implementati come mostrato nel Codice sorgente \ref{lst:LibreriaAgenti}.
+I piani messi a disposizione della libreria sono implementati come mostrato nel Codice sorgente \ref{lst:LibreriaAgenti}.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:LibreriaAgenti},caption={Libreria agenti}]
    receiveMessage :-
@@ -854,7 +854,7 @@ Lo stato dell'arte prima della rifattorizzazione prevedeva che la classe di Alch
 Con la rifattorizzazione, si \`e voluto creare una struttura con una classe principale che implementa i metodi per gestire il comportamento degli agenti e che sia estesa da altre classi, le quali implementino il ciclo di ragionamento invocando i metodi della classe padre.
 \\
 Seguendo questa logica \`e stata creata la classe astratta \textbf{AbstracAgent} che estende \textit{AbstractAction} e che, dei metodi rimasti da implementare dell'interfaccia \textit{Action}, definisce solamente \textit{getContext} lasciando alla classe dell'agente che si vuole creare la capacit\`a di implementare \textit{execute} e \textit{cloneAction}, rispettivamente utilizzati per il ciclo di ragionamento e per clonare l'azione.
-Nella classe astratta creata, sono state quindi definite le variabili per la gestione dell'agente, tra cui quelle per le code dei messaggi (entrata e uscita), il motore tuProlog e una struttura per la notifica dei cambiamenti della 'belief base'. Nel costruttore viene caricata inoltre la libreria definita nel Codice sorgente \ref{lst:LibreriaAgenti} nella quale sono descritti i piani che definiscono il linguaggio e invocabili nella teoria dell'agente. Inoltre la classe contiene i metodi per il comportamento dell'agente nel ciclo di ragionamento descritti nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento} e quelli per l'inizializzazione. Quest'ultima è identificata come la prima esecuzione del ciclo di ragionamento dell'agente e che quindi racchiude delle istruzioni basilari per la sua corretta operativit\`a: i metodi in questione sono \textit{inizializeAgent} e \textit{initReasoning}.
+Nella classe astratta creata, sono state quindi definite le variabili per la gestione dell'agente, tra cui quelle per le code dei messaggi (entrata e uscita), il motore tuProlog e una struttura per la notifica dei cambiamenti della 'belief base'. Nel costruttore viene caricata inoltre la libreria definita nel Codice sorgente \ref{lst:LibreriaAgenti} nella quale sono descritti i piani che definiscono il linguaggio e invocabili nella teoria dell'agente. Inoltre la classe contiene i metodi per il comportamento dell'agente nel ciclo di ragionamento descritti nel Codice sorgente \ref{lst:ImplementazioneCicloDiRagionamento} e quelli per l'inizializzazione. Quest'ultima \`e identificata come la prima esecuzione del ciclo di ragionamento dell'agente e che quindi racchiude delle istruzioni basilari per la sua corretta operativit\`a: i metodi in questione sono \textit{inizializeAgent} e \textit{initReasoning}.
 
 Estendendo la classe appena descritta \`e stata creata \textbf{SimpleAgent} che racchiude tutte le caratteristiche principali di un agente descritte precedentememte. Alla sua istanzazione, oltre a richiamare il costruttore del padre, carica nel motore tuProlog il file contenente la sua teoria. Gli unici metodi rimasti da definire per creare l'agente sono \textit{execute} e \textit{cloneAction}. L'implementazione del primo \`e mostrata nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} mentre la seconda \`e semplicemente la creazione di una nuova istanza dell'oggetto che prende il nome 'cloned\_' seguito dal nome dell'agente (es. per l'agente 'pong' verr\`a creato l'agente 'cloned\_pong').
 \medskip
@@ -905,7 +905,7 @@ Con questa rifattorizzazione si conclude la prima fase del progetto che ha perme
 Terminata l'implementazione dei componenti che consentono di definire il comportamento di un agente quali scambio di messaggi, spostamento del nodo e aggiornamenro della 'belief base' si \`e passati all'implementazione dell'estensione di Spatial Tuples per gli agenti.
 Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente dove:
 \begin{itemize}
-   \item le tuple sono posizinoate nel mondo fisico e si possono muovere;
+   \item le tuple sono posizionate nel mondo fisico e si possono muovere;
    \item il comportamento delle primitive di coordinamento pu\`o dipendere dalla propriet\`a spaziali del coordinameto degli agenti;
    \item lo spazio di tuple pu\`o essere concepito come un livello virtuale che aumenta la realt\`a fisica.
 \end{itemize}
@@ -929,7 +929,7 @@ Le tuple spaziali possono essere associate a posizioni o regioni in modo diretto
 
 
 \section{Implementazione modello}
-Per inserire il modello appena descritto all'interno dell'incarnazione sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente per permettergli di fer comunicare gli agenti con lo spazio di tuple.
+Per inserire il modello appena descritto all'interno dell'incarnazione sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente per permettergli di far comunicare gli agenti con lo spazio di tuple.
 
 Sono stati quindi definiti i seguenti piani che rispecchiano rispettivamente le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello Spaital Tuples e sono state aggiunte alla libreria tuProlog degli agenti dell'incarnazione.
 \medskip
@@ -952,7 +952,7 @@ Come detto nella sezione \ref{ModelloSpatialTuples}, se le operazioni richieste 
 \\
 Per le richieste di tipo \textit{read} e \textit{take}, se l'operazione di match del template va a successo deve essere notificata all'agente la tupla letta/prelevata. Questa azione \`e fatta inserendo nella struttura di notifica dei belif dell'agente un nuovo elemento, che \`e la tupla recuperata dallo spazio di tuple, e che verr\`a notificata nel prossimo ciclo di ragionamento dell'agente.
 
-Per completare l'implementazione \`e necessario definire un metodo nella classe AbstracAgent che consente agli agenti, durante il loro ciclo di ragionamento, di recuperari i belief inseriti con i piani descritti nel Codice sorgente \ref{lst:PianiSpatialTuples} e di inserirli nello spazio di tuple. \`E stato quindi implementato il metodo \textit{retrieveTuples} che per prima cosa recupera tutte le tuple dalla teoria dell'agente e poi in base al tipo di azione esegue delle operazioni diverse.
+Per completare l'implementazione \`e necessario definire un metodo nella classe AbstracAgent che consente agli agenti, durante il loro ciclo di ragionamento, di recuperare i belief inseriti con i piani descritti nel Codice sorgente \ref{lst:PianiSpatialTuples} e di inserirli nello spazio di tuple. \`E stato quindi implementato il metodo \textit{retrieveTuples} che per prima cosa recupera tutte le tuple dalla teoria dell'agente e poi in base al tipo di azione esegue delle operazioni diverse.
 \\
 Se l'azione \`e \textit{write}, recupera l'agente di tipo Blackboard pi\`u vicino e se lo trova invoca il metodo per inserire la richiesta.
 \\
