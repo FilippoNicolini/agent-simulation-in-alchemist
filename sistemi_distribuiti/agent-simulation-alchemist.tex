@@ -145,11 +145,11 @@ Per creare l'incarnazione sar\`a necessario definire una base del modello ad age
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 % mette i numeri arabi
 \pagenumbering{arabic}
-Alchemist fornisce un ambiente di simulazione sul quale \`e possibile sviluppare nuove incarnazioni, ovvero nuove definizioni di modelli sviluppati su di esso.
+Alchemist fornisce un ambiente di simulazione sul quale \`e possibile sviluppare nuove incarnazioni, ovvero nuove definizioni di modelli implementati su di esso.
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{Il meta-modello}
-Il meta-modello di Alchemist pu\`o essere compreso con la figura \ref{fig:alchemistModel}.
+Il meta-modello di Alchemist pu\`o essere compreso osservando la figura \ref{fig:alchemistModel}.
 %crea l'ambiente figura;
 \begin{figure}[h] % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
@@ -258,7 +258,7 @@ Questo parametro \`e opzionale e di default \`e uno spazio continuo bidimensiona
 
 La keyword \textbf{positions} consente di specificare il tipo delle coordinate della simulazione. La psizione riflette lo spazio fisico: per esempio non si potr\`a utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una citt\`a visto che dati due punti A e B, nel mondo reale la distanza AB \`e diversa da quella BA.
 \medskip
-\begin{lstlisting}[firstnumber=last,caption={Default environment}]
+\begin{lstlisting}[firstnumber=last,caption={Posizioni}]
   positions:
     type: LatLongPosition
 \end{lstlisting}
@@ -284,9 +284,9 @@ Esempi di classi utilizzabili nel parametro 'in' sono Point e Circle.
 La classe Circle necessita di quattro parametri, da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
 
 Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene passato alla creazione della reazione e che pu\`o essere utilizzato per istanziare condizioni e azioni).
-Un'esempio di displacements \`e il seguente.
+Un'esempio di displacements \`e quello mostrato nel Codice sorgente \ref{lst:EsempioDisplacement}.
 \medskip
-\begin{lstlisting}[firstnumber=last,caption={Disposizione nodi e reazioni associate}]
+\begin{lstlisting}[firstnumber=last,label={lst:EsempioDisplacement},caption={Disposizione nodi e reazioni associate}]
   displacements:
     - in: {type: Circle, parameters: [5,0,0,2]}
       programs:
@@ -312,7 +312,7 @@ Un'agente \`e un entit\`a che agisce in modo autonomo e continuo in uno spazio c
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{Agenti BDI}
-Gli agenti BDI forniscono un meccanismo per separare le attivit\`a di selezione di un piano fra quelli presenti nella sua teoria dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
+Gli agenti BDI forniscono un meccanismo per separare le attivit\`a di selezione di un piano, fra quelli presenti nella sua teoria, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
 
 I \textbf{\textit{Beliefs}} sono informazioni dello stato dell'agente, ovvero ci\`o che l'agente sa del mondo (di se stesso e degli altri agenti), e possono comprendere regole di inferenza per permettere l'aggiunta di nuovi beliefs. L'insieme dei beliefs di un agente \`e detto 'belief base' o 'belief set' e si pu\`o modificare nel tempo.
 
@@ -361,7 +361,7 @@ Le primitive che permettono la comunicazione sono:
    \item in(tt): ricerca tuple che corrispondano al template tt e le consuma
 \end{itemize}
 
-Le richieste in Spatial Tuples sono sospensive e non deterministiche. Sospensive perch\`e se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata la tupla. Il non determinismo, invece, deriva dal fatto che se ci fossero pi\`u tuple che corrispondono al template ne viene scelta una casualmente.
+Le richieste in Spatial Tuples sono sospensive e non deterministiche. Sospensive perch\`e se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata una tupla che risponde alla richiesta. Il non determinismo, invece, deriva dal fatto che se ci fossero pi\`u tuple che corrispondono al template ne viene scelta una casualmente.
 
 Le tuple spaziali possono essere associate a posizioni o regioni in modo diretto o indiretto. Le operazioni dirette associano direttamente la tupla spaziale ad una posizione o una regione. Quelle indirette, invece, associano tuple a componenti situati e vale anche se la regione in cui si trova il componente cambia nel tempo: finch\`e non viene rimossa, la tupla \`e associata alla regione del componente in cui \`e situata.
 
@@ -389,7 +389,7 @@ Nel secondo mapping, l'agente \`e stato spostato pi\`u internamente al nodo rife
 \\
 Utilizzando questo secondo caso si riuscir\`a a creare un sistema con pi\`u agenti all'interno di un singolo nodo, che in ambito applicativo pu\`o essere riferito ad un device, il quale si muover\`a nello spazio insieme ad altri nodi, contenitori di altri agenti.
 
-La frequenza con cui gli eventi di Alchemist sono innescati dipende, oltre che dai parametri passati nella configurazione della simulazione, anche dalle condizioni definite per quello specifico agente: questo influisce sul numero di volte in cui viene eseguita un'azione.
+La frequenza con cui gli eventi di Alchemist sono innescati dipende, oltre che dai parametri passati nella configurazione della simulazione, anche dalle condizioni definite per quello specifico agente: questo influisce sul numero di volte in cui viene eseguita un'azione, ovvero il ciclo di ragionamento dell'agente.
 
 \section{Definizione del linguaggio}
 Dopo aver effettuato l'analisi dei vari mapping si \`e passati alla realizzazione di un linguaggio per l'incarnazione. Lo scopo di questa operazione \`e quella di fornire all'utilizzatore finale, ovvero il programmatore dell'agente, completa libert\`a per la definizione della teoria dell'agente ma che al tempo stesso permetta di gestire il comportamento dell'agente all'interno dell'ambiente di simulazione.
@@ -415,7 +415,7 @@ L'altra tipologia riguarda piani invocati per consentire all'agente di reagire a
    \item \textbf{onRemoveBelief(B).} Richiamato ad ogni rimozione di belief dalla 'belief base'
 \end{itemize}
 
-Per inserire il modello Spatial Tuples all'interno dell'incarnazione,sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente, permettergli di far comunicare gli agenti con gli spazi di tuple. Sono stati quindi definiti i piani che rispecchiano le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello Spaital Tuples e un piano per la ricezione delle tuple prelevate. Mentre i primi tre sono piani che innescano un'azione, il quarto \`e un piano invocato per reagire alle operazioni di \textit{read} e \textit{write} e che il programmatore dell'agente sceglie come implementare.
+Per inserire il modello Spatial Tuples all'interno dell'incarnazione, sono state analizzate le sue parti per decidere l'implementazione delle primitive da fornire al programmatore dell'agente, permettergli di far comunicare gli agenti con gli spazi di tuple. Sono stati quindi definiti i piani che rispecchiano le primitive \textbf{out(t)}, \textbf{rd(tt)}, \textbf{in(tt)} definte dal modello Spaital Tuples e un piano per la ricezione delle tuple prelevate. Mentre i primi tre sono piani che innescano un'azione, il quarto \`e un piano invocato per reagire alle operazioni di \textit{read} e \textit{write}, e che il programmatore dell'agente sceglie come implementare.
 
 \begin{itemize}
    \item \textbf{writeTuple(T).} Scrive una tupla T nello spazio di tuple pi\`u vicino.
@@ -453,7 +453,7 @@ Per la creazione del \textbf{nodo} si \`e definita la classe \textbf{AgentsConta
 
 La \textbf{distribuzione temporale} di ogni reazione \`e stata realizzata istanziando la classe \textit{DiracComb} inizializzata con il parametro recuperato dal file di configurazione della simulazione. La classe permette di emettere eventi ad un intervallo temporale specificato dal parametro passato.
 
-Per le \textbf{reazioni} \`e stata definita la classe \textbf{AgentReaction} che implementa \textit{AbstractReaction} e che rappresenta l'agente e che contiene le azioni, che sono il fulcro dell'agente, e le condizioni che devono verificarsi per far avvenire le azioni. Come propriet\`a della classe \`e presente solo una stringa che memorizza il nome dell'agente.
+Per le \textbf{reazioni} \`e stata definita la classe \textbf{AgentReaction} che implementa \textit{AbstractReaction} e che rappresenta l'agente e che contiene le azioni e le condizioni che devono verificarsi per far avvenire le azioni. Come propriet\`a della classe \`e presente solo una stringa che memorizza il nome dell'agente.
 \\
 La creazione delle \textbf{condizioni} \`e stata definita istanziando la classe \textit{AbstractCondition} e implementando i metodi mancanti dell'interfaccia Condition: \textit{getContext} (definisce la profondit\`a della condizione tra GLOBAL, NEIGHBORHOOD, LOCAL), \textit{getPropensityContribution} (permette di influenzare la velocit\`a della reazione che decide se utilizzare o meno questo parametro), \textit{isValid} (definisce la clausola per la valit\`a della condizione).
 \\
@@ -497,7 +497,7 @@ Nel metodo \textbf{\textit{notifyBeliefBaseChanges}} viene presa la mappa con tu
 
 
 \subsection{Spostamento del nodo}
-Per realizzare lo spostamento sono stati utilizzati i campi per memorizzare la velocit\`a di spostamento del nodo, la direzione o angolo dello spostamento (rappresentata da un valore espresso in radianti) e il tempo della simulazione in cui \`e avvenuto l'ultimo aggiornamento della posizione della classe AgentsContainerNode.
+Per realizzare lo spostamento sono stati utilizzati i campi per memorizzare la velocit\`a di spostamento del nodo, la direzione o angolo dello spostamento (rappresentata da un valore espresso in radianti) e il tempo della simulazione in cui \`e avvenuto l'ultimo aggiornamento della posizione della classe \textit{AgentsContainerNode}.
 Oltre a queste propriet\`a sono presenti anche i metodi per recuperare e aggiornare tali valori.
 \\
 Il metodo che effettua lo spostamento vero e proprio del nodo \`e \textit{changeNodePosition} che prende come parametro il tempo della simulazione corrente e ad ogni ciclo ci ragionamento effettua l'aggiornamento della posizone del nodo che ospita l'agente. L'implementazione del metodo \`e mostrata nel Codice sorgente \ref{lst:changeNodePosition}. All'interno del metodo viene costruito un cerchio che ha come centro le coordinate attuali del nodo e come raggio la differenza di tempo rispetto al precedente spostamento moltiplicata per la velocit\`a. La nuova posizione \`e un punto della circonferenza che viene individuato utilizzando l'angolo o direzione del nodo.
@@ -587,11 +587,11 @@ Come detto nella sezione \ref{ModelloSpatialTuples}, se le operazioni richieste 
 \\
 Per le richieste di tipo \textit{read} e \textit{take}, se l'operazione di match del template va a successo deve essere notificata all'agente la tupla letta/prelevata. Questa azione \`e fatta inserendo nella struttura di notifica dei belif dell'agente un nuovo elemento, che \`e la tupla recuperata dallo spazio di tuple, e che verr\`a notificata nel prossimo ciclo di ragionamento dell'agente.
 
-Per completare l'implementazione di Spatial Tuples \`e necessario definire un metodo nella classe AbstracAgent che consente agli agenti, durante il loro ciclo di ragionamento, di recuperare i beliefs inseriti con i piani descritti nel Codice sorgente \ref{lst:LibreriaAgenti} e di inserirli nello spazio di tuple. \`E stato quindi implementato il metodo \textit{retrieveTuples} che per prima cosa recupera tutte le tuple dalla teoria dell'agente e poi in base al tipo di azione esegue delle operazioni diverse.
+Per completare l'implementazione di Spatial Tuples \`e necessario definire un metodo nella classe \textit{AbstracAgent} che consente agli agenti, durante il loro ciclo di ragionamento, di recuperare i beliefs inseriti con i piani descritti nel Codice sorgente \ref{lst:LibreriaAgenti} e di inserirli nello spazio di tuple. \`E stato quindi implementato il metodo \textit{retrieveTuples} che per prima cosa recupera tutte le tuple dalla teoria dell'agente e poi in base al tipo di azione esegue delle operazioni diverse.
 \\
-Se l'azione \`e \textit{write}, cerca l'agente di tipo Blackboard pi\`u vicino e se lo trova invoca il metodo per inserire la richiesta.
+Se l'azione \`e \textit{write}, cerca l'agente di tipo \textit{Blackboard} pi\`u vicino e se lo trova invoca il metodo per inserire la richiesta.
 \\
-Diversamente, se l'azione \`e \textit{read} o \textit{take}, viene recuperata la lista di agenti di tipo Blackboard presenti nel suo vicinato. Per ognuno degli agenti della lista viene inserita la richiesta in modo tale da estendere la ricerca della tupla che corrisponda al template.
+Diversamente, se l'azione \`e \textit{read} o \textit{take}, viene recuperata la lista di agenti di tipo \textit{Blackboard} presenti nel suo vicinato. Per ognuno degli agenti della lista viene inserita la richiesta in modo tale da estendere la ricerca della tupla che corrisponda al template.
 
 \section{Simulazione}
 Per testare l'incarnazione creata \`e stato utilizzato il pattern di coordinazione 'breadcrumbs'. L'esempio prodotto utilizza due agenti, Hansel e Gretel, che si muovono all'interno di un'ambiente in cui sono presenti altri agenti utilizzati come spazi di tuple situati. L'agente Hansel si sposter\`a casualmente nell'ambiente lasciando le briciole negli spazi di tuple pi\`u vicini al suo passaggio, mentre l'agente Gretel dovr\`a muoversi alla ricerca delle briciole e una volta che ne ha individuata una iniziare a seguire le altre per raggiungere Hansel.
@@ -839,7 +839,10 @@ L'agente Hansel nella ricerca dell'agente Gretel esegue il seguente algoritmo. L
 \end{itemize}
 
 \subsection{Raccolta dei dati}
-Per valutare il grado di successo della simulazione sono state effettuate analisi sui risultati delle simulazioni. Su dieci di simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte nei Codici sorgenti \ref{lst:Hansel} e \ref{lst:Gretel}, \`e risultato che l'agente Hansel ha raggiunto Gretel nove volte con un tempo medio di 545 tau (tempo della simulazione).
+Per valutare il grado di successo della simulazione sono state effettuate analisi sui risultati delle simulazioni.
+\\
+\textbf{TODO}:\textit{inserire analisi dati una volta effettuate le simulazioni nel modo corretto}
+% Su dieci di simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte nei Codici sorgenti \ref{lst:Hansel} e \ref{lst:Gretel}, \`e risultato che l'agente Hansel ha raggiunto Gretel nove volte con un tempo medio di 545 tau (tempo della simulazione).
 
 
 % \clearpage{\pagestyle{empty}\cleardoublepage} % vedere se serve
