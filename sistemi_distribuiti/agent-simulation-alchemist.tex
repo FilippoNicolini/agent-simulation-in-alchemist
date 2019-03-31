@@ -106,6 +106,8 @@ Questo lavoro ha l'obiettivo di implementare sul simulatore Alchemist il modello
 
 Alchemist \`e un meta-simulatore estendibile, ispirato alla chimica stocastica e adatto al calcolo pervasivo e ai sistemi distribuiti. Fornisce un meta-modello flessibile, sul quale gli sviluppatori legano le proprie astrazioni, realizzando un'incarnazione.
 
+Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente che supporta la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo.
+
 Per creare l'incarnazione sar\`a necessario definire una base del modello ad agenti sul quale poi innestare Spatial Tuples.
 
 % non numera l'ultima pagina sinistra
@@ -191,117 +193,11 @@ Per comprendere meglio il meccanismo di una reazione si pu\`o osservare la figur
 
 Una \textbf{\textit{Condizione}} \`e una funzione che prende come input l'environment corrente e restituisce come output un booleano e un numero. Se la condizione non si verifica, le azioni associate a quella reazione non saranno eseguite. In relazione a parametri di configurazione e alla distribuzione temporale, una condizione potrebbe influire sulla velocit\`a della reazione.
 
-La \textbf{\textit{Distribuzione temporale}} indica il numero di eventi che si verificano successivamente ed indipendentemente in un dato intervallo di tempo.
+La \textbf{\textit{Distribuzione temporale}} indica il numero di eventi, in un dato intervallo di tempo, generati da Alchemist e che innescano la verifica delle condizioni che possono portare alla potenziale esecuzione delle azioni.
 
 Un'\textbf{\textit{Azione}} \`e la definizione di una serie di operazioni che modellano un cambiamento nel nodo o nell'environment.
 
 In Alchemist un'incarnazione \`e un'istanza concreta del meta-modello appena descritta e che implementa una serie di componenti base come: la definizione di una molecola e del tipo di dati della concentrazione, un set di condizioni, le azioni e le reazioni. Incarnazioni diverse possono modellare universi completamente differenti.
-
-%++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Scrivere una simulazione}
-% style for general source code
-\lstset{
-  numberstyle=\footnotesize\color{black},
-  basicstyle=\ttfamily,
-  breakatwhitespace=false,
-  breaklines=true,
-  captionpos=b,
-  keepspaces=true,
-  numbers=left,
-  numbersep=0pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  tabsize=2,
-  frame=tb
-  %label=incarnationYAML,
-  %caption={First verbatim}
-  %language=Java
-  %escapeinside={(*@}{@*)}
-}
-Il linguaggio da utilizzare per scrivere le simulazioni in Alchemist \`e YAML e quello che il parser del simulatore si aspetta in input \`e una mappa YAML.
-\\
-Nei prossimi paragrafi verr\`a mostrato quali sezioni si possono inserire e come utilizzarle per creare la simulazione che si vuole realizzare.
-
-La sezione \textbf{incarnation} \`e obbligatoria. Il parser YAML si aspetta una stringa che rappresenta il nome dell'incarnazione da utilizzare per la simulazione.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Incarnazione}]
-  incarnation: agent
-\end{lstlisting}
-
-Nel resto della sezione, il valore associato alla chiave 'type' fa riferimento al nome di una classe. Se il nome passato non \`e completo, ovvero non \`e comprensivo del percorso fino alla classe, Alchemist provveder\`a a cercare la classe tra i packages.
-
-Per dichiarare variabili che poi potranno essere richiamate all'interno del file di configurazione della simulazione si pu\`o procedere in questo modo.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Variabili simulazione}]
-  variables:
-    myVar: &myVar
-      par1: 0
-      par2: "string"
-    mySecondVar: &myVar2
-      par: "value"
-\end{lstlisting}
-
-Utilizzando la keyword \textbf{environment} si pu\`o scegliere quale definizione di ambiente utilizzare per la simulazione.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Environment}]
-  environment:
-    type: OSMEnvironment
-    parameters: [/maps/foo.pbf]
-\end{lstlisting}
-Questo parametro \`e opzionale e di default \`e uno spazio continuo bidimensionale: ometterlo equivale a scrivere la seguente configurazione.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Default environment}]
-  environment:
-    type: Continuous2DEnvironment
-\end{lstlisting}
-
-La keyword \textbf{positions} consente di specificare il tipo delle coordinate della simulazione. La psizione riflette lo spazio fisico: per esempio non si potr\`a utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una citt\`a visto che dati due punti A e B, nel mondo reale la distanza AB \`e diversa da quella BA.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Posizioni}]
-  positions:
-    type: LatLongPosition
-\end{lstlisting}
-
-I collegamenti tra i nodi che verranno utilizzati nella simulazione sono specificati nella sezione \textbf{network-model}. Un esempio per la costruzione di collegamenti \`e il seguente.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Funzione linking-rule}]
-  network-model:
-    type: EuclideanDistance
-    parameters: [10]
-\end{lstlisting}
-Anche questo \`e un parametro opzionale e di default non ci sono collegamenti, ovvero i nodi nell'environemnt non sono collegati, ed \`e descritto con il seguente formalismo.
-\medskip
-\begin{lstlisting}[firstnumber=last,caption={Default linking-rule}]
-  network-model:
-    type: NoLinks
-\end{lstlisting}
-
-Il posizionamento dei nodi viene gestito dalla sezione \textbf{displacements}. Questa sezione pu\`o contenere uno o pi\`u definizioni di disposizioni per i nodi.
-Il parametro 'in' definisce la geometria all'interno del quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro 'programs' definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
-\\
-Esempi di classi utilizzabili nel parametro 'in' sono Point e Circle.
-La classe Circle necessita di quattro parametri, da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
-
-Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene passato alla creazione della reazione e che pu\`o essere utilizzato per istanziare condizioni e azioni).
-Un'esempio di displacements \`e quello mostrato nel Codice sorgente \ref{lst:EsempioDisplacement}.
-\medskip
-\begin{lstlisting}[firstnumber=last,label={lst:EsempioDisplacement},caption={Disposizione nodi e reazioni associate}]
-  displacements:
-    - in: {type: Circle, parameters: [5,0,0,2]}
-      programs:
-      -
-        - time-distribution: 1
-          program: "reactionParam"
-        - time-distribution: 2
-          program: "doSomethingParam"
-    - in: {type: Point, parameters: [1,1]}
-      programs:
-      -
-        - time-distribution: 1
-          program: "pointReactionParam"
-\end{lstlisting}
-
 
 %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
 \chapter{Agenti}
@@ -311,16 +207,16 @@ Un'esempio di displacements \`e quello mostrato nel Codice sorgente \ref{lst:Ese
 Un'agente \`e un entit\`a che agisce in modo autonomo e continuo in uno spazio condiviso con altri agenti. Le caratteristiche principali di un agente sono: autonomia, proattivit\`a e reattivit\`a. Gli agenti sono formati da un nome, che \`e una caratteristica statica, e da componenti dinamici come lo stato.
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Agenti BDI}
-Gli agenti BDI forniscono un meccanismo per separare le attivit\`a di selezione di un piano, fra quelli presenti nella sua teoria, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
-
-I \textbf{\textit{Beliefs}} sono informazioni dello stato dell'agente, ovvero ci\`o che l'agente sa del mondo (di se stesso e degli altri agenti), e possono comprendere regole di inferenza per permettere l'aggiunta di nuovi beliefs. L'insieme dei beliefs di un agente \`e detto 'belief base' o 'belief set' e si pu\`o modificare nel tempo.
-
-I \textbf{\textit{Desires}} sono tutti i possibili piani che l'agente potrebbe eseguire. Rappresentano gli obiettivi o le situazioni che l'agente vorrebbe realizzare o portare a termine. I \textbf{goals} sono desires che l'agente persegue attivamente: per questo motivo, in generale, i piani desiderabili possono non essere coerenti tra loro mentre i goals \`e bene che lo siano.
-
-Le \textbf{\textit{Intentions}} sono piani a cui l'agente ha deciso di lavorare o a cui sta gi\`a lavorando. I piani sono sequenze di azioni che un agente pu\`o eseguire per raggiungere una intention. I piani possono contenerne altri al loro interno.
-
-Gli \textbf{\textit{Eventi}} innescano le attivit\`a reattive degli agenti il cui risultato pu\`o essere l'aggiornamento dei beliefs, la chiamata ad altri piani o la modifica di goals.
+% \section{Agenti BDI}
+% Gli agenti BDI forniscono un meccanismo per separare le attivit\`a di selezione di un piano, fra quelli presenti nella sua teoria, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
+%
+% I \textbf{\textit{Beliefs}} sono informazioni dello stato dell'agente, ovvero ci\`o che l'agente sa del mondo (di se stesso e degli altri agenti), e possono comprendere regole di inferenza per permettere l'aggiunta di nuovi beliefs. L'insieme dei beliefs di un agente \`e detto 'belief base' o 'belief set' e si pu\`o modificare nel tempo.
+%
+% I \textbf{\textit{Desires}} sono tutti i possibili piani che l'agente potrebbe eseguire. Rappresentano gli obiettivi o le situazioni che l'agente vorrebbe realizzare o portare a termine. I \textbf{goals} sono desires che l'agente persegue attivamente: per questo motivo, in generale, i piani desiderabili possono non essere coerenti tra loro mentre i goals \`e bene che lo siano.
+%
+% Le \textbf{\textit{Intentions}} sono piani a cui l'agente ha deciso di lavorare o a cui sta gi\`a lavorando. I piani sono sequenze di azioni che un agente pu\`o eseguire per raggiungere una intention. I piani possono contenerne altri al loro interno.
+%
+% Gli \textbf{\textit{Eventi}} innescano le attivit\`a reattive degli agenti il cui risultato pu\`o essere l'aggiornamento dei beliefs, la chiamata ad altri piani o la modifica di goals.
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
 \section{tuProlog}
@@ -336,6 +232,10 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 \end{itemize}
 
 Librerie e teorie, pur essendo simili, sono gestite diversamente dal motore tuProlog.
+
+\section{Agenti in tuProlog}
+Gli agenti descritti in tuProlog sono entit\`a computazionali autonome che effettuano delle operazioni che impattano sul proprio stato e su quello dell'ambiente in cui sono immersi. La reattivit\`a \`e una caratteristica importante per quanto riguada gli agenti poich\`e devono essere pronti a reagire ad eventi o cambiamenti che avvengono nello spazio.
+Un'agente sar\`a quindi definito attraverso una teoria composta da predicati, i quali sono i piani dell'agente. I piani saranno composti di una serie di operazioni volte a svolgere un'azione.
 
 \chapter{Spatial Tuples}
 Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente dove:
@@ -391,7 +291,7 @@ Utilizzando questo secondo caso si riuscir\`a a creare un sistema con pi\`u agen
 
 La frequenza con cui gli eventi di Alchemist sono innescati dipende, oltre che dai parametri passati nella configurazione della simulazione, anche dalle condizioni definite per quello specifico agente: questo influisce sul numero di volte in cui viene eseguita un'azione, ovvero il ciclo di ragionamento dell'agente.
 
-\section{Definizione del linguaggio}
+\section{Definizione del linguaggio}\label{DefinizioneLinguaggio}
 Dopo aver effettuato l'analisi dei vari mapping si \`e passati alla realizzazione di un linguaggio per l'incarnazione. Lo scopo di questa operazione \`e quella di fornire all'utilizzatore finale, ovvero il programmatore dell'agente, completa libert\`a per la definizione della teoria dell'agente ma che al tempo stesso permetta di gestire il comportamento dell'agente all'interno dell'ambiente di simulazione.
 
 Per programmare l'agente sono messi a disposizione i seguenti beliefs:
@@ -541,7 +441,7 @@ public void changeNodePosition(final Time time) {
 \end{lstlisting}
 
 \subsection{Aggiornamento belief base}
-Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta', 'assertz' e 'retract' utilizzando strutture dati e piani tuPorlog per svolgere lo stesso comportamento: modifica della 'belief base', notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
+Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta', 'assertz' e 'retract' utilizzando strutture dati e piani tuProlog per svolgere lo stesso comportamento: modifica della 'belief base', notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
 \\
 La prima parte, quella dell'aggiunta o rimozione del belief dalla 'belief base', \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
 La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e quest'ultima viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della 'belief base' avvenuta e dove il B \`e il termine recuperato precedentemente.
@@ -594,6 +494,114 @@ Se l'azione \`e \textit{write}, cerca l'agente di tipo \textit{Blackboard} pi\`u
 Diversamente, se l'azione \`e \textit{read} o \textit{take}, viene recuperata la lista di agenti di tipo \textit{Blackboard} presenti nel suo vicinato. Per ognuno degli agenti della lista viene inserita la richiesta in modo tale da estendere la ricerca della tupla che corrisponda al template.
 
 \section{Simulazione}
+Attraverso la configurazione e l'esecuzione delle simulazioni \`e possibile vedere il comportamento delle incarnazioni definite all'interno di Alchemist. Nelle prossime sezioni verr\`a mostrato quali sono le parti che compongono la configurazione di una simulazione e qual \`e la configurazione scelta.
+
+%++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
+\section{Scrivere una simulazione}
+% style for general source code
+\lstset{
+  numberstyle=\footnotesize\color{black},
+  basicstyle=\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=0pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=tb
+  %label=incarnationYAML,
+  %caption={First verbatim}
+  %language=Java
+  %escapeinside={(*@}{@*)}
+}
+Il linguaggio da utilizzare per scrivere le simulazioni in Alchemist \`e YAML e quello che il parser del simulatore si aspetta in input \`e una mappa YAML.
+\\
+Nei prossimi paragrafi verr\`a mostrato quali sezioni si possono inserire e come utilizzarle per creare la simulazione che si vuole realizzare.
+
+La sezione \textbf{incarnation} \`e obbligatoria. Il parser YAML si aspetta una stringa che rappresenta il nome dell'incarnazione da utilizzare per la simulazione.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Incarnazione}]
+  incarnation: agent
+\end{lstlisting}
+
+Nel resto della sezione, il valore associato alla chiave 'type' fa riferimento al nome di una classe. Se il nome passato non \`e completo, ovvero non \`e comprensivo del percorso fino alla classe, Alchemist provveder\`a a cercare la classe tra i packages.
+
+Per dichiarare variabili che poi potranno essere richiamate all'interno del file di configurazione della simulazione si pu\`o procedere in questo modo.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Variabili simulazione}]
+  variables:
+    myVar: &myVar
+      par1: 0
+      par2: "string"
+    mySecondVar: &myVar2
+      par: "value"
+\end{lstlisting}
+
+Utilizzando la keyword \textbf{environment} si pu\`o scegliere quale definizione di ambiente utilizzare per la simulazione.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Environment}]
+  environment:
+    type: OSMEnvironment
+    parameters: [/maps/foo.pbf]
+\end{lstlisting}
+Questo parametro \`e opzionale e di default \`e uno spazio continuo bidimensionale: ometterlo equivale a scrivere la seguente configurazione.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Default environment}]
+  environment:
+    type: Continuous2DEnvironment
+\end{lstlisting}
+
+La keyword \textbf{positions} consente di specificare il tipo delle coordinate della simulazione. La psizione riflette lo spazio fisico: per esempio non si potr\`a utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una citt\`a visto che dati due punti A e B, nel mondo reale la distanza AB \`e diversa da quella BA.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Posizioni}]
+  positions:
+    type: LatLongPosition
+\end{lstlisting}
+
+I collegamenti tra i nodi che verranno utilizzati nella simulazione sono specificati nella sezione \textbf{network-model}. Un esempio per la costruzione di collegamenti \`e il seguente.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Funzione linking-rule}]
+  network-model:
+    type: EuclideanDistance
+    parameters: [10]
+\end{lstlisting}
+Anche questo \`e un parametro opzionale e di default non ci sono collegamenti, ovvero i nodi nell'environemnt non sono collegati, ed \`e descritto con il seguente formalismo.
+\medskip
+\begin{lstlisting}[firstnumber=last,caption={Default linking-rule}]
+  network-model:
+    type: NoLinks
+\end{lstlisting}
+
+Il posizionamento dei nodi viene gestito dalla sezione \textbf{displacements}. Questa sezione pu\`o contenere uno o pi\`u definizioni di disposizioni per i nodi.
+Il parametro 'in' definisce la geometria all'interno del quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro 'programs' definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
+\\
+Esempi di classi utilizzabili nel parametro 'in' sono Point e Circle.
+La classe Circle necessita di quattro parametri, da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point \`e sufficiente fornire in ordine la coordinata x e la coordinata y.
+
+Il parametro 'programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un'esempio di definizione di una reazione \`e utilizzando 'time-distribution' (valore utilizzato per settare la freqeunza) e 'program' (parametro che viene passato alla creazione della reazione e che pu\`o essere utilizzato per istanziare condizioni e azioni).
+Un'esempio di displacements \`e quello mostrato nel Codice sorgente \ref{lst:EsempioDisplacement}.
+\medskip
+\begin{lstlisting}[firstnumber=last,label={lst:EsempioDisplacement},caption={Disposizione nodi e reazioni associate}]
+  displacements:
+    - in: {type: Circle, parameters: [5,0,0,2]}
+      programs:
+      -
+        - time-distribution: 1
+          program: "reactionParam"
+        - time-distribution: 2
+          program: "doSomethingParam"
+    - in: {type: Point, parameters: [1,1]}
+      programs:
+      -
+        - time-distribution: 1
+          program: "pointReactionParam"
+\end{lstlisting}
+
+\section{Configurazione della simulazione}
 Per testare l'incarnazione creata \`e stato utilizzato il pattern di coordinazione 'breadcrumbs'. L'esempio prodotto utilizza due agenti, Hansel e Gretel, che si muovono all'interno di un'ambiente in cui sono presenti altri agenti utilizzati come spazi di tuple situati. L'agente Hansel si sposter\`a casualmente nell'ambiente lasciando le briciole negli spazi di tuple pi\`u vicini al suo passaggio, mentre l'agente Gretel dovr\`a muoversi alla ricerca delle briciole e una volta che ne ha individuata una iniziare a seguire le altre per raggiungere Hansel.
 
 Per realizzare questa simulazione \`e stato scritto il file di configurazione indicato dal Codice sorgente \ref{lst:SimulazioneBreadcrumbs}.
@@ -627,200 +635,26 @@ Per realizzare questa simulazione \`e stato scritto il file di configurazione in
 
 Le teorie degli agenti utilizzate in questa simulazione sono indicate qui di seguito.
 
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Hansel},caption={Teoria agente Hansel}]
-   init :-
-       writeTuple(breadcrumb(hansel,here)),
-       removeBelief(movement(S,D)),
-       addBelief(movement(0.025,4.8)),
-       addBelief(counter(0,0)),
-       addBelief(spiralCorner(0.08)),
-       addBelief(stopped(false)).
+L'agente Hansel, ovvero colui che deve rilasciare le briciole, esegue un movimento a spirale dall'esterno, dell'area delimitata dagli spazi di tuple, verso l'interno. Nel percorrere questa traiettoria scrive su ogni spazio di tuple che incontra una briciola cos\`i formattata \textit{breadcrumb(hansel,here)}.
+Se viene raggiunto dall'agente Gretel, ovvero gli viene notificato che l'agente Gretel \`e stato aggiunto al suo vicinato, si ferma.
+Il movimento del nodo \`e comandato dall'agente tramite il belief \textit{movement(S,D)} descritto nella sezione \ref{DefinizioneLinguaggio}.
 
-   onAddBelief(position(X,Y)) :-
-       belief(stopped(false)),
-       removeBelief(counter(C1,C2)),
-       handlePosition(C1,C2,X,Y).
 
-   onAddBelief(position(X,Y)) :-
-       true.
-
-   handlePosition(C1,C2,X,Y) :-
-       C1 < 300,
-       C2 < 10,
-       C1N is C1 + 1,
-       C2N is C2 + 1,
-       addBelief(counter(C1N,C2N)),
-       writeTuple(breadcrumb(hansel,here)).
-
-   handlePosition(C1,C2,X,Y) :-
-       C1 < 300,
-       C1N is C1 + 1,
-       C2 >= 10,
-       addBelief(counter(C1N,0)),
-       removeBelief(movement(S,D)),
-       belief(spiralCorner(V)),
-       D1 is D + V,
-       addBelief(movement(S,D1)).
-
-   handlePosition(C1,C2,X,Y) :-
-       C1 >= 300,
-       C2N is C2 + 1,
-       addBelief(counter(0,C2N)),
-       removeBelief(spiralCorner(V)),
-       TEMP is V * 0.30,
-       V1 is V + TEMP,
-       addBelief(spiralCorner(V1)).
-
-   onAddBelief(distance(A,ND,OD)) :-
-       true.
-
-   onAddBelief(distance(gretel,ND)) :-
-       removeBelief(stopped(false)),
-       addBelief(stopped(true)),
-       removeBelief(movement(_,D)),
-       addBelief(movement(0,D)).
-
-   onAddBelief(distance(A,ND)) :-
-       true.
-
-   onAddBelief(movement(_,_)) :-
-       true.
-
-   onRemoveBelief(movement(_,_)) :-
-       true.
-
-   onAddBelief(counter(C1,C2)) :-
-       true.
-
-   onRemoveBelief(counter(C1,C2)) :-
-       true.
-
-   onAddBelief(spiralCorner(V)) :-
-       true.
-
-   onRemoveBelief(spiralCorner(V)) :-
-       true.
-
-   onResponseMessage(msg(stop(hansel),X,Y)) :-
-       removeBelief(movement(_,D)),
-       addBelief(movement(0,D)),
-       writeTuple(stop(gretel)).
-\end{lstlisting}
-
+L'agente Gretel adotta invece un movimento che genera in modo casuale direzione e velocit\`a del nodo secondo la distribuzione di L\`evy.
+Per effettuare il calcolo sono stati inseriti tramite tuProlog due oggetti Java (randomGenerator: istanza di RandomGenerator, levyDistribution: istanza di LevyDistribution) all'interno della libreria tuProlog e utilizzati nel modo descritto dal Codice sorgente \ref{lst:Gretel}.
+Ad ogni passo cerca una briciola negli spazi di tuple presenti nel suo vicinato e se la trova modifica la direzione verso il nodo che contiene la briciola.
+Se viene aggiunto l'agente Hansel nel suo vicinato si ferma.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Gretel},caption={Teoria agente Gretel}]
-   init :-
-       removeBelief(movement(_,_)),
-       randomDirection(D),
-       addBelief(movement(0.025,D)),
-       takeTuple(breadcrumb(hansel,here)),
-       randomSteps(P),
-       addBelief(counterStep(P)),
-       addBelief(stopped(false)).
-
-   onAddBelief(position(X,Y)) :-
-       belief(stopped(false)),
-       removeBelief(counterStep(S)),
-       handlePosition(S,X,Y),
-       takeTuple(breadcrumb(hansel,here)).
-
-   onAddBelief(position(X,Y)) :-
-       true.
-
-   handlePosition(S,X,Y) :-
-       S > 0,
-       S1 is S - 1,
-       addBelief(counterStep(S1)).
-
-   handlePosition(S,X,Y) :-
-       S =< 0,
-       randomSteps(P),
-       addBelief(counterStep(P)),
-       removeBelief(movement(_,D)),
-       randomDirection(RD),
-       D1 is D - RD,
-       addBelief(movement(0.025,D1)).
-
-   onAddBelief(distance(hansel,ND,OD)) :-
-       ND < 0.4,
-       removeBelief(stopped(false)),
-       addBelief(stopped(true)),
-       removeBelief(movement(_,D)),
-       addBelief(movement(0,D)).
-
-   onAddBelief(distance(A,ND,OD)) :-
-       true.
-
-   onAddBelief(distance(A,ND)) :-
-       true.
-
-   onAddBelief(movement(_,_)) :-
-       true.
-
-   onRemoveBelief(movement(_,_)) :-
-       true.
-
-   onAddBelief(counterStep(C)) :-
-       true.
-
-   onRemoveBelief(counterStep(C)) :-
-       true.
-
-   onResponseMessage(msg(breadcrumb(hansel,here),X,Y)) :-
-       removeBelief(counterStep(_)),
-       addBelief(counterStep(15)),
-       removeBelief(movement(_,D)),
-       addBelief(movement(0.05,D)),
-       changeDirection(X,Y).
-
-   changeDirection(X2,Y2) :-
-       belief(position(X1,Y1)),
-       DX is X2 - X1,
-       DY is Y2 - Y1,
-       calculateAtan(DY,DX,RAD),
-       removeBelief(movement(S,D)),
-       addBelief(movement(S,RAD)).
-
-   calculateAtan(DY,DX,RAD) :-
-       DX > 0,
-       RAD is atan(DY / DX).
-
-   calculateAtan(DY,DX,RAD) :-
-       DX < 0,
-       DY >= 0,
-       TMP is atan(DY / DX),
-       RAD is TMP + 3.14.
-
-   calculateAtan(DY,DX,RAD) :-
-       DX < 0,
-       DY < 0,
-       TMP is atan(DY / DX),
-       RAD is TMP - 3.14.
-
-   calculateAtan(DY,DX,RAD) :-
-       DX == 0,
-       DY > 0,
-       RAD is 3.14 / 2.
-
-   calculateAtan(DY,DX,RAD) :-
-       DX == 0,
-       DY < 0,
-       RAD is -3.14 / 2.
-
-   randomSteps(R) :-
-       rand_int(50,R).
-
    randomDirection(R) :-
-       rand_float(X),
-       TMP is X * 3.14,
-       R is TMP - 1.57.
-\end{lstlisting}
+      randomGenerator <- nextDouble returns RAND,
+      levyDistribution <- density(RAND) returns X,
+      R is X * 6.28.
 
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Blackboard},caption={Teoria per gli spazi di tuple}]
-   init :-
-       true.
+   randomSpeed(R) :-
+      randomGenerator <- nextDouble returns RAND,
+      levyDistribution <- density(RAND) returns X,
+      R is X * 0.5.
 \end{lstlisting}
 
 L'agente Hansel nella ricerca dell'agente Gretel esegue il seguente algoritmo. L'esecuzione dell'algoritmo \`e ciclica.
@@ -839,11 +673,54 @@ L'agente Hansel nella ricerca dell'agente Gretel esegue il seguente algoritmo. L
 \end{itemize}
 
 \subsection{Raccolta dei dati}
-Per valutare il grado di successo della simulazione sono state effettuate analisi sui risultati delle simulazioni.
+Per valutare il grado di successo della simulazione sono state effettuate analisi sui risultati delle simulazioni. Ad ogni simulazione \`e stato modificato solamente il punto di partenza dell'agente Gretel. Nella tabella \ref{RisultatiSimulazioni} sono mostrati i risulati delle simulazioni effettuate.
 \\
-\textbf{TODO}:\textit{inserire analisi dati una volta effettuate le simulazioni nel modo corretto}
-% Su dieci di simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte nei Codici sorgenti \ref{lst:Hansel} e \ref{lst:Gretel}, \`e risultato che l'agente Hansel ha raggiunto Gretel nove volte con un tempo medio di 545 tau (tempo della simulazione).
-
+\begin{table}[h!]
+   \centering
+   \begin{tabular}{||c c c c||}
+      \hline
+      Posizione (x,y) & Precisione & Tau & Risultato \\ [0.5ex]
+      \hline\hline
+      P(2,2) & 0.2 & 700 & \textcolor{red}{KO} \\
+      \hline
+      P(2,1) & 0.2 & 262 & \textcolor{green}{OK} \\
+      \hline
+      P(2,0) & 0.2 & 225 & \textcolor{green}{OK} \\
+      \hline
+      P(2,-1) & 0.2 & 212 & \textcolor{green}{OK} \\
+      \hline
+      P(2,-2) & 0.2 & 60 & \textcolor{red}{KO} \\
+      \hline
+      P(2,3) & 0.2 & 425 & \textcolor{green}{OK} \\
+      \hline
+      P(2,4) & 0.2 & 434 & \textcolor{green}{OK} \\
+      \hline
+      P(2,5) & 0.2 & 480 & \textcolor{green}{OK} \\
+      \hline
+      P(2,6) & 0.2 & 515 & \textcolor{green}{OK} \\
+      \hline
+      P(1,2) & 0.2 & 700 & \textcolor{red}{KO} \\
+      \hline
+      P(0,2) & 0.2 & 720 & \textcolor{green}{OK} \\
+      \hline
+      P(-1,2) & 0.2 & 8 & \textcolor{green}{OK} \\
+      \hline
+      P(-2,2) & 0.2 & 1 & \textcolor{green}{OK} \\
+      \hline
+      P(3,2) & 0.2 & 337 & \textcolor{green}{OK} \\
+      \hline
+      P(4,2) & 0.2 & 345 & \textcolor{green}{OK} \\
+      \hline
+      P(5,2) & 0.2 & 383 & \textcolor{green}{OK} \\
+      \hline
+      P(6,2) & 0.2 & 200 & \textcolor{red}{KO} \\
+      \hline
+   \end{tabular}
+   \caption{Risulatati simulazioni eseguite}
+   \label{RisultatiSimulazioni}
+\end{table}
+Su 17 simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte sopra, \`e risultato che l'agente Hansel ha raggiunto Gretel 13 volte con un tempo medio di 334 tau (tempo della simulazione).
+Le simulazioni non valide sono contraddistinte dal risulatato KO. In queste simulazioni l'agente Gretel nel suo spostamento ha superato i limiti formati dagli spazi di tuple presenti nello spazio.
 
 % \clearpage{\pagestyle{empty}\cleardoublepage} % vedere se serve
 \begin{thebibliography}{90} % crea l'ambiente bibliografia
