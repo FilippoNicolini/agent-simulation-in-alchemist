@@ -234,14 +234,14 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 Librerie e teorie, pur essendo simili, sono gestite diversamente dal motore tuProlog.
 
 \section{Agenti in tuProlog}
-Gli agenti descritti in tuProlog sono entit\`a computazionali autonome che effettuano delle operazioni che impattano sul proprio stato e su quello dell'ambiente in cui sono immersi. La reattivit\`a \`e una caratteristica importante per quanto riguada gli agenti poich\`e devono essere pronti a reagire ad eventi o cambiamenti che avvengono nello spazio.
-Un'agente sar\`a quindi definito attraverso una teoria composta da predicati, i quali sono i piani dell'agente. I piani saranno composti di una serie di operazioni volte a svolgere un'azione.
+Gli agenti descritti in tuProlog sono entit\`a computazionali autonome che effettuano delle operazioni che impattano sul proprio stato e su quello dell'ambiente in cui sono immersi. La reattivit\`a \`e una caratteristica importante per quanto riguada gli agenti poich\`e fa si che siano pronti a reagire ad eventi o cambiamenti che avvengono nello spazio.
+Un'agente \`e quindi definito attraverso una teoria, la quale \`e composta da predicati che corrispondono ai piani dell'agente. I piani sono formati da una serie di operazioni volte a svolgere un'azione.
 
 \chapter{Spatial Tuples}
 Spatial Tuples \`e un'estensione del modello base di tuple per i sistemi distribuiti multi agente dove:
 \begin{itemize}
    \item le tuple sono posizionate nel mondo fisico e si possono muovere;
-   \item il comportamento delle primitive di coordinamento pu\`o dipendere dalla propriet\`a spaziali del coordinamento degli agenti;
+   \item il comportamento delle primitive di coordinamento pu\`o dipendere dalle propriet\`a spaziali del coordinamento degli agenti;
    \item lo spazio di tuple pu\`o essere concepito come un livello virtuale che aumenta la realt\`a fisica.
 \end{itemize}
 
@@ -327,6 +327,28 @@ Per inserire il modello Spatial Tuples all'interno dell'incarnazione, sono state
 Le implementazioni dei piani che scatenatno un evento (mostrata nel Codice sorgente \ref{lst:LibreriaAgenti}) sono racchiuse all'interno della libreria caricata nel motore tuProlog di ogni agente.
 
 \medskip
+\lstset{
+  numberstyle=\footnotesize\color{black},
+  basicstyle=\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=0pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=tb,
+  commentstyle=\color{black},
+  keywordstyle=\color{black},
+  stringstyle=\color{black}
+  %label=incarnationYAML,
+  %caption={First verbatim}
+  %language=Java
+  %escapeinside={(*@}{@*)}
+}
 \begin{lstlisting}[firstnumber=1,label={lst:LibreriaAgenti},caption={Libreria agenti}]
    addBelief(B) :-
      assertz(belief(B)),
@@ -441,7 +463,7 @@ public void changeNodePosition(final Time time) {
 \end{lstlisting}
 
 \subsection{Aggiornamento belief base}
-Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta', 'assertz' e 'retract' utilizzando strutture dati e piani tuProlog per svolgere lo stesso comportamento: modifica della 'belief base', notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo delle ad Alchemist.
+Per quanto riguarda l'aggiornamento delle 'belief base' si \`e pensato di incapsulare i predicati 'asserta', 'assertz' e 'retract' utilizzando strutture dati e piani tuProlog per svolgere lo stesso comportamento: modifica della 'belief base', notifica del cambiamento tramite evento. In questo modo si \`e in grado di spezzare l'inserimento o la rimozione del belief dalla notifica del cambiamento, evitando che un agente operi un ciclo di ragionamento senza mai terminare, ovvero che l'agente continui a svolgere compiti lato tuProlog senza far tornare il controllo ad Alchemist.
 \\
 La prima parte, quella dell'aggiunta o rimozione del belief dalla 'belief base', \`e incapsulata all'interno dei piani 'addBelief(B)' e 'removeBelief(B)' i quali inoltre si occupano di aggiungere un'altro belief fittizio ('added\_belief(B)' o 'removed\_belief(B)') che verr\`a utilizzato per divulgare l'evento.
 La parte di notifica viene svolta da Alchemist ed \`e divisa in due fasi: inizialmente viene recuperato il belief fittizio e inserito il suo termine all'interno di una mappa, dopodich\`e quest'ultima viene iterata e per ogni belief viene invocato un evento 'onAddBelief(B)' o 'onRemoveBelief(B)' relativamente alla tipologia di modifica della 'belief base' avvenuta e dove il B \`e il termine recuperato precedentemente.
@@ -481,8 +503,8 @@ La definizione dei piani per aggiungere e rimuovere i belief \`e la seguente.
 
 %-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-%-
 \subsection{Implementazione Spatial Tuples}
-Per modellare le posizioni degli spazi di tuple, \`e stata definita la classe \textbf{Blackboard} che estende da \textbf{AbstractAgent} e implementa una specializzazione dell'agente. Questa classe rappresenta un punto situato nello spazio che pu\`o contenere informazioni: gli agenti possono, attraverso le primitive descritte nel Codice sorgente \ref{lst:LibreriaAgenti}, scrivere tuple oppure leggere o prendere quelle che corrispondono al template passato.
-All'interno della classe sono state create due liste una per le richieste in entrata e una per quelle in attesa. La classe espone il metodo \textit{insertRequest} al quale sono passati la tupla/template, l'istanza dell'agente e l'azione da eseguire (\textit{write}/\textit{read}/\textit{take}). La richiesta viene aggiunta alla coda e processata nel ciclo di ragionamento dell'istanza di questo agente. In base alla tipologia di azione vengono invocati i diversi metodi interni \textit{writeOnBlackboard}, \textit{readOnBlackboard}, \textit{takeOnBlackboard} per la gestioni della richiesta.
+Per modellare le posizioni degli spazi di tuple, \`e stata definita la classe \textbf{Blackboard} che estende da \textbf{AbstractAgent} e implementa una specializzazione dell'agente. Questa classe rappresenta un punto situato nello spazio che pu\`o contenere informazioni: gli altri agenti possono, attraverso le primitive descritte nel Codice sorgente \ref{lst:LibreriaAgenti}, scrivere tuple oppure leggere o prendere quelle che corrispondono al template passato.
+All'interno della classe sono state create due liste, una per le richieste in entrata e una per quelle in attesa. La classe \textit{Blackboard} espone il metodo \textit{insertRequest} al quale sono passati la tupla/template, l'istanza dell'agente e l'azione da eseguire (\textit{write}/\textit{read}/\textit{take}). La richiesta viene aggiunta alla coda e processata nel ciclo di ragionamento dell'istanza di questo agente. In base alla tipologia di azione vengono invocati i diversi metodi interni \textit{writeOnBlackboard}, \textit{readOnBlackboard}, \textit{takeOnBlackboard} per la gestioni della richiesta.
 Come detto nella sezione \ref{ModelloSpatialTuples}, se le operazioni richieste non possono essere effettuate vengono sospese e inserite nella coda di quelle in attesa: questa lista viene iterata, come quella delle richieste in entrata, ad ogni ciclo di ragionamento.
 \\
 Per le richieste di tipo \textit{read} e \textit{take}, se l'operazione di match del template va a successo deve essere notificata all'agente la tupla letta/prelevata. Questa azione \`e fatta inserendo nella struttura di notifica dei belif dell'agente un nuovo elemento, che \`e la tupla recuperata dallo spazio di tuple, e che verr\`a notificata nel prossimo ciclo di ragionamento dell'agente.
@@ -640,9 +662,9 @@ Se viene raggiunto dall'agente Gretel, ovvero gli viene notificato che l'agente 
 Il movimento del nodo \`e comandato dall'agente tramite il belief \textit{movement(S,D)} descritto nella sezione \ref{DefinizioneLinguaggio}.
 
 
-L'agente Gretel adotta invece un movimento che genera in modo casuale direzione e velocit\`a del nodo secondo la distribuzione di L\`evy.
+L'agente Gretel adotta invece un movimento casuale che viene eseguito utilizzando direzione e velocit\`a del nodo generate secondo la distribuzione di L\`evy.
 Per effettuare il calcolo sono stati inseriti tramite tuProlog due oggetti Java (randomGenerator: istanza di RandomGenerator, levyDistribution: istanza di LevyDistribution) all'interno della libreria tuProlog e utilizzati nel modo descritto dal Codice sorgente \ref{lst:Gretel}.
-Ad ogni passo cerca una briciola negli spazi di tuple presenti nel suo vicinato e se la trova modifica la direzione verso il nodo che contiene la briciola.
+Ad ogni passo Gretel cerca una briciola negli spazi di tuple presenti nel suo vicinato e se la trova modifica la direzione verso il nodo che contiene la briciola.
 Se viene aggiunto l'agente Hansel nel suo vicinato si ferma.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Gretel},caption={Teoria agente Gretel}]
@@ -663,10 +685,10 @@ L'agente Hansel nella ricerca dell'agente Gretel esegue il seguente algoritmo. L
    \item[(2)] si: imposto la velocit\`a a 0 e aggiungo il belief stopped
    \item[(3)] no: ho trovato una briciola?
    \begin{itemize}
-      \item[(4)] si: resetto il contatore dei passi e seguo la direzione della briciola a velocit\`a 0.05
-      \item[(5)] no: ho fatto N passi senza trovare una briciola?
+      \item[(4)] si: imposto il contatore dei passi e seguo la direzione della briciola ad una velocit\`a casuale
+      \item[(5)] no: ho fatto N passi senza trovare una briciola? (ovvero, si \`e azzerato il contatore?)
       \begin{itemize}
-         \item[(6)] si: resetto il contatore dei passi, imposto una nuova direzione random e la velocit\`a a 0.025
+         \item[(6)] si: imposto una nuova direzione e velocit\`a casuali
          \item[(7)] no: decremento il contatore dei passi
       \end{itemize}
    \end{itemize}
@@ -719,8 +741,8 @@ Per valutare il grado di successo della simulazione sono state effettuate analis
    \caption{Risulatati simulazioni eseguite}
    \label{RisultatiSimulazioni}
 \end{table}
-Su 17 simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte sopra, \`e risultato che l'agente Hansel ha raggiunto Gretel 13 volte con un tempo medio di 334 tau (tempo della simulazione).
-Le simulazioni non valide sono contraddistinte dal risulatato KO. In queste simulazioni l'agente Gretel nel suo spostamento ha superato i limiti formati dagli spazi di tuple presenti nello spazio.
+Su 17 simulazioni eseguite, con la configurazone del Codice sorgente \ref{lst:SimulazioneBreadcrumbs} e con le teorie dei due agenti descritte sopra, \`e risultato che l'agente Gretel ha raggiunto Hansel 13 volte con un tempo medio di 334 tau (tempo della simulazione).
+Le simulazioni non valide sono contraddistinte dal risulatato KO, nelle quali l'agente Gretel ha superato i limiti formati dagli spazi di tuple presenti nello spazio.
 
 % \clearpage{\pagestyle{empty}\cleardoublepage} % vedere se serve
 \begin{thebibliography}{90} % crea l'ambiente bibliografia
