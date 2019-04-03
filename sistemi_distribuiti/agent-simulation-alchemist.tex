@@ -519,7 +519,7 @@ Diversamente, se l'azione \`e \textit{read} o \textit{take}, viene recuperata la
 Attraverso la configurazione e l'esecuzione delle simulazioni \`e possibile vedere il comportamento delle incarnazioni definite all'interno di Alchemist. Nelle prossime sezioni verr\`a mostrato quali sono le parti che compongono la configurazione di una simulazione e qual \`e la configurazione scelta.
 
 %++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-++-
-\section{Scrivere una simulazione}
+\subsection{Scrivere una simulazione}
 % style for general source code
 \lstset{
   numberstyle=\footnotesize\color{black},
@@ -623,7 +623,7 @@ Un'esempio di displacements \`e quello mostrato nel Codice sorgente \ref{lst:Ese
           program: "pointReactionParam"
 \end{lstlisting}
 
-\section{Configurazione della simulazione}
+\subsection{Configurazione della simulazione}
 Per testare l'incarnazione creata \`e stato utilizzato il pattern di coordinazione 'breadcrumbs'. L'esempio prodotto utilizza due agenti, Hansel e Gretel, che si muovono all'interno di un'ambiente in cui sono presenti altri agenti utilizzati come spazi di tuple situati. L'agente Hansel si sposter\`a casualmente nell'ambiente lasciando le briciole negli spazi di tuple pi\`u vicini al suo passaggio, mentre l'agente Gretel dovr\`a muoversi alla ricerca delle briciole e una volta che ne ha individuata una iniziare a seguire le altre per raggiungere Hansel.
 
 Per realizzare questa simulazione \`e stato scritto il file di configurazione indicato dal Codice sorgente \ref{lst:SimulazioneBreadcrumbs}.
@@ -752,7 +752,8 @@ Le simulazioni non valide sono contraddistinte dal risulatato KO, nelle quali l'
 % provare anche questo comando:
 \addcontentsline{toc}{chapter}{\numberline{}{Bibliografia}}
 \bibitem{K1} alchemistsimulator.github.io
-\bibitem{K2} Programming Multi-Agent Systems in AgentSpeak using Jason, (Rafael H. Bordini, Jomi Fred H\"{u}bner, Michael Wooldridge), Wiley, Interscience (2007)
+\bibitem{K2} Spatial Tuples: Augmenting reality with tuples, Ricci et al., Wiley 2018
+
 
 % \bibitem{K3} Terzo oggetto bibliografia.
 % \bibitem{K4} Quarto oggetto bibliografia.
