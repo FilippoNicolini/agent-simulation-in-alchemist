@@ -604,8 +604,7 @@ outMessages.forEach(message -> {
 
 \subsection{Spostamento del nodo}
 Per lo spostamento del nodo all'interno dello spazio si \`e deciso di modificare la classe \textbf{AgentsContainerNode} aggiungendo tre propriet\`a per memorizzare direzione, velocit\`a e il tau (tempo della simulazione) dell'ultimo aggiornamento. Inoltre sono stati definiti i metodi per recuperare e impostare i valori della velocit\`a e della direzione.
-Per quanto riguarda l'aggiornamento della posizione \`e stato definito il metodo \textit{changeNodePosition(Time updateTau)} che prende in input il tau dell'aggiornamento.
-questo metodo \`e implementato come mostrato dal Codice sorgente \ref{lst:AggiornamentoPosizioneNodo}.
+Per quanto riguarda l'aggiornamento della posizione \`e stato definito il metodo \textit{changeNodePosition(Time updateTau)} che prende in input il tau dell'aggiornamento ed \`e implementato come mostrato dal Codice sorgente \ref{lst:AggiornamentoPosizioneNodo}.
 Questo metodo \`e quindi responsabile di calcolare la nuova posizone del nodo utilizzando le propriet\`a descritte in precedenza. Per prima cosa viene recuperata la posizione corrente del nodo che viene utilizzata come centro per la costruzione di una circonferenza, la quale avr\`a come raggio la distanza calcolata moltiplicando la velocit\`a per il tempo trascorso dall'ultimo aggiornamento. La nuova posizione del nodo si trover\`a dunque sulla circonferenza e per selezionare il punto viene utilizzata la direzione, espressa in radianti.
 \medskip
 \begin{lstlisting}[label={lst:AggiornamentoPosizioneNodo},caption={Metodo per l'aggiornamento della posizione del nodo}]
@@ -645,7 +644,7 @@ public void execute() {
 }
 \end{lstlisting}
 
-Questo agente viene aggiunto alla creazione di ogni nodo: \`e quindi creata una reazione, chiamata 'movementReact', alla quale viene aggiunta la stessa condizione utilizzata per gli altri agenti e come azione l'agente appena definito. La reazione \`e definita con una distribuzione temporale di 1 tau, in modo tale che se si vuole simulare l'aggiornamento della posizione, come se arrivasse da un apparato GPS, sar\`a sufficiente impostare valori pi\`u altri per le distribuzioni temporali di altri agenti.
+Questo agente viene aggiunto alla creazione di ogni nodo: \`e quindi creata una reazione, chiamata 'movementReact', alla quale viene aggiunta la stessa condizione utilizzata per gli altri agenti e come azione l'agente appena definito. La reazione \`e definita con una distribuzione temporale di 1 tau, in modo tale che se si vuole simulare l'aggiornamento della posizione, come se arrivasse da un apparato GPS, sar\`a sufficiente impostare valori pi\`u alti per le distribuzioni temporali di altri agenti.
 Terminata la creazione, la reazione viene aggiunta al nodo che verr\`a poi popolato con altri agenti. In questo modo la funzionalit\`a dello spostamento del nodo \`e implicita nell'incarnazione ed \`e il programmatore dell'agente che la pu\`o sfruttare implementando opportunamente gli agenti.
 
 \subsection{Aggiornamento della 'belief base'}
