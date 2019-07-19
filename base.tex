@@ -1,0 +1,213 @@
+% 12pt: grandezza carattere
+% a4paper: formato a4
+% openright: apre i capitoli a destra
+% twoside: serve per fare un
+% documento fronteretro
+% report: stile tesi (oppure book)
+\documentclass[12pt,a4paper,openright,twoside]{report}
+
+%libreria per scrivere in italiano
+\usepackage[italian]{babel}
+
+% libreria per accettare i caratteri
+% digitati da tastiera come ?
+% si può usare anche
+% \usepackage[T1]{fontenc}
+% però con questa libreria
+% il tempo di compilazione
+% aumenta
+\usepackage[latin1]{inputenc}
+
+% libreria per impostare il documento
+\usepackage{fancyhdr}
+
+% libreria per avere l'indentazione all'inizio dei capitoli, ...
+\usepackage{indentfirst}
+
+%libreria per mostrare le etichette
+%\usepackage{showkeys}
+
+% libreria per inserire grafici
+\usepackage{graphicx}
+
+% libreria per utilizzare font particolari ad esempio \textsc{}
+\usepackage{newlfont}
+
+% librerie matematiche
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsthm}
+
+
+% example style for lstlistoflistings
+% tabsize = 2, %% Sets tab space width.
+% showstringspaces = false, %% Prevents space marking in strings, string is defined as the text that is generally printed directly to the console.
+% numbers = left, %% Displays line numbers on the left.
+% commentstyle = \color{green}, %% Sets comment color.
+% keywordstyle = \color{blue}, %% Sets  keyword color.
+% stringstyle = \color{red}, %% Sets  string color.
+% rulecolor = \color{black}, %% Sets frame color to avoid being affected by text color.
+% basicstyle = \small \ttfamily , %% Sets listing font and size.
+% breaklines = true, %% Enables line breaking.
+% numberstyle = \tiny,
+%...................................
+% backgroundcolor=\color{white},
+% commentstyle=\color{green},
+% keywordstyle=\color{blue},
+% numberstyle=\footnotesize\color{black},
+% stringstyle=\color{red},
+% basicstyle=\footnotesize,
+% breakatwhitespace=false,
+% breaklines=true,
+% captionpos=b,
+% keepspaces=true,
+% numbers=left,
+% numbersep=10pt,
+% showspaces=false,
+% showstringspaces=false,
+% showtabs=false,
+% tabsize=2
+
+
+% impostano i margini
+\oddsidemargin=30pt
+\evensidemargin=20pt
+
+% serve per la sillabazione: tra parentesi vanno inserite come nell'esempio le parole
+% che latex non riesce a tagliare nel modo giusto andando a capo.
+\hyphenation{sil-la-ba-zio-ne pa-ren-te-si}
+
+% comandi per l'impostazione della pagina, vedi il manuale della libreria fancyhdr per ulteriori delucidazioni
+\pagestyle{fancy}\addtolength{\headwidth}{20pt}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection \ #1}{}}
+\rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{\bfseries\thepage}}
+\cfoot{}
+
+%comando per impostare l'interlinea
+\linespread{1.3}
+
+
+\begin{document}
+
+\begin{titlepage}
+% crea un ambiente libero da vincoli di margini e grandezza caratteri: si pu\`o modificare
+% quello che si vuole, tanto fuori da questo ambiente tutto viene ristabilito
+
+% elimina il numero della pagina
+\thispagestyle{empty}
+
+% imposta il margina superiore a 6.5cm
+\topmargin=6.5cm
+
+% incolonna la scrittura a destra
+\raggedleft
+
+% aumenta la grandezza del carattere a 14pt
+\large
+
+% emfatizza (corsivo) il carattere
+\em
+
+%\ldots lascia tre puntini
+%\ldots
+
+% va in una pagina nuova
+\newpage
+
+% non numera l'ultima pagina sinistra
+\clearpage{\pagestyle{empty}\cleardoublepage}
+\end{titlepage}
+
+%-----------------------------------------
+%-----------------------------------------
+% mette i numeri arabi
+\pagenumbering{arabic}
+
+\include{abstract/abstract}
+
+\include{capitoli/capitolo1/capitolo1}
+
+\include{capitoli/capitolo2/capitolo2}
+
+%-----------------------------------------
+%-----------------------------------------
+
+% imposta l'intestazione di pagina
+%\renewcommand{\chaptermark}[1]{\markright{\thechapter \ #1}{}}
+%\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
+%\appendix % imposta le appendici
+
+% crea l'appendice
+%\chapter{Prima Appendice}
+% \verb"" è equivalente all'ambiente verbatim, ma si utilizza all'interno di un discorso.
+%\verb"\clearpage{\pagestyle{empty}\cleardoublepage}"
+
+% imposta l'intestazione di pagina
+%\rhead[\fancyplain{}{\bfseries \thechapter \:Prima Appendice}]
+%{\fancyplain{}{\bfseries\thepage}}
+
+% crea l'appendice
+%\chapter{Seconda Appendice}
+
+% imposta l'intestazione di pagina
+%\rhead[\fancyplain{}{\bfseries \thechapter \:Seconda Appendice}]
+%{\fancyplain{}{\bfseries\thepage}}
+
+
+
+\begin{thebibliography}{90} % crea l'ambiente bibliografia
+\rhead[\fancyplain{}{\bfseries \leftmark}]{\fancyplain{}{\bfseries \thepage}}
+
+% aggiunge la voce Bibliografia nell'indice
+\addcontentsline{toc}{chapter}{Bibliografia}
+
+% provare anche questo comando:
+%\addcontentsline{toc}{chapter}{\numberline{}{Bibliografia}}
+\bibitem{AgentSpeak(L)} AgentSpeak(L): BDI Agents speak out in a logical computable language, Anand S. Rao, 1996
+\bibitem{SpatialTuples} Spatial Tuples: Augmenting reality with tuples, Ricci et al., 2017
+\bibitem{AgentSpeakInJason} Programming multi-agent systems in AgentSpeak using Jason, Rafael H. Bordini, Jomi Fred Hubner, Michael Wooldridge, 2007
+
+\end{thebibliography}
+
+%% Preambolo per sitografia
+\makeatletter
+\let\@orig@endthebibliography\endthebibliography
+\renewcommand\endthebibliography{%
+  \xdef\@kept@last@number{\the\c@enumiv}%
+  \@orig@endthebibliography}
+
+\newenvironment{thesitography}[1]
+  {\def\bibname{Sitografia}%
+   \thebibliography{#1}%
+}
+  {\@orig@endthebibliography}
+\makeatother
+%% Preambolo per sitografia
+
+{\fancyplain{}{\bfseries\thepage}}
+\begin{thesitography}{90} % crea l'ambiente bibliografia
+\rhead[\fancyplain{}{\bfseries \leftmark}]{\fancyplain{}{\bfseries \thepage}}
+
+% aggiunge la voce Bibliografia nell'indice
+\addcontentsline{toc}{chapter}{Sitografia}
+
+% provare anche questo comando:
+%\addcontentsline{toc}{chapter}{\numberline{}{Bibliografia}}
+\bibitem {JADE} https://jade.tilab.com/
+\bibitem {Spade} https://pypi.org/project/spade/
+\bibitem {SARL} http://www.sarl.io/
+\bibitem {JADEX} https://www.activecomponents.org/\#/project/news
+\bibitem {Astra} http://astralanguage.com/wordpress/
+\bibitem {Jason} http://jason.sourceforge.net/wp/
+\bibitem {tuProlog} http://apice.unibo.it/xwiki/bin/view/Tuprolog/
+\bibitem {Alchemist} http://alchemistsimulator.github.io
+\end{thesitography}
+
+% non numera l'ultima pagina sinistra
+%\clearpage{\pagestyle{empty}\cleardoublepage}
+%\chapter{Ringraziamenti}
+%\thispagestyle{empty}
+%Contenuto ringraziamenti
+\end{document}

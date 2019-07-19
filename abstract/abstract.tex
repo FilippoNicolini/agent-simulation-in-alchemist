@@ -1,0 +1,35 @@
+%\pagenumbering{arabic} % serve per mettere i numeri romani
+\chapter*{Abstract} % crea l'introduzione (un capitolo non numerato)
+
+% imposta l'intestazione di pagina
+\rhead[\fancyplain{}{\bfseries ABSTRACT}]{\fancyplain{}{\bfseries\thepage}}
+\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries ABSTRACT}}
+
+% aggiunge la voce Introduzione nell'indice
+\addcontentsline{toc}{chapter}{Abstract}
+TODO Abstract
+
+% non numera l'ultima pagina sinistra
+\clearpage{\pagestyle{empty}\cleardoublepage}
+
+%crea l'indice
+\tableofcontents
+
+% imposta l'intestazione di pagina
+\rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{\bfseries\thepage}}
+\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries INDICE}}
+
+% non numera l'ultima pagina sinistra
+\clearpage{\pagestyle{empty}\cleardoublepage}
+
+% crea l'elenco delle figure
+\listoffigures
+
+% non numera l'ultima pagina sinistra
+\clearpage{\pagestyle{empty}\cleardoublepage}
+
+% crea l'elenco delle tabelle
+%\listoftables
+
+% non numera l'ultima pagina sinistra
+\clearpage{\pagestyle{empty}\cleardoublepage}
