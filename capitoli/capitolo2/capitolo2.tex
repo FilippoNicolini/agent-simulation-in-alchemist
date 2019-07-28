@@ -37,13 +37,13 @@ L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di fu
 \textbf{Definizione 2.} Se \textit{g} \`e un simbolo di predicato e \textit{t\textsubscript{1},...,t\textsubscript{n}} sono termini, allora !\textit{g(t\textsubscript{1},...,t\textsubscript{n})} e ?\textit{g(t\textsubscript{1},...,t\textsubscript{n})} sono \textit{goals}.
 
 \smallskip
-\textbf{Definizione 3.} Se \textit{b}(t) \`e un atomo di belief , !\textit{g(t)} e ?\textit{g(t)} sono goals, allora +\textit{b(t)}, -\textit{b(t)}, +!\textit{g(t)}, -!\textit{g(t)}, +?\textit{g(t)}, -?\textit{g(t)} sono \textit{eventi di attivazione}.
+\textbf{Definizione 3.} Se \textit{b(t)} \`e un atomo di belief , !\textit{g(t)} e ?\textit{g(t)} sono goals, allora +\textit{b(t)}, -\textit{b(t)}, +!\textit{g(t)}, -!\textit{g(t)}, +?\textit{g(t)}, -?\textit{g(t)} sono \textit{eventi di attivazione}.
 
 \smallskip
 \textbf{Definizione 4.} Se \textit{a} \`e un simbolo di azione e \textit{t\textsubscript{1},...,t\textsubscript{n}} sono termini del primo ordine, allora \textit{a(t\textsubscript{1},...,t\textsubscript{n})} \`e un'azione.
 
 \smallskip
-\textbf{Definizione 5.} Se \textit{e} \`e un evento scatenante, \textit{b\textsubscript{1},...,b\textsubscript{m}} sono letterali di belief e \textit{h\textsubscript{1};...;h\textsubscript{n}} sono goals o azioni, allora \textit{e : b\textsubscript{1}$\land$...$\land$b\textsubscript{m} $\leftarrow$ h\textsubscript{1};...;h\textsubscript{n}} \`e un piano.
+\textbf{Definizione 5.} Se \textit{e} \`e un \textit{eventi di attivazione}, \textit{b\textsubscript{1},...,b\textsubscript{m}} sono letterali di belief e \textit{h\textsubscript{1};...;h\textsubscript{n}} sono goals o azioni, allora \textit{e : b\textsubscript{1}$\land$...$\land$b\textsubscript{m} $\leftarrow$ h\textsubscript{1};...;h\textsubscript{n}} \`e un piano.
 
 \bigskip
 Durante l'esecuzione un agente \`e composto di un set di beliefs B, un set di piani P, un set di intenzioni I, un set di eventi E, un set di azioni A e un set di funzioni di selezione S, il quale \`e formato da S\textsubscript{E} (funzione di selezione degli eventi), S\textsubscript{O} (funzione di selezione del piano), S\textsubscript{I} (funzione di selezione dell'intenzione).
@@ -269,7 +269,7 @@ Gli operatori base di Spatial Tuples sono: \textbf{out(t)}, \textbf{rd(tt)}, \te
 \item \textit{rd}, cerca le tuple che corrispondono al template e ne ritorna una copia;
 \item \textit{in}, come rd, cerca le tuple che corrispondo al template ma poi ne restituisce una consumandola dalla sorgente.
 \end{itemize}
-Le primitive \textit{rd} e \textit{out} sono dette `getter' e, in Spatial Tuples, sono: 
+Le primitive \textit{rd} e \textit{out} sono dette `getter' e, in Spatial Tuples, sono:
 \begin{itemize}
 \item sospensive, se non ci sono tuple che fanno match con il template l'operazione \`e bloccata finch\`e non viene trovata una tupla
 \item non deterministiche, se vi sono pi\`u tuple che fanno match con il template una \`e scelta in modo non deterministico.
