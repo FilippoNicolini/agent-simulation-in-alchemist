@@ -1,10 +1,10 @@
 \chapter{AgentSpeak in tuProlog}
-Nel capitolo precedente \`e stato descritto lo stato attuale di lavori correlati che utilizzano il modello ad agenti BDi per costruirne altri pi\`u complessi ed espressivi o implementano linguaggi basati sugli agenti. Inoltre, \`e stato mostrato lo stato dell'arte delle tecnologie che sono state utilizzate.
+Nel capitolo precedente \`e stato descritto lo stato attuale di lavori correlati che utilizzano il modello ad agenti BDI per costruirne altri pi\`u complessi ed espressivi o implementano linguaggi basati sugli agenti. Inoltre, \`e stato mostrato lo stato dell'arte delle tecnologie che sono state utilizzate.
 
-In questo lavoro di tesi si \`e voluto definire un nuovo linguaggio che fosse \textit{`platform indipendent'}, ovvero indipendente dall'ambiente sul quale viene utilizzato. Quindi \`e stato definito come una libreria senza nessun riferimento all'ambiente. Nei capitoli successivi verr\`a mostrato come, partendo dalla libreria, \`e stata colmata la distanza con l'ambiente scelto.
+In questo lavoro di tesi si \`e voluto definire un nuovo linguaggio che fosse \textit{`platform indipendent'}, ovvero indipendente dall'ambiente sul quale viene utilizzato: \`e stato definito al pari di una libreria, senza nessun riferimento all'ambiente. Nei capitoli successivi verr\`a mostrato come, partendo dal linguaggio, \`e stata colmata la distanza con l'ambiente scelto.
 
 \section{Definizione linguaggio}
-Essendo tuProlog un interprete che opera su piattaforme differenti, si \`e voluto definire questo linguaggio per permettere di poterlo utilizzare facilemente colmando la distanza tra l'ambiente e la libreria tuProlog.
+Essendo tuProlog un interprete che opera su piattaforme differenti, si \`e voluto utilizzarlo nella definizione del linguaggio per permettere di utilizzare quest'ultimo facilemente, potendo sfruttare la libreria tuProlog per colmare la distanza tra l'ambiente e il linguaggio.
 
 Seguendo quella che \`e la struttura di AgentSpeak, \`e stato formalizzato questo linguaggio di programmazione ad agenti, e, di seguito, sono mostrate le definizioni.
 
@@ -24,8 +24,10 @@ Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief
 \textbf{Definizione 4.} Se \textit{a} \`e un simbolo di azione e \textit{t\textsubscript{1},...,t\textsubscript{n}} sono termini del primo ordine, allora \textit{a(t\textsubscript{1},...,t\textsubscript{n})} \`e un'azione.
 
 \smallskip
-\textbf{Definizione 5.\textbf{TODO RIVEDERE DEFINIZIONE PIANO (sotto meglio)}} Se \textit{e} \`e un \textit{eventi di attivazione} e \textit{h\textsubscript{1},...,h\textsubscript{n}} sono goals o azioni, allora \textit{e :- h\textsubscript{1},...,h\textsubscript{n}}. \`e un piano. L'espressione a sinistra di `:-' \`e la testa, quella sulla destra il corpo: se quest'ultimo \`e vuoto viene definito con l'espressione \textit{true}.
-Se si utilizzano le guardie, ad esempio \textit{b\textsubscript{1},...,b\textsubscript{m}}, allora `$\leftarrow$'(\textit{e}, [\textit{b\textsubscript{1},...,b\textsubscript{m}}], [\textit{h\textsubscript{1},...,h\textsubscript{n}}]) \`e un piano.
+%\textbf{TODO RIVEDERE DEFINIZIONE PIANO (sotto meglio)}
+\textbf{Definizione 5.}
+%Se \textit{e} \`e un \textit{evento di attivazione} e \textit{h\textsubscript{1},...,h\textsubscript{n}} sono goals o azioni, allora \textit{e :- h\textsubscript{1},...,h\textsubscript{n}}. \`e un piano. L'espressione a sinistra di `:-' \`e la testa, quella sulla destra il corpo: se quest'ultimo \`e vuoto viene definito con l'espressione \textit{true}.
+Se \textit{e} \`e un \textit{evento di attivazione}, \textit{b\textsubscript{1},...,b\textsubscript{m}} sono belief o guardie e \textit{h\textsubscript{1},...,h\textsubscript{n}} sono goals o azioni, allora `$\leftarrow$'(\textit{e}, [\textit{b\textsubscript{1},...,b\textsubscript{m}}], [\textit{h\textsubscript{1},...,h\textsubscript{n}}]) \`e un piano.
 
 \smallskip
 \textbf{Definizione 6.} Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione \`e definita come intention\textit{(i, [\textit{p\textsubscript{1}},...,\textit{p\textsubscript{n}}])}, dove \textit{i} \`e l'identificativo univoco dell'intenzione e [\textit{p\textsubscript{1}},...,\textit{p\textsubscript{n}}] \`e lo stack formata da azioni, belief o goal: \textit{p\textsubscript{1}} \`e la coda e \textit{p\textsubscript{n}} \`e la testa.
@@ -40,55 +42,56 @@ Se si utilizzano le guardie, ad esempio \textit{b\textsubscript{1},...,b\textsub
 \textbf{Definizione 9.} Un piano \textit{p} \`e definito da `$\leftarrow$'(\textit{e}, [\textit{b\textsubscript{1},...,b\textsubscript{m}}], [\textit{h\textsubscript{1},...,h\textsubscript{n}}]) \`e un \textit{piano applicabile} rispetto ad un evento \textit{$\epsilon$} se e solo se esite un identificatore rilevante $\sigma$ per \textit{$\epsilon$} e esite una sostituzione \textit{$\theta$} tale che $\forall$\textit{(b\textsubscript{1},...,b\textsubscript{m})}\textit{$\sigma\theta$} \`e una conseguenza logica di B.
 %La composizione \textit{$\sigma\theta$} \`e riferita all'\textit{unificatore applicabile} per l'evento \textit{$\epsilon$} e \textit{$\theta$} \`e riferita alla sostituzione della corretta risposta.
 
-
-\bigskip
-\textbf{TODO}
-
-\textbf{selezione intenzione (13,14,15,16)}
-
-\smallskip
-\textbf{Definizione 13.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ !\textit{g(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se $\langle$ +!\textit{g(t)}, \textit{i} $\rangle$ $\in$ E.
-
-\smallskip
-\textbf{Definizione 14.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ ?\textit{g(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se esiste una sostituzione \textit{$\theta$} tale che $\forall$g(t)\textit{$\theta$} \`e una conseguenza logica di B e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ (\textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y})\textit{$\theta$} $\leftarrow$ h\textsubscript{2}\textit{$\theta$};...;h\textsubscript{n}\textit{$\theta$}].
-
-\smallskip
-\textbf{Definizione 15.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ \textit{a(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se \textit{a(t)} $\in$ A, e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ h\textsubscript{2};...;h\textsubscript{n}].
-
-\smallskip
-\textbf{Definizione 16.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{p\textsubscript{z-1}} $\ddagger$ \textit{g(t)} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ \textit{true}], dove \textit{p\textsubscript{z-1}} \`e e : b\textsubscript{1}$\land$...$\land$b\textsubscript{x} $\leftarrow$ !\textit{g(s)}; h\textsubscript{2};...;h\textsubscript{n}. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se esiste una sostituzione \textit{$\theta$} tale che g(t)\textit{$\theta$} = g(s)\textit{$\theta$} e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{p\textsubscript{z-1}} $\ddagger$ (e : b\textsubscript{1}$\land$...$\land$b\textsubscript{x})\textit{$\theta$} $\leftarrow$ (h\textsubscript{2};...;h\textsubscript{n})\textit{$\theta$}].
+%\bigskip
+%\textbf{TODO}
+%
+%\textbf{selezione intenzione (13,14,15,16)}
+%
+%\smallskip
+%\textbf{Definizione 13.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ !\textit{g(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se $\langle$ +!\textit{g(t)}, \textit{i} $\rangle$ $\in$ E.
+%
+%\smallskip
+%\textbf{Definizione 14.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ ?\textit{g(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se esiste una sostituzione \textit{$\theta$} tale che $\forall$g(t)\textit{$\theta$} \`e una conseguenza logica di B e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ (\textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y})\textit{$\theta$} $\leftarrow$ h\textsubscript{2}\textit{$\theta$};...;h\textsubscript{n}\textit{$\theta$}].
+%
+%\smallskip
+%\textbf{Definizione 15.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ \textit{a(t)};h\textsubscript{2};...;h\textsubscript{n}]. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se \textit{a(t)} $\in$ A, e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{f} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ h\textsubscript{2};...;h\textsubscript{n}].
+%
+%\smallskip
+%\textbf{Definizione 16.} Sia S\textsubscript{I}(I) = \textit{i}, dove \textit{i} \`e [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{p\textsubscript{z-1}} $\ddagger$ \textit{g(t)} : c\textsubscript{1}$\land$...$\land$c\textsubscript{y} $\leftarrow$ \textit{true}], dove \textit{p\textsubscript{z-1}} \`e e : b\textsubscript{1}$\land$...$\land$b\textsubscript{x} $\leftarrow$ !\textit{g(s)}; h\textsubscript{2};...;h\textsubscript{n}. L'intenzione \textit{i} si dice che \`e eseguita  se e solo se esiste una sostituzione \textit{$\theta$} tale che g(t)\textit{$\theta$} = g(s)\textit{$\theta$} e \textit{i} \`e rimpiazzato da [\textit{p\textsubscript{1}} $\ddagger$ ... $\ddagger$ \textit{p\textsubscript{z-1}} $\ddagger$ (e : b\textsubscript{1}$\land$...$\land$b\textsubscript{x})\textit{$\theta$} $\leftarrow$ (h\textsubscript{2};...;h\textsubscript{n})\textit{$\theta$}].
 
 
 \section{Interfacce del linguaggio}
 Il linguaggio appena definito \`e ci\`o che \`e messo a disposizione del programmatore dell'agente per descrivere il suo comportamento. Oltre questo, sono state definite altre sintassi che permettano al programmatore di gestire ogni evento o situazione per l'agente. 
-Qui di seguito sono citate le keyword del linguaggio e, successivamente, vengono analizzate ed esposte:
+Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \begin{itemize}
-\item init
-\item self(A)
+\item init :- ...
+\item self(A).
 \item agent
 \item node
-\item addBelief(B)
-\item removeBelief(B)
-\item onAddBelief(B)
-\item onRemoveBelief(B)
-\item onReceivedMessage(S, M)
-\item achievement
-\item test
-\item concurrent
-\item belief(position(X,Y))
-\item belief(distance(A, ND, OD)) | o |  belief(distance(A, ND))
+\item addBelief(B).
+\item removeBelief(B).
+\item onAddBelief(B) :- ...
+\item onRemoveBelief(B) :- ...
+\item onReceivedMessage(S, M) :- ...
+\item achievement(t).
+\item test(t).
+\item concurrent(t).
+\item belief(position(X,Y)).
+\item belief(distance(A, ND, OD)). | o |  belief(distance(A, ND)).
 \end{itemize}
+
+Qui di seguito vengono analizzate ed esposte. Per ogni regola \`e lasciata l'implementazione del corpo al programmatore dell'agente.
 
 La regola `\textbf{init}' \`e messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verr\`a invocata solo ed esclusivamente la prima volta che viene azionato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente \`e in grado di far eseguire all'agente una serie di operazioni iniziali per impostare la `belief base' dell'agente.
 
 \medskip
-Il belief `\textbf{self}(\textit{A})' permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente pu\`o essere recuperato anche all'interno della teoria tuProlog.
+Il fatto `\textbf{self}(\textit{A})' permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente pu\`o essere recuperato anche all'interno della teoria tuProlog.
 
 \medskip
-I due letterali `agent' e `node' sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si \`e scelto di utilizzare il linugaggio. Se costruiti correttamente, dalla teoria dell'agente sar\`a possibile richiamare metodi implementati nella classe corrispondente. La variabile `agent' fa riferimento all'oggetto dell'agente stesso, mentre `node' si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente \`e inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
+I due letterali `\textbf{agent}' e `\textbf{node}' sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si \`e scelto di utilizzare il linugaggio. Se costruiti correttamente, dalla teoria dell'agente sar\`a possibile richiamare metodi implementati nella classe corrispondente. La variabile `agent' fa riferimento all'oggetto dell'agente stesso, mentre `node' si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente \`e inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
 
 \medskip
-Le keyword `addBelief(\textit{B})' e `removeBelief(\textit{B})' sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare `\textbf{onAddBelief}(\textit{B})', `\textbf{onRemoveBelief}(\textit{B})'. Pi\`u precisamente `\textbf{onAddBelief}(\textit{B})' viene invocato quando viene aggiunto un belief, mentre `\textbf{onRemoveBelief}(\textit{B})' \`e chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile B corrisponde al belief inserito o rimosso.
+Le regole `\textbf{addBelief}(\textit{B})' e `\textbf{removeBelief}(\textit{B})' sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare `\textbf{onAddBelief}(\textit{B})', `\textbf{onRemoveBelief}(\textit{B})'. Pi\`u precisamente `\textbf{onAddBelief}(\textit{B})' viene invocato quando viene aggiunto un belief, mentre `\textbf{onRemoveBelief}(\textit{B})' \`e chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile B corrisponde al belief inserito o rimosso.
 \\
 Diversamtene, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), \`e invocato `\textbf{onReceivedMessage}(\textit{S, M})', dove \textit{S} rappresente il mittente e \textit{M} il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
 
@@ -97,31 +100,31 @@ Come visto precedentemente nella `\textbf{definizione 2}', i letterali `\textbf{
 In combinazione, i due letterali appena citati possono essere usati in combinazione con `\textbf{concurrent}', mostrato nella `\textbf{definizione 3}', che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione pu\`o essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
 
 \medskip
-Per rendere disponibile al programmatore dell'agente varie possibilit\`a per accedere a informazioni quali la posizione dell'agente e la distanza degli altri agenti rispetto alla propria posizione, sono stati definiti due belief che saranno aggiornati direttamente dall'ambiente sul quale viene utilizzato il linguaggio. La posizione dell'agente viene aggiornata una volta per ogni ciclo di ragionamento e, al termine, sono modificati anche i valori dei belief appena citati. 
+Per rendere disponibile al programmatore dell'agente varie possibilit\`a per accedere a informazioni quali la posizione dell'agente e la distanza degli altri agenti rispetto alla propria posizione, sono utilizzati due belief che saranno aggiornati direttamente dall'ambiente sul quale viene utilizzato il linguaggio. La posizione dell'agente viene aggiornata una volta per ogni ciclo di ragionamento e, al termine, sono modificati anche i valori dei belief appena citati. 
 \\
 Per quanto riguarda la posizione dell'agente, potr\`a essere invocato `belief( \textit{\textbf{position}(X, Y)})' dove \textit{X} \`e la coordinata relative alle ascisse o longitudine e \textit{Y} \`e la coordinata relativa alle ordinate o latitudine.
 \\
 La distanza da altri agenti pu\`o essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief `belief(\textit{\textbf{distance}(A, ND)})', dove \textit{A} \`e il nome dell'agente nel vicinato e \textit{ND} \`e la distanza che li separa. Se, invece, un agente era gi\`a nella lista del vicinato e vi rimane, allora viene inserito il belief `belief(\textit{\textbf{distance}(A, ND, OD)})', dove \textit{A} \`e il nome dell'agente nel vicinato, \textit{ND} \`e la nuova distanza che li separa e \textit{OD} \`e la distanza che li divideva precedentemente.
 
 \subsubsection{Estensione Spatial Tuples}
-Il linguaggio appena descritto \`e stato esteso per permettere di utilizzare il modello Spatial Tuples. Sono state quindi inserite le seguenti keyword:
+Il linguaggio appena descritto \`e stato esteso per permettere di utilizzare il modello Spatial Tuples. Sono state quindi inserite le seguenti regole:
 \begin{itemize}
-\item writeTuple(T)
-\item readTuple(TT)
-\item takeTuple(TT)
-\item onResponseMessage(M)
+\item writeTuple(T).
+\item readTuple(TT).
+\item takeTuple(TT).
+\item onResponseMessage(M) :- ...
 \end{itemize}
-Le keyword dell'elenco sono tutte riferite all'inserimento, all'interno del linguaggio, del modello di coordinazione LINDA e pi\`u precisamente del modello Spatial Tuples.
+Le regole dell'elenco sono tutte riferite all'inserimento, all'interno del linguaggio, del modello di coordinazione LINDA e pi\`u precisamente del modello Spatial Tuples.
 Con questa estensione, viene data la possibilit\`a agli agenti di poter inserire e recuperare informazioni posizionate nello spazio. Le regole messe a disposizione mappano le primitive dei modelli che vogliono implementare `\textit{in}', `\textit{rd}', `\textit{out}' rispettivamente in `writeTuple(\textit{T})', `readTuple(\textit{TT})', `takeTuple(\textit{TT})' dove T \`e la tupla da inserire e TT \`e il template da ricercare.
 \\
-Utilizzando `writeTuple(\textit{T})' il programmatore \`e in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalit\`a: `readTuple(\textit{TT})' e `takeTuple(\textit{TT})'. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece `takeTuple(\textit{TT})', si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
+Utilizzando `\textbf{writeTuple}(\textit{T})' il programmatore \`e in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalit\`a: `\textbf{readTuple}(\textit{TT})' e `takeTuple(\textit{TT})'. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece `\textbf{takeTuple}(\textit{TT})', si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
 \\
 Entrambe le due modalit\`a di getter seguono la semantica standard dei modelli basati su tuple, e quindi sono:
 \begin{itemize}
 \item sospensive: se non ci sono tuple che si abbinano al template l'operazione \`e bloccata finch\`e non viene trovata una tupla;
 \item non deterministiche: se ci sono pi\`u tuple che si abbinano al template una \`e scelta in modo non deterministico.
 \end{itemize}
-Per dare la possibilit\`a di gestire la risposta e gestire la tupla restituita \`e stata introdotta `onResponseMessage(\textit{M})' che viene invocata ogni qualvolta che una tupla viene restituita dallo spazio di tuple. Il contenuto \textit{M} \`e la tupla incapsulata in un belief in modo che si possano gestire tuple provenienti da diversi spazi di tuple e con contenuti differenti.
+Per dare la possibilit\`a di gestire la risposta e gestire la tupla restituita \`e stata introdotta `\textbf{onResponseMessage}(\textit{M})' che viene invocata ogni qualvolta che una tupla viene restituita dallo spazio di tuple. Il contenuto \textit{M} \`e la tupla incapsulata in un belief in modo che si possano gestire tuple provenienti da diversi spazi di tuple e con contenuti differenti.
 
 \section{Esempi linguaggio}
 In questa sezione verranno mostrate alcuni casi d'uso del linguaggio appena descritto. Nello specifico verr\`a mostrato un primo scenario dove sono stati configurati gli agenti per realizzare un semplice scambio di messaggi (o Ping Pong). Nel secondo esempio, invece, viene illustrato come poter utilizzare l'estensione Spatial Tuples supportata dal linguaggio.

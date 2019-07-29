@@ -4,67 +4,6 @@
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 TODO DESCRIZIONE INTRODUZIONE
 
-% crea la SEZIONE
-\section{Contesto}
-TODO DESCRIZIONE CONTESTO
-
-\subsection{JADE}
-JADE (Java Agent DEvelopement Framework) \`e un software implementato in Java che semplifica l'implementazione del sistema multi-agente attraverso un middleware che \`e conforme alle specifiche FIPA e uno strumento grafico che supporta le fasi di debug e distribuzione.
-
-FIPA \`e una societ\`a di standard IEEE, il cui scopo \`e la promozione di tecnologie e specifiche di interoperabilit\`a che facilitino l'interworking end-to-end di sistemi di agenti intelligenti in moderni ambienti commerciali ed industriali.
-
-Un middleware \`e un software che fornisce servizi per applicazioni che permette agli sviluppatori di implementare meccanismi di comunicazione e di input/output. Viene usato particolarmente in software che necessitano di comunicazione e gestione di dati in applicazioni distribuite.
-
-Un sistema basato su JADE pu\`o essere distribuito su diverse macchine (anche con sistemi operativi differenti) e la configurazione pu\`o essere controllata da un'interfaccia remota. La configurazione pu\`o essere anche cambiata durante l'esecuzione spostando gli agenti da una macchina ad un'altra in base alle necessit\`a.
-
-%Dietro alla parte di astrazione degli agenti, JADE fornisce un semplice e potente modello di esecuzione e composizione dei task, la comunicazione peer to peer tra gli agenti basata sul paradigma di scambio di messaggi asincrono.
-
-L'architettura di comunicazione offre uno scambio di messaggi privati di ogni agente  flessibile ed efficiente, dove JADE crea e gestisce una coda di messaggi ACL in entrata.
-\`E stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto.
-Il meccaniscmo di trasporto, in particolare, \`e come un camaleonte perch\`e si adatta ad ogni situazione scegliendo trasparentemente il miglior protocollo disponibile.
-
-\subsection{SPADE}
-SPADE (Smart Python multi-Agent Development Environment) \`e una piattaforma per sistemi multi-agente scritta in Python e basata sui messaggi istantanei (XMPP).
-Il protocollo XMPP offre una buon architettura per la comunicazione tra agenti in modo strutturato e risolve eventuali problemi legati al design della piattaforma, come autenticazione degli utenti (agenti) o creazione di canali di comunicazione.
-
-Il modello ad agenti \`e composto da un meccanismo di connessione alla piattaforma, un dispatcher di messaggi e un set di comportamenti differenti a cui il dispatcher da i messaggi. Ogni agente ha un identificativo (JID) e una password per autenticarsi al server XMPP.
-
-La connessione alla piattaforma \`e gestita internamente tramite il protocollo XMPP, il quale fonisce un meccaniscmo per registrare e autenticare gli utenti al server XMPP. Ogni agente potr\`a quindi mantenere aperta e persistente uno stream di comunicazioni con la piattaforma.
-
-Ogni agente ha al suo interno un componente dispatcher per i messaggi che opera come un postino: quando arriva un messaggio per l'agente, lo posizione nella corretta casella di posta; quando l'agente deve inviare un messaggio, il dispatcher si occupa di inserirlo nello stream di comunicazione.
-
-Un agente pu\`o avere pi\`u comportamenti simultaneamente. Un comportamento \`e un operazione che l'agente pu\`o eseguire usando il pattern di ripetizione. Spade fornisce alcuni comportamenti predefiniti: Cyclic, Periodic (utili per eseguire operazioni ripetitive); One-Shot, Time-Out (usati per eseguire operazioni casuali); Finite State Machine (permette di costruire comportamenti complessi).
-Quando un messaggio arriva all'agente, il dispatcher lo indirizza alla coda del comportamento corretto: il dispatcher utilizza il template di messaggi di ogni comportamento per capire qual \`e il giusto destinatario. Quindi un comportamento pu\`o definire il tipo di messaggi che vuole ricevere.
-
-\subsection{Jason}
-Jason \`e un interprete per la versione estesa di AgentSpeak che implementa la semantica operazionale di tale linguaggio e fornisce una piattaforma per lo sviluppo di sistemi multi-agente. AgentSpeak \`e uno dei principali linguaggi orientati agli agenti basati sull'architettura BDI. Il linguaggio interpretato da Jason \`e un'estensione del linguaggio di programmazione astratto AgentSpeak(L).
-Gli agenti BDI (Belief-Desires-Intentions) forniscono un meccaniscmo per separare le attivit\`a di selezione di un piano, fra quelli disponibili, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo per la scelta del piano e quello per eseguirlo.
-
-\subsection{SARL}
-SARL \`e un linguaggio di programmazione ad agenti tipizzato staticamente. SARL mira a fornire le astrazioni fondamentali per affrontare la concorrenza, la distribuzione, l'interazione, il decentramento, la reattivit\`a e la riconfigurazione dinamica. Queste funzionalit\`a di alto livello sono adesso considerate i principali requisiti per un'implementazione facile e pratica delle moderne applicazioni software complesse.
-
-\subsection{JADEX}
-Il framework di componenti attivi Jadex fornisce funzionalit\`a di programmazione e di esecuzione per sistemi distribuiti e concorrenti. L'idea generale \`e di considerare che il sistema sia composto da componenti che agiscono come fornitori di serviziw e consumatori.
-Rispetto a SCA (Service Component Architecture) i componenti sono sempre entit\`a attive, mentre in confronto agli agenti la comunicazione \`e preferibilmente eseguita utilizzando chiamate ai servizi.
-
-\subsection{ASTRA}
-ASTRA \`e un linguaggio di programmazione ad agenti per creare sistemi intelligenti distrubuiti/concorrenti costruiti su Java.
-ASTRA \`e basato su AgentSpeak(L), ovvero fornisce tutte le stesse funzionalit\`a base, ed inoltre le aumenta con una serie di feature orientate a creare un linguaggio di programmazione ad agenti pi\`u pratico.
-
-
-%--------------------------------------
-%Le caratteristiche di un agente sono:
-%\begin{itemize}
-%	\item Autonomia
-%	\item Reattivit\`a
-%	\item Proattivit\`a
-%	\item Orientamento ai goal
-%	\item Socialit\`a
-%	\item Adatattivit\`a
-%	\item Cognitivit\`a
-%\end{itemize}
-
-
 \section{Obiettivo del lavoro}
 TODO 
 %Le tecnologie appena descritte permettono di programmare agenti, ognuna con funzionalit\`a specifiche come la distribuzione, protocolli di comunicazione e il modello BDI.
