@@ -1,17 +1,12 @@
 % crea il CAPITOLO
-\chapter{Introduzione}
+\chapter{\hl{Introduzione}}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
-TODO DESCRIZIONE INTRODUZIONE
+In questo lavoro di tesi ci si è concentrati sulla realizzazione di un nuovo linguaggio ad agenti che permettesse di essere utilizzato in ambienti o piattaforme differenti.
 
-\section{Obiettivo del lavoro}
-TODO 
-%Le tecnologie appena descritte permettono di programmare agenti, ognuna con funzionalit\`a specifiche come la distribuzione, protocolli di comunicazione e il modello BDI.
-%Nessuna di quelle descritte per\`o \`e in grado di fornire la possibilit\`a di tener conto della distribuzione degli agenti nel mondo reale.
+\subsubsection{\hl{Obiettivo del lavoro}}
+L'obiettivo del lavoro è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
+Si vuole mostrare, inoltre, come è possibile realizzare un interprete che lavori con il nuovo linguaggio definito.
 
-%Con questo lavoro di tesi si propone un linguaggio ed un'architettura ad agenti che possa essere eseguita sia in un ambiente simulato che in uno reale, per tentare di esprimere tutto il potenziale del modello ad agenti.
-%In particolare, il focus della tesi \`e definire e formalizzare il linguaggio e poi effettuare l'esecuzione in un ambiene simulato.
-%L'applicativo utilizzato per la simulazione \`e il meta-simulatore Alchemist, che fornisce un ambiente sul quale \`e possibile sviluppare definizioni di modelli da eseguire su di esso.
-
-\subsection{Benefici dell'approccio scelto}
-TODO 
+\subsubsection{\hl{Benefici dell'approccio scelto}}
+Il beneficio del linguaggio è quindi un'architettura ad agenti che possa essere eseguita sia in un ambiente simulato che in uno reale, per tentare di esprimere tutto il potenziale del modello ad agenti. In questo lavoro verrà presentata una soluzione che implementa l'interprete del linguaggio in un ambiente simulato, il meta-simulatore Alchemist, ma si sarebbe potuta scegliere una qualsiasi altra piattaforma o ambiente sulla quale fosse possibile utilizzare la libreria tuProlog.

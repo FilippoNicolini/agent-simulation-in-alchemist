@@ -1,11 +1,209 @@
-\chapter{AgentSpeak in tuProlog su Alchemist}
-TODO intro
+\chapter{\hl{AgentSpeak in tuProlog su Alchemist}}
+In questo capitolo verrà esposta la parte di implementazione mancante nel capitolo precedente. Più precisamente è descritto come è stato scelto di implementare il modello ad agenti su Alchemist, fornendo un'analisi del mapping, e di come è stato utilizzato il linguaggio per definire l'interprete, scendendo nel dettaglio di come è stata realizzata la gestione delle intenzioni, lo spostamento dell'agente e l'estensione Spatial Tuples.
 
-\section{Mapping modello agenti su meta-modello}
-TODO
+La scelta della piattaforma è ricaduta su Alchemist poichè fonisce un meta-modello molto adattabile a vari ambiti applicativi e una struttura di simulazione già consolidata ed efficace.
+\\
+Come detto in precedenza è possibile realizzare implementazioni del modello ad agenti utilizzando il linguaggio definito in questo lavoro di tesi anche sfruttando altre piattaforme sulle quali lavorare con la libreria tuProlog.
 
-\section{Descrizione interprete linguaggio}
-TODO
+\section{\hl{Mapping modelli}}\label{sctn:mapping}
+In precedenza sono stati descritti il modello ad agenti e il meta-modello di Alchemist. Ora, dopo aver definito il linguaggio, per procedere all'implementazione è necessario capire quale risulta il migliore modo, in termini di performace e espressività, per unire i due modelli.
+In questa fase si vuole quindi pensare come realizzare sul meta-modello fornito da Alchemist il modello ad agenti cercando eventuali incongruenze o opportunità per massimizzare il risultato.
+
+Si è partiti analizzando le entità del meta-modello e per ognuna è stato posto l'interrogativo sul fatto che potesse essere un'agente.
+Fin da subito sono state ritenute inadatte l'Environment e la Molecola: il primo perchè è esso stesso lo spazio e non avrebbe potuto rappresentare lo spazio degli agenti, mentre le molecole perchè forniscono un livello di dettaglio troppo elevato e non hanno una struttura per che consente di contenere lo stato dell'agente.
+
+Le entità rimaste da analizzare sono quindi il Nodo e la Reazione. Mappando il Nodo come agente ne deriva che l'Environment corrisponderà allo spazio degli agenti mentre, all'interno dell'agente, le Molecole e le Concentrazioni potranno essere utilizzate per gestire la `belief base' e le reazioni saranno riferite ai piani, utilizzando le Condizioni come clausola per scatenare le Azioni. Questo tipo di mapping consente di realizzare simulazioni di sistemi non complessi, in cui agenti allo stesso livello operano e comunicano tra loro.
+
+Posizionando l'agente nella Reazione, quindi più internamente rispetto al precedente mapping, il Nodo sarà quindi un contenitore di agenti e l'Environment lo spazio nel quale si muovono i gruppi di agenti. Ogni agente avrà il riferimento ad una Condizione e ad una Azione: quest'ultima conterrà il ciclo di ragionamento dell'agente mentre la Condizione, sempre vera, ne determinerà la frequenza di esecuzione. Utilizzando questa seconda ipotesi sarà possibile realizzare simulazioni di sistemi complessi, nei quali dei nodi, che potrebbero essere dispositivi mobili (ad esempio cellulari), si muovo nello spazio ed ognuno dei quali al suo interno contiene un gruppo di agenti che possono interagire sia internamente che esternamente.
+
+Dopo aver analizzato le due possibili alternative presentate, è stato scelto il mapping in cui l'agente è posizionato nella Reazione poichè permette una maggiore espressività e un'apertura verso più scenari applicativi.
+
+\section{\hl{Descrizione interprete linguaggio}}\label{sctn:interpreteLinguaggio}
+Una volta scelto il mapping si è iniziato lo sviluppo dell'interprete del linguaggio sul meta-simlatore al fine di creare una `incarnazione', ovvero il nome con cui sono chiamate le implementazioni dei modelli in Alchemist.
+
+Alchemist è un meta-simulatore che, proprio per la sua natura di simulatore, ha un meccanismo di generazione degli eventi e fornisce quindi la possibilità di gesire lo scheduling dei cicli di ragionamento degli agenti. Più precisamente, in Alchemist è possibile definire una distribuzione temporale per ogni reazione, la quale nell'incarnazione che si vuole realizzare e secondo il mapping scelto corrisponde ad un agente. \`E quindi possibile decidere quante volte viene programmata l'iterazione del ciclo di ragionamento di ogni singolo agente. La scelta fatta per gestire la distribuzione temporale è ricaduta sull'utilizzo di un pettine di Dirac che è una distribuzione periorica degli eventi costruita da una somma di delta di Diract, la quale è una funzione generalizzata che dipende da un parametro reale utilizzata per rappresentare dei picchi, gli eventi.
+
+Si è pensato come organizzare le invocazioni delle regole base, definite dal linguaggio, per migliorare l'usabilità l'interprete. \`E stato deciso di creare una classe astratta che raggruppasse le implementazioni delle funzionalità principali dell'agente, le quali saranno utili al programmatore dell'agente nella realizazione delle classi specifiche degli agenti poichè sarà sufficiente richiamare queste funzioni dove non necessari comportamenti specifici.
+
+\subsection{Implementazione del linguaggio}
+Il primo passo è stato quello di definire la libreria dell'agente, ovvero l'implementazione delle chiamate messe a disposizione del programmatore dell'agente. Sono state quindi definite, utilizzando le funzionalità base di tuProlog, le regole per aggiungere o rimuovere un belief, per eseguire un'intenzione e per recuperare la lista di operazioni dal corpo di un piano, quest'ultima solo per uso interno.
+La definizione di queste regole è stata necessaria per permettere la gestione dei cicli di ragionamento, cioè per consentire ad Alchemist di riprendere il controllo alla fine del ciclo di ragionamento di ogni agente evitando così che un agente possa eseguire le sue operazioni entrando in un loop infinito.
+Ad esempio la definizione per l'aggiunta e la rimozione dei belief è quella mostrata nel Codice sorgente \ref{lst:ImplementazioneRegoleModificaBeliefBase} nella quale sono eseguite due operazioni: la prima riguarda l'effettiva modifica della `belief base' con il belief passato, mentre la seconda inserisce un belief fittizio recuperato dall'interprete per permettere di innescare l'evento di modifica del relativo belief al prossimo ciclo di ragionamento.
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneRegoleModificaBeliefBase},caption={Implementazione regole modifica della `belief base'}]
+addBelief(B) :-
+  assertz(belief(B)),
+  assertz(added_belief(B)).
+
+removeBelief(B) :-
+  retract(belief(B)),
+  assertz(removed_belief(B)).
+\end{lstlisting}
+
+Una modalità analoga è stata utilizzata per gestire anche altri eventi, sempre per poter separare l'invocazione della regola dall'attivazione dell'evento. Gli eventi in questione sono quelli relativi alla realizzazione dell'estensione Spatial Tuples e che sono stati implementati come mostrato nel Codice sorgente \ref{lst:ImplementazioneRegoleSpatialTuples}. In questo caso sono aggiunti dei fatti il cui contenuto è la tupla o il template da utilizzare nella richiesta verso lo spazio di tuple.
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneRegoleSpatialTuples},caption={Implementazione regole estensione Spatial Tuples}]
+writeTuple(T) :-
+  assertz(write(T)).
+
+readTuple(T) :-
+  assertz(read(T)).
+
+takeTuple(T) :-
+  assertz(take(T)).
+\end{lstlisting}
+
+\subsection{Invocazione regole ed esecuzione intenzioni}
+Terminata la definizione delle regole per la gestione degli eventi è stata aggiunta la libreria `alice.tuprolog' dalla quale è stato importato all'interno della classe astratta dell'agente il motore tuProlog per la realizzazione delle invocazioni verso la teoria dell'agente.
+Ogni agente ha un motore tuProlog al cui interno è caricata la libreria che definisce l'implementazione del linguaggio e una teoria specifica scritta dal programmatore dell'agente che descrive il comportamento dell'agente.
+L'agente nel meta-modello è mappato con la Reazione ma implementativamente il ciclo di ragionamento dell'agente, ovvero il cuore, risiederà nell'Azione e quindi la classe astratta dell'agente sarà un'estensione dell'interfaccia relativa a tale entità.
+Sono stati definiti due costruttori, uno che imposta solamente il nome dell'agente e il generatore random per l'agente e un altro che prende in ingresso anche la reazione a cui è riferito l'agente e che è utilizzata per ottenere la distribuzione temporale.
+
+Per fare un'invocazione vengono utilizzate alcune classi messe a disposizione dalla libreria 'alice.tuprolog' che sono descritte qui di seguito.
+\\
+La prima cosa da fare è costruire il template del fatto o della regola che si vuole ottenere, sfruttando le classi della libreria tuProlog, e per fare questo si possono utilizzare due modi: creazione del termine o composizione della struttura del termine. Nel primo caso viene invocata la funzione statica $Term.createTerm(t)$ dove il parametro passato è una stringa che descrive la struttura del template. Diversamente, la composizione della struttura del termine utilizza la classe Struct. Per creare un oggetto di questo tipo si devono definire almeno un funtore, di tipo stringa, e un termine, che può essere un numero, una variabile o un'altra struttura. In questo modo la creazione del termine del template risulta molto più efficiente.
+\\
+Terminata la costruzione del template è il momento di effettuare l'interrogazione all'interno della teoria dell'agente. Per fare questo viene utilizzata la funzione $solve(term)$ definita all'interno del motore tuProlog e che restituisce un oggetto dal quale è possibile ricavare i risultati dell'interrogazione, come ad esempio:
+\begin{itemize}
+\item controllare se la richiesta è andata a successo;% (funzione $isSuccess$);
+\item recuperare il valore di una singola variabile inserita nel template;% (funzione $getTerm$);
+\item ottenere la soluzione del template, ovvero dove tutte le variabili utilizzate sono sostituite con il valore del fatto o della regola ricavato;% (funzione $getSolution$);
+\item verificare se ci fossero altre possibili alternative che corrispondono al template utilizzato;% (funzione $hasOpenAlternatives$);
+\end{itemize}
+
+Per quanto riguarda invece l'esecuzione dell'intenzione sono state definite una serie di regole che, dato l'identificativo, recuperano l'intenzione e ne prelevano la lista di operazioni collegate. Se la lista è vuota allora l'intenzione viene rimossa. Altrimenti si preleva l'operazione in testa che viene eseguita e restituisce una lista con eventuali operazioni da eseguire scaturite dal suo processamento (ed esempio se l'azione è un goal). La nuova lista di operazioni viene quindi aggiunta in testa alla lista delle operazioni già presenti nell'intenzione e poi quest'ultima viene aggiornata. Quanto appena descritto è mostrato nel Codice sorgente \ref{lst:ImplementazioneRegoleInvocazioneEsecuzioneIntenzione}.
+
+\`E inoltre necessario descrivere in che modo vengono selezionati i piani applicabili e le intenzioni per completare la descrizione degli step che sono effettuati.
+\\
+Per quanto riguarda la selezione di piani applicabili, in base all'implementazione attuale, viene utilizzata la selezione del motore tuProlog poichè sfrutta l'ordinamento con cui sono definite le regole e i fatti nella teoria per scegliere quello giusto, anche attraverso l'utilizzo del contesto.
+\\
+Diversamente per quanto riguarda le intenzioni avviene la seguente gestione. Nella teoria dell'agente sono salvate tutte le intenzioni mentre nell'interprete viene salvata una lista contenente solamente gli identificativi delle rispettive intenzioni presenti nella teoria. La tipologia di selezione è Round-Robin, ogni intenzione avrà lo stesso spazio di esecuzione delle altre. L'intenzione da eseguire viene presa dalla testa dello stack e una volta finita la sua esecuzione viene posizionata in coda: in questo modo si assicura che ogni intenzione possa essere eseguita.
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneRegoleInvocazioneEsecuzioneIntenzione},caption={Implementazione regole per invocazione esecuzione di un'intenzione}]
+execute(I) :-
+    intention(I, []),
+    !,
+    agent <- removeCompletedIntention(I).
+
+execute(I) :-
+    retract(intention(I, [ACTION | STACK])),
+    execute(I, ACTION, TOP),
+    !,
+    append(TOP, STACK, NEWSTACK),
+    assertz(intention(I, NEWSTACK)).
+\end{lstlisting}
+
+\subsection{Gestione azioni}
+L'esecuzione vera e propria dell'intenzione è gestita da altre regole che sono definite ciascuna per ogni tipologia: $achievement$, $test$, $concurrent$, azione interna e azione esterna; qui di seguito verrà mostrato come sono state implementate ognuna di esse.
+\\
+In caso l'azione da eseguire fosse un $achievement$ allora, una volta verificata la correttezza del contesto (detto anche guardia), il contenuto del corpo di quella regola verrà recuperato e restituito per essere aggiunto in testa allo stack da cui è pervenuta l'invocazione di quell'azione. Lo stesso comportamento verrà tenuto per azioni di tipo $test$.
+\\
+Diversamente, se si tratta dell'azione $concurrent$, sia che essa racchiuda $achievement$ o $test$, il suo obiettivo è quello di creare un intenzione concorrente a quella dalla quale è pervenuta l'invocazione dell'azione. Per fare questo, per prima cosa è ottenuta la regola verificandone la correttezza del contesto e quindi si recupera la sua lista di operazioni, contenuta nel corpo. A questo punto viene generato un nuovo identificativo univoco per l'intenzione e poi è creato il fatto dell'intenzione così formato: $intention(id, [op_1, \ldots, op_n])$.
+\\
+Per quanto riguarda le azioni interne ed esterne, quindi che rispettivamente accadono nell'agente o nell'ambiente, il programmatore dell'interprete è in grado di definirne di nuove in base al contesto applicativo in cui si deve calare il linguaggio e l'interprete. Un'esempio di definizione di un'azione interna è quello relativo all'azione per inviare dei messaggi. Per realizzarlo è stata definita la sintassi $iSend(S,M)$ dove $S$ è il mittente e $M$ messaggio. Quando un'azione interna o esterna viene richiamata per l'esecuzione deve essere verificata la sua esistenza prima che possa essere eseguita: per fare questo possono essere definiti dei fatti, come il seguente $is\_internal(iSend(S,M))$, che sono utilizzati come template per verificare che la sintassi sia corretta. Il controllo funziona come una guardia e se ha successo allora l'operazione interna può essere invocata tramite l'apposita funzione implementata all'interno della classe dell'agente, riferita all'oggetto $agent$. Per comodità si potrebbe implementare all'interno dell'agente un'unica funzione, ad esempio $executeInternalAction(action)$ che viene sempre richiamata per l'esecuzione di azioni interne e che, in base al parametro in ingresso, esegue l'azione corretta.
+In modo analogo possono essere gestire le azioni esterne che possono essere gestite dal nodo, lo spazio dell'agente. Infatti, la scelta di fornire anche l'oggetto del nodo nella teoria dell'agente permette di poter implementare azioni che l'agente possa compiere e che abbiano effetto nell'ambiente.
+
+\subsection{Spostamento del nodo}
+Precedentemente nella sezione \ref{sctn:mapping} si è trattato dello spazio, ovvero dell'ambiente in cui gli agenti si muovono. Con il mapping scelto per l'implementazione del meta-modello sono presenti due livelli di spazio: uno internamente al nodo e che contiene gli agenti ed un altro che è l'ambiente globale dove si possono muovere i nodi. Il nodo quindi è visto non come un singolo agente ma come un contenitore di agenti che è in grado di muoversi nello spazio sia fisico che simulato. Si può quindi implementare all'interno della classe del nodo la funzionalità per gestire il movimento.
+\\
+Nell'implementazione che è stata effettuata si sono utilizzate due variabili per la gestione dello spostamento: la direzione (calcolata in radianti) e la velocità. Entrambe le variabili sono memorizzate come proprietà della classe. Inoltre, è stato utilizzato un altro parametro, il momento dell'ultimo aggiornamento della posizione, per poter calcolare l'esatta posizione finale del nodo trascorso un certo arco temporale. In questo modo, avendo possibilità di gestire tutti i parametri (direzione, velocità, tempo) è possibile muovere il nodo in una qualsiasi posizione.
+\\
+La funzione che calcola la nuova posizione del nodo è descritta qui di seguito. Date la posizione attuale del nodo, la direzione in radianti, la velocità del nodo e il tau (tempo della simulazione) dell'ultimo aggiornamento. Viene costruito un cerchio che ha come centro la posizione attuale del nodo e il cui raggio ha distanza uguale a $V * (T_1 - T_0)$, dove $V$ è la velocità del nodo, $T_1$ è il tempo attuale della simulazione e $T_0$ è il tempo dell'ultimo aggiornamento della posizione. Sulla circonferenza appena creata viene individuata la prossima posizione del nodo calcolando il punto che corrisponde alla direzione attualmente memorizzata nel nodo.
+
+\lstset{
+  numberstyle=\footnotesize\color{black},
+  basicstyle=\ttfamily,
+  breakatwhitespace=true,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=3pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=tb,
+  language=Java,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red}
+}
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneAggiornamentoPosizioneNodo},caption={Implementazione aggiornamento posizione nodo}]
+void changeNodePosition(Time t1) {
+  Position currPos = this.getNodePosition();
+  
+  double radius = (t1.toDouble() - this.t0.toDouble()) * this.speed;
+  
+  double coordX = currPos.getCoordinate(0) + radius * Math.cos(this.radAngle);
+  
+  double coordY = currPos.getCoordinate(1) + radius * Math.sin(this.radAngle);
+  
+  this.environment.moveNodeToPosition(this, this.environment.makePosition(coordX, coordY));
+  
+  this.t0 = t1;
+}
+\end{lstlisting}
+
+Per rispettare il fatto che il movimento sia una funzione basilare dell'implementazione ad agenti si è pensato a come realizzarlo. Richiamare la funzione mostrata nel Codice sorgente \ref{lst:ImplementazioneAggiornamentoPosizioneNodo} dentro ogni agente non è il modo migliore poichè potrebbe essere richiamata più di una volta ed essere quindi aggiornata troppo frequentemente.
+\\
+L'idea che è stata poi realizzata è quella di inserire all'interno di ogni nodo un agente che abbia come unico compito quello di innescare l'aggiornamento della posizione del nodo e di comunicare la variazione a tutti gli altri agenti all'interno del nodo. Per fare ciò, il modo migliore è stato quello di inserire durante la creazione del nodo, tramite il codice dell'interprete, un agente il quale, come detto precedenemente, avrà il compito di innescare l'aggiornamento della posizione del nodo e una volta terminato di far partire l'aggiornamento interno di ogni agente riguardo la sua posizione (che è quella del nodo) e la distanza rispetto a tutti gli altri agenti (sia residenti nello stesso nodo che in altri).
+\\
+Questo agente che gestisce il movimento ha una distribuzione temporale uguale a 1, ovvero il suo ciclo di ragionamento viene eseguito 1 volta ogni `clock' dello scheduler. In questo modo, definendo opportunamente la distribuzione temporale degli altri agenti della simulaizone si può ottenere il risultato come se l'aggiornamento della posizione provenisse da un componente esterno, ad esempio un apparato GPS, che periodicamente aggiorna la posizione.
+
+\subsection{Implementazione Spatial Tuples}
+La realizzazione lato Alchemist del modello Spatial Tuples è stata fatta appongiandosi al lavoro già svolto per la realizzazione degli agenti. Partendo dalla classe astratta definita per gli agenti è stato quindi deciso di estenderla per creare una nuova classe, anch'essa astratta, con la quale sarà possibile creare implementazioni specifiche per gli spazi di tuple. Per implementare correttamente il modello Spatial Tuples e gestire opportunamente le sue primitive è necessario però completare due parti: la prima è quella appena descritta riguardo l'implementazione di una classe astratta, mentre la seconda riguarda la definizione di funzioni nella classe dell'agente per poter gesistire le invocazioni delle primitive del linguaggio.
+
+Sfruttando l'ereditarietà della classe astratta degli agenti, anche lo spazio di tuple è implementato come un agente anche se con le sue precise caratteristiche. Per implementare la classe sono state definite come proprietà due liste: una per i messaggi in entrata e una per quelli in attesa. Il resto delle proprietà utilizzate come il motore tuProlog, il nome dell'agente, la libreria sono ereditate dal padre e lo stesso vale anche per il costruttore.
+\\
+Ogni richiesta è composta da un template, un identificativo dell'azione e l'oggetto dell'agente al quale poi comunicare la risposta. 
+Per la gestione delle due code aggiunte sono state implementate due funzioni, una per ogni coda, ed in entrambe, in base all'azione della richiesta ricevuta($in$, $rd$, $out$), viene invocato il metodo per effettuare quell'operazione. Le operazioni vanno a modificare la teoria dello spazio di tuple scrivendo, leggendo o rimuovendo fatti dalla teoria tramite il motore tuProlog.
+
+L'implementazione dell'operazione $in$ viene sempre eseguita immediatamente e al termine richiama la funzione che controlla se nella lista delle richieste pendenti vi siano template che corrispondano alla tupla appena inserita.
+
+Le operazioni $rd$ e $out$ sono gestite in modo simile, cambia solo la natura del termine contenente il template che viene passato al motore tuProlog: nel primo caso contiene solo il template mentre nel secondo anche la sintassi per rimuovere la tupla. In entrambi i casi, se il motore restituisce una tupla, questa viene presa e inviata tramite messaggio diretto all'agente.
+
+In questo modo si è implementato lo spazio di tuple in modo astratto, lasciando alla classe specifica il compito di implementare le funzioni mancanti, come ad esempio quella del ciclo di ragionamento.
+Ora è necessario parlare della parte da definire nella classe dell'agente.
+
+Nella classe dell'agente rimane da realizzare la parte per inviare una richiesta allo spazio di tuple e per ricevere in risposta le tuple richieste: per fare questo si sono implementati due funzioni. La prima funzione è quella che recupera i fatti a seguito dell'invocazione di una delle regole definite nel Codice sorgente \ref{lst:ImplementazioneRegoleSpatialTuples} e successivamente li utilizza per creare la richiesta. Nell'implementazione realizzata si sono voluti tenere due approcci diversi per la scrittura e per la lettura di tuple: nel primo caso è stato scelto di farlo nella tupla più vicina, mentre nel secondo caso sono recuperati tutti gli spazi di tuple nell'intorno dell'agente e su questi viene richiesto il template. La possibilità di recuperare uno o più spazi di tuple è fornita dal nodo che è stato implementato in modo tale da poter recuperare la lista degli agenti presenti in ogni nodo del suo vicinato che poi può essere opportunamente filtrata in base alle necessità.
+\\
+L'altra funzione da implementare, è quella per ricevere il messaggio di ritorno dallo spazio di tuple quando viene trovata la tupla che corrisponde al template passato. Come parametro in ingresso richiede un termine valido così da limitare il suo operato al recupero della regola $onResponseMessage(T)$, dove $T$ è il parametro, idonea al contesto e quindi creare una nuova intenzione pronta per essere eseguita.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

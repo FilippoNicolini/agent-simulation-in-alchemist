@@ -16,7 +16,7 @@
 % però con questa libreria
 % il tempo di compilazione
 % aumenta
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 
 % libreria per impostare il documento
 \usepackage{fancyhdr}
@@ -39,10 +39,20 @@
 \usepackage{latexsym}
 \usepackage{amsthm}
 
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[chapter] % reset theorem numbering for each chapter
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition} % definition numbers are dependent on theorem numbers
+\newtheorem{exmp}[thm]{Example} % same for example numbers
+
 %per inserire il codice
 \usepackage{listings, xcolor}
 \renewcommand{\lstlistingname}{Codice sorgente}
 \renewcommand{\lstlistlistingname}{Codici sorgenti}
+
+%per l'highlight delle modifiche
+\usepackage{color,soul}
 
 % example style for lstlistoflistings
 % tabsize = 2, %% Sets tab space width.
@@ -162,7 +172,14 @@
 %\rhead[\fancyplain{}{\bfseries \thechapter \:Seconda Appendice}]
 %{\fancyplain{}{\bfseries\thepage}}
 
-
+\makeatletter
+\renewcommand\@bibitem[1]
+{
+  \item\if@filesw \immediate\write\@auxout
+  {\string\bibcite{#1}{Bib. \the\value{\@listctr}}}\fi\ignorespaces
+}% <------------
+\def\@biblabel#1{[Bib. #1]}% <-------------------
+\makeatother
 
 \begin{thebibliography}{90} % crea l'ambiente bibliografia
 \rhead[\fancyplain{}{\bfseries \leftmark}]{\fancyplain{}{\bfseries \thepage}}
@@ -178,18 +195,28 @@
 
 \end{thebibliography}
 
+
 %% Preambolo per sitografia
 \makeatletter
 \let\@orig@endthebibliography\endthebibliography
-\renewcommand\endthebibliography{%
+\renewcommand\endthebibliography
+{
   \xdef\@kept@last@number{\the\c@enumiv}%
-  \@orig@endthebibliography}
+  \@orig@endthebibliography
+}
 
 \newenvironment{thesitography}[1]
-  {\def\bibname{Sitografia}%
+{\def\bibname{Sitografia}%
    \thebibliography{#1}%
 }
-  {\@orig@endthebibliography}
+{\@orig@endthebibliography}
+
+\renewcommand\@bibitem[1]
+{
+  \item\if@filesw \immediate\write\@auxout
+  {\string\bibcite{#1}{Sit. \the\value{\@listctr}}}\fi\ignorespaces
+}% <------------
+\def\@biblabel#1{[Sit. #1]}% <-------------------
 \makeatother
 %% Preambolo per sitografia
 
@@ -202,14 +229,14 @@
 
 % provare anche questo comando:
 %\addcontentsline{toc}{chapter}{\numberline{}{Bibliografia}}
-\bibitem {JADE} https://jade.tilab.com/
-\bibitem {Spade} https://pypi.org/project/spade/
-\bibitem {SARL} http://www.sarl.io/
-\bibitem {JADEX} https://www.activecomponents.org/\#/project/news
-\bibitem {Astra} http://astralanguage.com/wordpress/
-\bibitem {Jason} http://jason.sourceforge.net/wp/
-\bibitem {tuProlog} http://apice.unibo.it/xwiki/bin/view/Tuprolog/
-\bibitem {Alchemist} http://alchemistsimulator.github.io
+\bibitem {JADE} \texttt{https://jade.tilab.com/}
+\bibitem {Spade} \texttt{https://pypi.org/project/spade/}
+\bibitem {Jason} \texttt{http://jason.sourceforge.net/wp/}
+\bibitem {SARL} \texttt{http://www.sarl.io/}
+\bibitem {JADEX} \texttt{https://www.activecomponents.org/\#/project/news}
+\bibitem {Astra} \texttt{http://astralanguage.com/wordpress/}
+\bibitem {tuProlog} \texttt{http://apice.unibo.it/xwiki/bin/view/Tuprolog/}
+\bibitem {Alchemist} \texttt{http://alchemistsimulator.github.io}
 \end{thesitography}
 
 % non numera l'ultima pagina sinistra
