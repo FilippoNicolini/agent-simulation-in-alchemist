@@ -1,261 +1,41 @@
-\chapter{AgentSpeak in tuProlog}
-Nel capitolo precedente è stato descritto lo stato attuale di lavori correlati che utilizzano il modello ad agenti BDI per costruirne altri più complessi ed espressivi o implementano linguaggi basati sugli agenti. Inoltre, è stato mostrato lo stato dell'arte delle tecnologie che sono state utilizzate.
+% crea il CAPITOLO
+\chapter{tuProlog}
+% imposta l'intestazione di pagina
+\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
+% mette i numeri arabi
+%\pagenumbering{arabic}
 
-In questo lavoro di tesi si è voluto definire un nuovo linguaggio che fosse \textit{`platform indipendent'}, ovvero indipendente dall'ambiente sul quale viene utilizzato: è stato definito al pari di una libreria, senza nessun riferimento all'ambiente. Nei capitoli successivi verrà mostrato come, partendo dal linguaggio, è stata colmata la distanza con l'ambiente scelto.
+tuProlog è stato scelto per essere utilizzato nel progetto di tesi per via della sua capacità di operare su ambienti differenti. Grazie a questo strumento e alla sua flessibilità, sarà possibile integrare le due parti, l'interprete e il linguaggio, su uno dei possibili ambienti di sviluppo, ovvero Alchemist. Infatti, proprio grazie al fatto che la libreria tuProlog supporta la programmazione multi-paradigma, è possibile utilizzare vari ambienti per la realizzazione di un'interprete che sfrutti il linguaggio che si andrà a definire nel lavoro di tesi.
 
-\section{Definizione linguaggio}\label{sctn:definizioneLinguaggio}
-Essendo tuProlog un interprete che opera su piattaforme differenti, si è voluto utilizzarlo nella definizione del linguaggio per permettere di utilizzare quest'ultimo facilemente, potendo sfruttare la libreria tuProlog per colmare la distanza tra l'ambiente e il linguaggio.
+%----------------------------
+\section{Descrizione tuProlog}
+tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile.
+tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
 
-Seguendo quella che è la struttura di AgentSpeak, è stato formalizzato questo linguaggio di programmazione ad agenti, e, di seguito, sono mostrate le definizioni.
+\subsection{Caratteristiche tuProlog}
+tuProlog è un sistema per applicazioni e infrastrutture distribuite ed è intenzionalmente strutturato con un core minimale, per essere configurato sia staticamente che dinamicamente tramite l'utilizzo di librerie e predicati \cite{tuProlog}. Inoltre, tuProlog supporta nativamente la programmazione multi-paradigma, fornendo un'integrazione chiara ed efficiente tra Prolog e i principali linguaggi orientati agli oggetti, ad esempio Java.
 
-\smallskip
-% Definizione 1
-\begin{defn}
-Se $b$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $belief(b(t_1, \ldots, t_n))$ è un atomo di belief.
-Se $b(t)$ e $c(s)$ sono atomi di belief, allora $b(t) \land c(s)$ e $\neg b(t)$ sono beliefs.
-Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief. Un atomo di belief base sarà chiamato \textit{belief base}.
-\end{defn}
-
-\smallskip
-% Definizione 2
-\begin{defn}\label{defn:goals}
-Se $g$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $achievement(g(t_1, \ldots, t_n))$ e $test(g(t_1, \ldots, t_n))$ sono \textit{goals}.
-\end{defn}
-
-\smallskip
-% Definizione 3
-\begin{defn}\label{defn:triggeringEvents}
-Se $b(t)$ è un atomo di belief e $g(t)$ un goal, allora $onAddBelief(b(t))$, $onRemoveBelief(b(t))$, $onReceivedMessage(b(t))$, $onResponseMessage(b(t))$, $concurrent(achievement(g(t)))$, $concurrent(test(g(t)))$ sono \textit{eventi di attivazione}.
-\end{defn}
-
-\smallskip
-% Definizione 4
-\begin{defn}
-Se $a$ è un simbolo di azione e $t_1, \ldots, t_n$ sono termini del primo ordine, allora $a(t_1, \ldots, t_n)$ è un'azione.
-\end{defn}
-
-\smallskip
-% Definizione 5
-\begin{defn}
-%Se $e$ è un \textit{evento di attivazione} e $h_1, \ldots, h_n$ sono goals o azioni, allora $e :- $h_1, \ldots, h_n$ è un piano. L'espressione a sinistra di `:-' è la testa, quella sulla destra il corpo: se quest'ultimo è vuoto viene definito con l'espressione \textit{true}.
-Se $e$ è un \textit{evento di attivazione}, $b_1, \ldots, b_m$ sono belief o guardie e $h_1, \ldots, h_n$ sono goals o azioni, allora $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$ è un piano.
-\end{defn}
-
-\smallskip
-% Definizione 6
-\begin{defn}\label{defn:intenzione}
-Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione è definita come $intention(i, [p_1, \ldots, p_n])$, dove $i$ è l'identificativo univoco dell'intenzione e $[p_1, \ldots,p_n]$ è lo stack formata da azioni, belief o goal: $p_1$ è la coda e $p_n$ è la testa.
-\end{defn}
-
-\smallskip
-% Definizione 7
-\begin{defn}
-Un \textit{agente} è formato da $\langle B,P,I,A,S_O,S_I \rangle$, dove $B$ è una `belief base', $P$ è un set di piani, $I$ è un set di intenzioni, $A$ è un set di azioni. La funzione $S_O$ sceglie un piano dal set di quelli applicabili; la funzione $S_I$ sceglie l'intenzione da eseguire dal set $I$.
-\end{defn}
-
-\smallskip
-% Definizione 8
-\begin{defn}
-Dato un evento $\epsilon$ ed un piano $p = `\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$, allora $p$ è rilevante per l'evento $\epsilon$ se e solo se esite un unificatore $\sigma$ tale per cui $d\sigma = e\sigma$. $\sigma$ è detto \textit{unificatore rilevante} per $\epsilon$.
-\end{defn}
-
-\smallskip
-% Definizione 9
-\begin{defn}
-Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$ è un \textit{piano applicabile} rispetto ad un evento $\epsilon$ se e solo se esite un identificatore rilevante $\sigma$ per $\epsilon$ e esite una sostituzione $\theta$ tale che $\forall (b_1, \ldots, b_m) \sigma\theta$ è una conseguenza logica di $B$.
-%La composizione $\sigma\theta$ è riferita all'\textit{unificatore applicabile} per l'evento $\epsilon$ e $\theta$ è riferita alla sostituzione della corretta risposta.
-\end{defn}
-
-%\bigskip
-%\textbf{TODO}
-%
-%\textbf{selezione intenzione (13,14,15,16)}
-%
-%\smallskip
-%% Definizione 13
-%\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow !g(t);h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $\langle +!g(t), i \rangle \in E$.
-%\end{defn}
-%
-%\smallskip
-%% Definizione 14
-%\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow ?g(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $\forall g(t) \theta$ è una conseguenza logica di B e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger (f : c_1 \land \ldots \land c_y) \theta \leftarrow h_2 \theta; \ldots; h_n \theta]$.
-%\end{defn}
-%
-%\smallskip
-%% Definizione 15
-%\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow a(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $a(t) \in A$, e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow h_2; \ldots; h_n]$.
-%\end{defn}
-%
-%\smallskip
-%% Definizione 16
-%\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(t) : c_1 \land \ldots \land c_y \leftarrow true]$, dove $p_{z-1}$ è $e : b_1 \land \ldots \land b_x \leftarrow !g(s); h_2; \ldots; h_n$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $g(t)\theta = g(s)\theta$ e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger (e : b_1 \land \ldots \land b_x)\theta \leftarrow (h_2; \ldots; h_n) \theta]$.
-%\end{defn}
-
-\section{API del linguaggio}
-Il linguaggio appena definito è ciò che è messo a disposizione del programmatore dell'agente per descrivere il suo comportamento. Oltre questo, sono state definite altre sintassi che permettano al programmatore di gestire ogni evento o situazione per l'agente.
-Qui di seguito sono citate regole, variabili e fatti del linguaggio:
+tuProlog ha diverse caratteristiche e qui di seguito verranno illustrate solo alcune di esse, ovvero quelle utilizzate all'interno di questo lavoro.
+Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 \begin{itemize}
-\item $init :- \ldots$
-\item $self(A).$
-\item $agent$
-\item $node$
-\item $addBelief(B).$
-\item $removeBelief(B).$
-\item $onAddBelief(B) :- \ldots$
-\item $onRemoveBelief(B) :- \ldots$
-\item $onReceivedMessage(S, M) :- \ldots$
-\item $achievement(t).$
-\item $test(t).$
-\item $concurrent(t).$
-\item $belief(position(X,Y)).$
-\item $belief(distance(A, ND, OD)).$ oppure $belief(distance(A, ND)).$
+\item predicati built-in: incapsulati nel motore tuProlog;
+\item predicati di libreria: inseriti in una libreria che viene caricata nel motore tuProlog. La libreria può essere liberamente aggiunta all'inizio o rimossa dinamicamente durante l'esecuzione. I predicati della libreria possono essere sovrascritti da quelli della teoria. Per rimuovere un singolo predicato dal motore è necesssario rimuovere tutta la libreria che contiene quel predicato;
+\item predicati della teoria: inseriti in una teoria che viene caricata nel motore tuProlog. Le teorie tuProlog sono semplicemente collezioni di clausole Prolog. Le teorie possono essere liberamente aggiunte all'inizio o rimosse dinamicamente durante l'esecuzione.
 \end{itemize}
 
-Qui di seguito vengono analizzate ed esposte. Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
+\subsubsection{Prolog}
+Prolog è un linguaggio di programmazione che adotta il paradigma della programmazione logica. \`E impiegato in molti programmi di intelligenza artificiale.
 
-La regola $`init'$ è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene azionato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare la `belief base' dell'agente.
+Prolog si basa sul calcolo dei predicati (più precisamente di quelli del primo ordine). L'esecuzione di un programma Prolog è comparabile alla dimostrazione di un teorema mediante regola di inferenza. I concetti fondamentali sono l'unificazione, la ricorsione in coda e il backtracking, o monitoraggio a ritroso.
 
-\medskip
-Il fatto $`self(A)'$ permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
+\section{Aspetti principali in tuProlog}
+tuProlog, come detto precedentemente, è un interprete semplificato di Prolog.
+Le difficoltà iniziali nell'utilizzo di questo strumento erano dovute alla carenza di conoscenza di Prolog e della libreria in generale.
 
-\medskip
-I due letterali $`agent'$ e $`node'$ sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linugaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile $`agent'$ fa riferimento all'oggetto dell'agente stesso, mentre $`node'$ si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
+tuProlog è uno strumento molto utile perchè riesce ad adattasi all'ambiente sul quale viene utilizzato. In questo caso, per il progetto di tesi, è stato scelto Alchemist e l'adattabilità di tuProlog si è rivelata davvero efficiente poichè in poco tempo si è riusciti ad implementare la gestione della teoria dell'agente. 
 
-\medskip
-Le regole $`addBelief(B)'$ e $`removeBelief(B)'$ sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare $`onAddBelief(B)'$, $`onRemoveBelief(B)'$. Più precisamente $`onAddBelief(B)'$ viene invocato quando viene aggiunto un belief, mentre $`onRemoveBelief(B)'$ è chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile $B$ corrisponde al belief inserito o rimosso.
+tuProlog è uno strumento che ha la possibilità di essere utilizzato in maniera differente in base all'ambito applicativo, poichè mette a disposizione una serie di predicati nativi (o built-in) oltre che delle librerie per la gestione dei vari paradigmi supportati.
 \\
-Diversamtene, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato $`onReceivedMessage(S, M)'$, dove $S$ rappresente il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
-
-\medskip
-Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali $`achievement'$, $`test'$ sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato  è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
-In combinazione, i due letterali appena citati possono essere usati in combinazione con $`concurrent'$, mostrato nella Definizione \ref{defn:triggeringEvents}, che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione può essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
-
-\medskip
-Per rendere disponibile al programmatore dell'agente varie possibilità per accedere a informazioni quali la posizione dell'agente e la distanza degli altri agenti rispetto alla propria posizione, sono utilizzati due belief che saranno aggiornati direttamente dall'ambiente sul quale viene utilizzato il linguaggio. La posizione dell'agente viene aggiornata una volta per ogni ciclo di ragionamento e, al termine, sono modificati anche i valori dei belief appena citati. 
+Una peculiare modalità di utilizzo di tuProlog, fornita per il paradigma orientato agli oggetti,  è la registrazione di istanze di classi all'interno di varibili inserite nella teoria. In questo modo è possibile modificare le proprietà dell'istanza o invocare i suoi metodi utilizzando la variabile tuProlog direttamente dalla teoria.
 \\
-Per quanto riguarda la posizione dell'agente, potrà essere invocato $`belief(position(X, Y))'$ dove $X$ è la coordinata relative alle ascisse o longitudine e $Y$ è la coordinata relativa alle ordinate o latitudine.
-\\
-La distanza da altri agenti può essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief $`belief(distance(A, ND))'$, dove $A$ è il nome dell'agente nel vicinato e $ND$ è la distanza che li separa. Se, invece, un agente era già nella lista del vicinato e vi rimane, allora viene inserito il belief $`belief(distance(A, ND, OD))'$, dove $A$ è il nome dell'agente nel vicinato, $ND$ è la nuova distanza che li separa e $OD$ è la distanza che li divideva precedentemente.
-
-\subsection{\hl{Gestione intenzioni}}
-Le intenzioni sono la modalità con cui l'agente opera le sue azioni. Come descritto in precedenza, nel ciclo di ragionamento alla sezione \ref{ssctn:cicloRagionamentoAgentSpeak}, l'agente esegue una serie di passi che portano all'esecuzione di un'azione.
-Qui di seguito è descritto come avviene il ciclo di ragionamento utilizzando questo linguaggio. La spiegazione terrà conto solamente degli aspetti relativi alla parte tuProlog e quindi sarà incompleta fino al raggiungimento della sezione \ref{sctn:interpreteLinguaggio}. Le funzioni di selezione per i piani applicabili e le intenzioni non sono trattate in questa parte, poichè sono relative all'implementazione dell'interprete.
-
-L'agente lato tuProlog definisce il suo comportamento tramite una serie di regole e fatti che gli permettono di reagire ad eventi sia esterni che interni. Una percezione dell'ambiente può essere scatenata ad esempio da uno spostamento o una modifica della `belief base': quando questo avviene l'ambiente sul quale è utilizzato il linguaggio invoca una delle regole che, se implementata correttamente nella teoria dell'agente, consente all'agente di reagire all'evento. Un altro tipo di input che può ricevere l'agente è la ricezione di un messaggio. In tuProlog l'agente può reagire alla lettura del contenuto del messaggio poichè l'implementazione e la gestione delle code e la selezione dei messaggi viene fatta dall'interprete.
-
-La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un'inserimento all'interno di una lista, la quale poi viene restituita.
-
-La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $intention(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione. Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma, lato tuProlog viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
-\\
-La regola $execute$ si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
-\begin{itemize}
-\item le azioni vengono eseguite direttamente;
-\item i goal vengono recuperati lo stack di operazioni collegate viene successivamente aggiunto in testa all'intenzione di cui faceva parte il goal;
-\item i goal espressi all'interno di $concurrent$ creano una nuova intenzione che potrà essere eseguita in parallelo rispetto a quella da cui ha avuto origine la chiamata al goal.
-\end{itemize}
-
-
-\subsection{Estensione Spatial Tuples}
-Il linguaggio appena descritto è stato esteso per permettere di utilizzare il modello Spatial Tuples. Sono state quindi inserite le seguenti regole:
-\begin{itemize}
-\item $writeTuple(T).$
-\item $readTuple(TT).$
-\item $takeTuple(TT).$
-\item $onResponseMessage(M) :- \ldots$
-\end{itemize}
-Le regole dell'elenco sono tutte riferite all'inserimento, all'interno del linguaggio, del modello di coordinazione LINDA e più precisamente del modello Spatial Tuples.
-Con questa estensione, viene data la possibilità agli agenti di poter inserire e recuperare informazioni posizionate nello spazio. Le regole messe a disposizione mappano le primitive dei modelli che vogliono implementare `\textit{in}', `\textit{rd}', `\textit{out}' rispettivamente in $`writeTuple(T)'$, $`readTuple(TT)'$, $`takeTuple(TT)'$ dove $T$ è la tupla da inserire e $TT$ è il template da ricercare.
-\\
-Utilizzando $`writeTuple(T)'$ il programmatore è in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalità: $`readTuple(TT)'$ e $`takeTuple(TT)'$. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece $`takeTuple(TT)'$, si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
-\\
-Entrambe le due modalità di getter seguono la semantica standard dei modelli basati su tuple, e quindi sono:
-\begin{itemize}
-\item sospensive: se non ci sono tuple che si abbinano al template l'operazione è bloccata finchè non viene trovata una tupla;
-\item non deterministiche: se ci sono più tuple che si abbinano al template una è scelta in modo non deterministico.
-\end{itemize}
-Per dare la possibilità di gestire la risposta e gestire la tupla restituita è stata introdotta $`onResponseMessage(M)'$ che viene invocata ogni qualvolta che una tupla viene restituita dallo spazio di tuple. Il contenuto $M$ è la tupla incapsulata in un belief in modo che si possano gestire tuple provenienti da diversi spazi di tuple e con contenuti differenti.
-
-\section{Esempi linguaggio}
-In questa sezione verranno mostrate alcuni casi d'uso del linguaggio appena descritto. Nello specifico verrà mostrato un primo scenario dove sono stati configurati gli agenti per realizzare un semplice scambio di messaggi (o Ping Pong). Nel secondo esempio, invece, viene illustrato come poter utilizzare l'estensione Spatial Tuples supportata dal linguaggio.
-
-\subsubsection{Ping Pong}
-In questo primo esempio è presentato il problema del Ping Pong. In questo esempio sono definiti due agenti, Ping e Pong, ognuno dei quali risponde ad un messaggio ricevuto. L'agente Ping, alla ricezione del messaggio `\textit{pong}' da parte dell'agente Pong risponderà con un messaggio `\textit{ping}'. Viceversa, l'agente Pong, alla ricezione del messaggio `\textit{ping}' da parte dell'agente Ping risponderà con un messaggio `\textit{pong}'.
-
-Per far iniziare lo scambio di messaggi è stato utilizzato `init' per impostare all'interno di uno dei due agenti, nello specifico l'agente Ping, un'intenzione iniziale. In questo modo, al primo ciclo di ragionamento, l'agente eseguirà l'intenzione e invierà il primo messaggio.
-\lstset{
-  %numberstyle=\footnotesize\color{black},
-  basicstyle=\ttfamily,
-  %breakatwhitespace=false,
-  %breaklines=true,
-  captionpos=b,
-  %keepspaces=true,
-  %numbers=left,
-  %numbersep=0pt,
-  %showspaces=false,
-  %showstringspaces=false,
-  %showtabs=false,
-  frame=tb,
-  %commentstyle=\color{black},
-  %keywordstyle=\color{black},
-  %stringstyle=\color{black}
-  %label=incarnationYAML,
-  %caption={First verbatim}
-  %language=Java
-  %escapeinside={(*@}{@*)}
-}
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:PingAgent},caption={Agente Ping}]
-init :-
-  addBelief(intention(0,[iSend('pong_agent','ping')])),
-  agent <- insertIntention(0).
-
-onReceivedMessage(S,pong) :-
-  iSend(S, ping).
-\end{lstlisting}
-
-In entrambe le teorie dei due agenti è stata richiamata $`iSend(S, M)'$, dove $S$ è il destinatario e $M$ è il messaggio, che è un'azione interna dichiarata e gestita nell'ambiente sul quale è utilizzato il linguaggio. Nel Codice sorgente \ref{lst:PingAgent} viene inviato all'agente Pong il messaggio `ping', mentre nel Codice sorgente \ref{lst:PongAgent} il messaggio inviato all'agente Ping è `pong'.
-
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:PongAgent},caption={Agente Pong}]
-onReceivedMessage(S,ping) :-
-  iSend(S, pong).
-\end{lstlisting}
-
-\subsubsection{Message passing through Spatial Tuples}
-In questo esempio viene mostrato come possono essere utilizzate le primitive del modello Spatial Tuples incorporate nel linguaggio descritto in precedenza. Nello specifico viene mostrato come tre agenti (Alice, Bob e Carl) comunicano tra loro inserendo messaggi negli spazi di tuple a loro vicini, usandoli come `lavagna'.
-L'agente Alice nel suo ciclo di configurazione, esegue due scritture sulla `lavagna' (spazio di tuple) inserendo messaggi per Bob e Carl e successivamente effettua altre due richieste allo spazio di tuple richiedendo due messaggi a lei destinati senza conoscerne il contenuto. Una volta ricevuti i messaggi non fa niente.
-
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Alice},caption={Alice}]
-init :-
-  writeTuple(blackboard,msg(bob,hello)),
-  writeTuple(blackboard,msg(carl,hello)),
-  takeTuple(blackboard,msg(alice,X)),
-  takeTuple(blackboard,msg(alice,X)).
-
-onResponseMessage(msg(X,Y)) :- true.
-\end{lstlisting}
-
-L'agente Bob, nel cuo ciclo di configurazione, effettua una richiesta allo spazio di tuple per ricevere messaggi a lui destinati. Inoltre, nella sua teoria, è definito un comportamento in caso di ricezione del messaggio: manda ad Alice lo stesso messaggio che ha ricevuto.
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Bob},caption={Bob}]
-init :-
-  takeTuple(blackboard,msg(bob,X)).
-
-onResponseMessage(msg(bob,X)) :-
-  writeTuple(blackboard,msg(alice,X)).
-\end{lstlisting}
-
-Come Bob, l'agente Carl esegue lo stesso comportamento di Bob.
-\medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Carl},caption={Carl}]
-init :-
-  takeTuple(blackboard,msg(carl,X)).
-
-onResponseMessage(msg(carl,X)) :-
-  writeTuple(blackboard,msg(alice,X)).
-\end{lstlisting}
+Questa funzionalità verrà utilizzata nello sviluppo del progetto di tesi per integrare l'ambiente dell'interprete, che sarà Alchemist, con l'agente e il linguaggio che verrà definito nel lavoro di tesi.

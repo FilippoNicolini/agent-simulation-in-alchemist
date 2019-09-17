@@ -1,262 +1,14 @@
 % crea il CAPITOLO
-\chapter{Stato dell'arte}
+\chapter{Alchemist}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 % mette i numeri arabi
 %\pagenumbering{arabic}
 
-In questo capitolo sono mostrati alcuni lavori correlati ed i modelli e i linguaggi utilizzati per svolgere il lavoro di tesi. Per ognuno verrà fatta una descrizione per esporre le caratteristiche principali ed un particolare di quelle che sono state utilizzate in questo progetto.
+Per la realizzazione dell'ambiente per il progetto di tesi è stato scelto il simulatore Alchemist, poichè fornisce già una struttura ed un meta-modello solido e utilizzabile. Nel capitolo viene mostrato Alchemist attraverso le funzionalità e ciò che lo compone. Successivamente è presentata una serie di peculiarità di questo strumento che saranno approfondite più avanti nel documento.
 
 %----------------------------
-\section{Lavori correlati}
-Qui di seguito sono descritti alcuni modelli e linguaggi correlati al lavoro proposto in questo progetto di tesi. Sono presi in esame singolarmente e per ognuno è fatta una presentazione generale e accenni alle loro caratteristiche principali.
-
-\subsection{JADE}
-JADE (Java Agent DEvelopement Framework) è un software implementato in Java che semplifica l'implementazione del sistema multi-agente attraverso un middleware che è conforme alle specifiche FIPA e uno strumento grafico che supporta le fasi di debug e distribuzione \cite{JADE}.
-
-FIPA è una società di standard IEEE, il cui scopo è la promozione di tecnologie e specifiche di interoperabilità che facilitino l'interworking end-to-end di sistemi di agenti intelligenti in moderni ambienti commerciali ed industriali.
-
-Un middleware è un software che fornisce servizi per applicazioni che permette agli sviluppatori di implementare meccanismi di comunicazione e di input/output. Viene usato particolarmente in software che necessitano di comunicazione e gestione di dati in applicazioni distribuite.
-
-Un sistema basato su JADE può essere distribuito su diverse macchine (anche con sistemi operativi differenti) e la configurazione può essere controllata da un'interfaccia remota. La configurazione può essere anche cambiata durante l'esecuzione spostando gli agenti da una macchina ad un'altra in base alle necessità.
-
-%Dietro alla parte di astrazione degli agenti, JADE fornisce un semplice e potente modello di esecuzione e composizione dei task, la comunicazione peer to peer tra gli agenti basata sul paradigma di scambio di messaggi asincrono.
-
-L'architettura di comunicazione offre uno scambio di messaggi privati di ogni agente flessibile ed efficiente, dove JADE crea e gestisce una coda di messaggi ACL in entrata.
-\`E stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto \cite{JADE}.
-Il meccaniscmo di trasporto, in particolare, è come un camaleonte perchè si adatta ad ogni situazione scegliendo trasparentemente il miglior protocollo disponibile.
-
-\subsection{SPADE}
-SPADE (Smart Python multi-Agent Development Environment) è una piattaforma per sistemi multi-agente scritta in Python e basata sui messaggi istantanei (XMPP).
-Il protocollo XMPP offre una buon architettura per la comunicazione tra agenti in modo strutturato e risolve eventuali problemi legati al design della piattaforma, come autenticazione degli utenti (agenti) o creazione di canali di comunicazione.
-
-Il modello ad agenti è composto da un meccanismo di connessione alla piattaforma, un dispatcher di messaggi e un set di comportamenti differenti a cui il dispatcher da i messaggi. Ogni agente ha un identificativo (JID) e una password per autenticarsi al server XMPP.
-
-La connessione alla piattaforma è gestita internamente tramite il protocollo XMPP, il quale fonisce un meccaniscmo per registrare e autenticare gli utenti al server XMPP. Ogni agente potrà quindi mantenere aperta e persistente uno stream di comunicazioni con la piattaforma.
-
-Ogni agente ha al suo interno un componente dispatcher per i messaggi che opera come un postino: quando arriva un messaggio per l'agente, lo posizione nella corretta casella di posta; quando l'agente deve inviare un messaggio, il dispatcher si occupa di inserirlo nello stream di comunicazione \cite{Spade}.
-
-Un agente può avere più comportamenti simultaneamente. Un comportamento è un operazione che l'agente può eseguire usando il pattern di ripetizione. Spade fornisce alcuni comportamenti predefiniti: Cyclic, Periodic (utili per eseguire operazioni ripetitive); One-Shot, Time-Out (usati per eseguire operazioni casuali); Finite State Machine (permette di costruire comportamenti complessi) \cite{Spade}.
-Quando un messaggio arriva all'agente, il dispatcher lo indirizza alla coda del comportamento corretto: il dispatcher utilizza il template di messaggi di ogni comportamento per capire qual è il giusto destinatario. Quindi un comportamento può definire il tipo di messaggi che vuole ricevere.
-
-\subsection{Jason}
-Jason è un interprete per la versione estesa di AgentSpeak che implementa la semantica operazionale di tale linguaggio e fornisce una piattaforma per lo sviluppo di sistemi multi-agente \cite{Jason}. AgentSpeak è uno dei principali linguaggi orientati agli agenti basati sull'architettura BDI. Il linguaggio interpretato da Jason è un'estensione del linguaggio di programmazione astratto AgentSpeak(L).
-Gli agenti BDI (Belief-Desires-Intentions) forniscono un meccaniscmo per separare le attività di selezione di un piano, fra quelli disponibili, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo per la scelta del piano e quello per eseguirlo.
-
-\subsection{SARL}
-SARL è un linguaggio di programmazione ad agenti tipizzato staticamente. SARL mira a fornire le astrazioni fondamentali per affrontare la concorrenza, la distribuzione, l'interazione, il decentramento, la reattività e la riconfigurazione dinamica. Queste funzionalità di alto livello sono adesso considerate i principali requisiti per un'implementazione facile e pratica delle moderne applicazioni software complesse \cite{SARL}.
-
-\subsection{JADEX}
-Il framework di componenti attivi Jadex fornisce funzionalità di programmazione e di esecuzione per sistemi distribuiti e concorrenti. L'idea generale è di considerare che il sistema sia composto da componenti che agiscono come fornitori di servizi e consumatori \cite{JADEX}.
-Rispetto a SCA (Service Component Architecture) i componenti sono sempre entità attive, mentre in confronto agli agenti la comunicazione è preferibilmente eseguita utilizzando chiamate ai servizi.
-
-\subsection{ASTRA}
-ASTRA è un linguaggio di programmazione ad agenti per creare sistemi intelligenti distrubuiti/concorrenti costruiti su Java \cite{Astra}.
-\\
-ASTRA è basato su AgentSpeak(L), ovvero fornisce tutte le stesse funzionalità base, ed inoltre le aumenta con una serie di feature orientate a creare un linguaggio di programmazione ad agenti più pratico.
-
-
-%--------------------
-\section{Agenti BDI con AgentSpeak}
-Il modello BDI consente di rappresentare le caratteristiche e le modalità di raggiungimento di un obiettivo secondo il paradigma ad agenti. Gli agenti BDI forniscono un meccanismo per separare le attività di selezione di un piano, fra quelli presenti nella sua teoria, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
-
-I \textbf{beliefs} sono quindi informazioni dello stato dell'agente, ovvero ciò che l'agente sa del mondo \cite{AgentSpeakInJason} il suo insieme è chiamato `belief base' o `belief set'.
-\\
-I \textbf{desires} rappresentano tutti i possibili piani che un agente potrebbe eseguire \cite{AgentSpeakInJason}. Rappresentano ciò che l'agente vorrebbe realizzare o portare a termine: i \textit{goals} sono desideri che l'agente persegue attivamente ed è quindi bene che tra loro siano coerenti, cosa che non è obbligatoria per quanto riguarda il resto dei desideri.
-\\
-Le \textbf{intentions} identificano i piani a cui l'agente ha deciso di lavorare o a cui sta già lavorando e a loro volta possono contenere altri piani \cite{AgentSpeakInJason}.
-
-Gli \textbf{eventi} innescano le attività reattive, ovvero la loro caratteristica di proattività degli agenti, come ad esempio l'aggiornamento dei beliefs, l'invocazione di piani o la modifica dei goals.
-
-\subsection{Definizione}
-\textbf{AgentSpeak} è un linguaggio di programmazione basato su un linguaggio del primo ordine con eventi e azioni \cite{AgentSpeak(L)}. Il comportamento degli agenti è dettato da quanto definito nel programma scritto in AgentSpeak. I beliefs correnti di un agente sono relativi al suo stato attuale, l'enviroment e gli altri agenti. Gli stati che un agente vuole determinare sulla base dei suoi stimoli esterni e interni sono i desideri \cite{AgentSpeak(L)}. L'adozione di programmi per soddisfare tali stimoli è detta intenzioni.
-
-\subsection{Descrizione formale}
-Vengono ora mostrate le definizioni che formalizzano questo linguaggio di programmazione.
-Di seguito, nelle prime cinque definizioni, viene formalizzato il linguaggio e, nelle restanti, la semantica operazionale.
-
-\medskip
-Le specifche del linguaggio consistono in un set di beliefs e in un set di piani. Quest'ultimi sono sensibili al contesto e richiamati da eventi che permettono la scomposizione gerarchica degli obiettivi e l'esecuzione di azioni.
-
-L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di funzione, simboli di predicati, simboli di azioni, quantificatori e simboli di punteggiatura. Oltre alle logiche del primo ordine, sono usati `!' (per achievement), `?' (per test), `;' (per operazioni sequenziali), `$\leftarrow$' (per implicazione) \cite{AgentSpeak(L)}.
-
-\smallskip
-% Definizione 1
-\begin{defn}
-Se $b$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $b(t_1, \ldots, t_n)$ un atomo di belief. Se $b(t)$ e $c(s)$ sono atomi di belief, allora $b(t) \wedge c(s)$ e $\neg b(t)$ sono beliefs. Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief. Un atomo di belief base sarà chiamato \emph{belief base}.
-\end{defn}
-
-\smallskip
-% Definizione 2
-\begin{defn}
-Se $g$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $!g(t_1, \ldots, t_n)$ e $?g(t_1, \ldots, t_n)$ sono goals.
-\end{defn}
-
-\smallskip
-% Definizione 3
-\begin{defn}
-Se $b(t)$ è un atomo di belief, $!g(t)$ e $?g(t)$ sono goals, allora $+b(t)$, $-b(t)$, $+!g(t)$, $-!g(t)$, $+?g(t)$, $-?g(t)$ sono eventi di attivazione.
-\end{defn}
-
-\smallskip
-% Definizione 4
-\begin{defn}
-Se $a$ è un simbolo di azione e $t_1, \ldots, t_n$ sono termini del primo ordine, allora $a(t_1, \ldots, t_n)$ è un'azione.
-\end{defn}
-
-\smallskip
-% Definizione 5
-\begin{defn}
-Se $e$ è un \textit{evento di attivazione}, $b_1, \ldots, b_m$ sono letterali di belief e $h_1; \ldots; h_n$ sono goals o azioni, allora $e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n$ è un piano. L'espressione alla sinistra della freccia è la testa del piano e l'espressione alla destra è il corpo del piano. L'espressione sulla destra dei due punti, nella testa del piano, è il contesto. Per convenienza si può definire un corpo vuoto con $true$.
-\end{defn}
-
-\smallskip
-Durante l'esecuzione un agente è composto di un set di beliefs $B$, un set di piani $P$, un set di intenzioni $I$, un set di eventi $E$, un set di azioni $A$ e un set di funzioni di selezione $S$, il quale è formato da $S_E$ (funzione di selezione degli eventi), $S_O$ (funzione di selezione del piano), $S_I$ (funzione di selezione dell'intenzione).
-
-\smallskip
-% Definizione 6
-\begin{defn}
-Un \textit{agente} è formato da $\langle E,B,P,I,A,S_E,S_O,S_I \rangle$, dove $E$ è un set di eventi, $B$ è una `belief base', $P$ è un set di piani, $I$ è un set di intenzioni, $A$ è un set di azioni. La funzione $S_E$ sceglie un evento da $E$; la funzione $S_O$ sceglie un piano dal set di quelli applicabili; la funzione $S_I$ sceglie l'intenzione da eseguire dal set $I$.
-\end{defn}
-
-\smallskip
-% Definizione 7
-\begin{defn}
-Il set $I$ è composto da intenzioni, ognuna delle quali è una pila di piani parzialmente istanziati (dove alcune variabili sono state istanziate). Un'intenzione è definita da $[p_1 \ddagger \ldots \ddagger p_z]$, dove $p_1$ è il fondo dello stack e $p_z$ la testa. Gli elementi sono delimitati da $\ddagger$. Per convenienza $[+!true : true \leftarrow true]$ è detta \textit{true intention} e viene definita con $T$.
-\end{defn}
-
-\smallskip
-% Definizione 8
-\begin{defn}
-Il set $E$ è composto da eventi, oguno delle quali è una tupla $\langle e, i \rangle$, dove $e$ è l'evento di attivazione e $i$ un'intenzione. Se l'intenzione è di tipo \textit{true intention} allora $e$ sarà chiamato \textit{evento esterno}, altrimenti è un \textit{evento interno}.
-\end{defn}
-
-\smallskip
-% Definizione 9
-\begin{defn}
-Sia $S_E(E) = \epsilon = \langle d, i \rangle$ e sia $p = e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n$, il piano $p$ è rilevante per l'evento $e$ se e solo se esiste un unificatore $\sigma$ tale per cui $d\sigma = e\sigma$.
-$\sigma$ è detto \textit{unificatore rilevante} per $\epsilon$.
-\end{defn}
-
-\smallskip
-% Definizione 10
-\begin{defn}
-Un piano $p$ è definito da $e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n$ è un \textit{piano applicabile} rispetto ad un evento $\epsilon$ se e solo se esite un unificatore rilevante $\sigma$ per $\epsilon$ e esite una sostituzione $\theta$ tale che $\forall (b_1 \land \ldots \land b_m) \sigma\theta$ è una conseguenza logica di B. La composizione $\sigma\theta$ è riferita all'\textit{unificatore applicabile} per l'evento $\epsilon$ e $\theta$ è riferita alla sostituzione della corretta risposta.
-\end{defn}
-
-\smallskip
-% Definizione 11
-\begin{defn}
-Sia $S_O(O_\epsilon) = p$, dove $O_\epsilon$ è il set dei piani applicabili per l'evento $\epsilon = \langle d, i \rangle$ e $p$ è $e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n$. Il piano $p$ è destinato all'evento $\epsilon$, dove $i$ è la \textit{true intention} se e solo se esiste un \textit{unificatore applicabile} $\sigma$ per cui $[+!true : true \leftarrow true \ddagger (e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n) \sigma] \in I$.
-\end{defn}
-
-\smallskip
-% Definizione 12
-\begin{defn}
-Sia $S_O(O_\epsilon) = p$, dove $O_\epsilon$ è il set dei piani applicabili per l'evento $\epsilon = \langle d, [p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow !g(t); h_2; \ldots; h_n] \rangle$, e $p$ è $+!g(s) : b_1 \land \ldots \land b_m \leftarrow k_1; \ldots; k_j$. Il piano $p$ è destinato all'evento $\epsilon$ se e solo se esiste un \textit{unificatore applicabile} $\sigma$ tale che $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow !g(t); h_2; \ldots; h_n \ddagger (+!g(s) : b_1 \land \ldots \land b_m) \sigma \leftarrow (k_1; \ldots; k_j) \sigma; (h_2; \ldots; h_n) \sigma] \in I$.
-\end{defn}
-
-\smallskip
-% Definizione 13
-\begin{defn}
-Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow !g(t);h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $\langle +!g(t), i \rangle \in E$.
-\end{defn}
-
-\smallskip
-% Definizione 14
-\begin{defn}
-Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow ?g(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $\forall g(t) \theta$ è una conseguenza logica di B e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger (f : c_1 \land \ldots \land c_y) \theta \leftarrow h_2 \theta; \ldots; h_n \theta]$.
-\end{defn}
-
-\smallskip
-% Definizione 15
-\begin{defn}
-Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow a(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $a(t) \in A$, e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow h_2; \ldots; h_n]$.
-\end{defn}
-
-\smallskip
-% Definizione 16
-\begin{defn}
-Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(t) : c_1 \land \ldots \land c_y \leftarrow true]$, dove $p_{z-1}$ è $e : b_1 \land \ldots \land b_x \leftarrow !g(s); h_2; \ldots; h_n$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $g(t)\theta = g(s)\theta$ e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger (e : b_1 \land \ldots \land b_x)\theta \leftarrow (h_2; \ldots; h_n) \theta]$.
-\end{defn}
-
-\subsubsection{Ciclo di ragionamento}\label{ssctn:cicloRagionamentoAgentSpeak}
-Il ciclo di ragionamento è il modo in cui l'agente prende le sue decisioni e mette in pratica le azioni. Esso è composto di otto fasi: le prime tre sono quelle che riguardano l'aggiornamento dei belief relativi al mondo e agli altri agenti, mentre altre descrivono la selezione di un evento che permette l'esecuzione di un'intenzione dell'agente.
-
-%/---AGGIORNAMENTO BELIEF BASE---/
-\subsubsection{a. Percezione ambiente}
-La percezione effettuata dall'agente all'interno del ciclo di ragionamento è utilizzata per poter aggiornare il suo stato. L'agente interroga dei componenti capaci di rilevare i cambiamenti nell'ambiente \cite{AgentSpeakInJason} e di emettere dati consultabili utilizzando opportune interfacce.
-
-\subsubsection{b. Aggiornamento beliefs}
-Ottenuta la lista delle percezioni è necessario aggiornare la `belief base'. Ogni percezione non ancora presente nel set viene aggiunta e al contrario quelle presenti nel set e che non sono nella lista delle percezioni vengono rimosse \cite{AgentSpeakInJason}.
-Ogni cambiamento effettato nella `belief base' produce un evento: quelli generati da percezioni dell'ambiente sono detti eventi esterni; quelli interni, rispetto agli altri, hanno associata un'intenzione.
-
-\subsubsection{c. Ricezione e selezione messaggi}
-L'altra sorgente di informazioni per un agente sono gli altri agenti presenti nel sistema. L'interprete controlla i messaggi diretti all'agente e li rende a lui disponibili \cite{AgentSpeakInJason}: ad ogni iterazione del ciclo può essere processato solo un messaggio. Inoltre,può essere assegnata una priotità ai messaggi in coda definendo una funzione di prelazione per l'agente.
-\\
-Prima di essere processati i messaggi passano all'interno di una funzione di selezione che definisce quali messaggi possano essere accettati dall'agente \cite{AgentSpeakInJason}. Questa funzione può essere implementata ad esempio per far ricevere solo i messaggi di un certo agente.
-
-%/---SELEZIONE EVENTO E ESECUZIONE INTENZIONE---/
-\subsubsection{d. Selezione evento}
-Gli eventi rappresentano la percezione del cambiamento nell'ambiente o dello stato interno dell'agente \cite{AgentSpeakInJason}, come il goal. Ci possono essere vari eventi in attesa ma in ogni ciclo di ragionamento può esserne gestito uno solo, il quale viene scelto dalla funzione di selezione degli eventi che ne seleziona uno dalla lista di quelli in attesa. Se la lista di eventi fosse vuota si passa direttamente alla penultima fase del ciclo di ragionamento \cite{AgentSpeakInJason}, ovvero la selezione di un'intenzione.
-
-\subsubsection{e. Recupero piani rilevanti}
-Una volta selezionato l'evento è necessario trovare un piano che permetta all'agente di agire per gestirlo. Per fare ciò viene recuperata dalla `Plan Library' la lista dei piani rilevanti, verificando quali possano essere unificati con l'evento selezionato \cite{AgentSpeakInJason}. L'unificazione è il confronto relativo a predicati e termini. Al termine di questa fase si otterrà un set di piani rilevanti per l'evento selezionato che verrà raffinato successivamente.
-
-\subsubsection{f. Selezione piano appplicabile}
-Ogni piano ha un contesto che definisce con quali informazioni dell'agente può essere usato.
-Per piano applicabile si intendeno quelli che, in relazione allo stato dell'agente, possono avere una possibilità di successo. Viene quindi controllato che il contesto sia una conseguenza logica della `belief base' dell'agente \cite{AgentSpeakInJason}. Vi possono anche essere più piani in grado di gestire un evento ma l'agente deve selezionarne uno solo ed impegnarsi ad eseguirlo.
-\\
-La selezione viene fatta tramite un'apposita funzione che inoltre tiene conto dell'ordinamento dei piani in base alla loro posizione nel codice sorgente oppure dall'ordine di inserimento. Quando un piano è scelto, viene creata un'istanza di quel piano che viene inserita nel set delle intenzioni \cite{AgentSpeakInJason}: sarà l'istanza ad essere manipolata dall'interprete e non il piano nella libreria.
-
-Ci sono due possibili modalità per la creazione di un'intenzione e dipende dal fatto che l'evento selezionato sia esterno o interno \cite{AgentSpeakInJason}. Nel primo caso viene semplicemente creata l'intenzione, altrimenti viene inserita un'altra intenzione in testa a quella che ha generato l'evento, poichè è necessario eseguire fino al completamento un piano per raggiungere tale goal.
-
-\subsubsection{g. Selezione intenzione}
-A questo punto, se erano presenti eventi da gestire, è stata aggiunta un'altra intenzione nello stack. Un agente ha tipicamente più di un'intenzione nel set delle intenzioni che potrebbe essere eseguita, ognuna delle quali rappresenta un diverso punto di attenzione \cite{AgentSpeakInJason}. Ad ogni ciclo di ragionamento avviene l'esecuzione di una sola intenzione, la cui scelta è importante per come l'agente opererà nell'ambiente.
-
-\subsubsection{h. Esecuzione intenzione}
-L'intenzione, scelta nello step precedente, non è altro che il corpo di un piano formato da una sequenza di istruzioni, ognuna delle quali, una volta eseguita, viene rimossa dall'istanza del piano. Terminata l'esecuzione un'intenzione, quest'ultima viene restituita al set delle intenzioni a meno che non debba aspettare un messaggio o un feedback dell'azione \cite{AgentSpeakInJason}: in questo caso viene memorizzata in una struttura e restituita una volta ricevuta la risposta.
-Se un'intenzione è sospesa non può essere selezionata per l'esecuzione nel ciclo di ragionamento.
-
-\subsubsection{Scambio di messaggi}
-Lo scambio di messaggi è la comunicazione standard che avviene tra agenti per comunicare tra loro e operare in base al contenuto ricevuto.
-La comunicazione definita da AgentSpeak utilizza tre parti. La prima è la coda dei messaggi in input, ovvero una lista contenente tutti i messaggi che il sistema o interprete riceve e che sono destinati all'agente. La seconda è la coda dei messaggi di output che si allunga ogni volta che l'agente vuole inviare un messaggio ad un altro agente. L'ultima è una struttura all'interno della quale vengono memorizzate le intenzioni che sono sospese dall'esecuzione poichè aspettano una risposta dal canale di comunicazione dei messaggi.
-\\
-L'interprete è il mezzo per il quale i messaggi trasmessi. Esso infatti ha il compito di recuperare tutti i messaggi nella coda in uscita di ogni agente e successivamente recapitarli. Per la consegna viene recuperato l'agente destinatario di ogni messaggio e poi quest'ultimo viene posizionato nella coda di quelli in input dell'agente, in modo tale che possa recuperarne il contenuto al prossimo ciclo di ragionamento.
-
-\section{Caratteristiche Jason}
-Jason è la maggiore implementazione di AgentSpeak e, oltre ad implementare le sue semantiche operazionali, lo estende dichiarando il linguaggio per definire gli agenti. Jason aggiunge un set di meccanismi potenti per migliorare le abilità degli agenti ed, inoltre, mira a rendere più pratico il linguaggio di programmazione ad agenti. Alcuni dei meccanismi aggiunti da Jason sono:
-\begin{itemize}
-\item negazione forte;
-\item gestione del fallimento dei piani;
-\item atti linguistici basati sulla comunicazione inter-agente;
-\item annotazioni sulle etichette del piano che possono essere utilizzate mediante funzioni di selezione elaborate;
-\item supporto per gli ambienti di sviluppo;
-\item possibilità di eseguire un sistema multi-agente distribuito su una rete;
-\item funzioni di selezione personalizzabili, funzioni di trust, architettura generale dell'agente;
-\item estensibilità mediante azioni interne definite dall'utente.
-\end{itemize}
-
-%----------------------------
-\section{tuProlog}
-tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile.
-tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
-
-\subsection{Caratteristiche tuProlog}
-tuProlog ha diverse caratteristiche e qui di seguito verranno illustrate solo alcune di esse, ovvero quelle utilizzate all'interno di questo lavoro.
-Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
-\begin{itemize}
-\item predicati built-in: incapsulati nel motore tuProlog;
-\item predicati di libreria: inseriti in una libreria che viene caricata nel motore tuProlog. La libreria può essere liberamente aggiunta all'inizio o rimossa dinamicamente durante l'esecuzione. I predicati della libreria possono essere sovrascritti da quelli della teoria. Per rimuovere un singolo predicato dal motore è necesssario rimuovere tutta la libreria che contiene quel predicato;
-\item predicati della teoria: inseriti in una teoria che viene caricata nel motore tuProlog. Le teorie tuProlog sono semplicemente collezioni di clausole Prolog. Le teorie possono essere liberamente aggiunte all'inizio o rimosse dinamicamente durante l'esecuzione.
-\end{itemize}
-
-In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java `alice.tuprolog', e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
-
-Una peculiare modalità di utilizzo di tuProlog sfruttata in questo progetto è stata la registrazione di oggetti Java all'interno della teoria dell'agente. In questo modo è possibile utilizzare uno stesso oggetto sia nella parte Java che in quella tuProlog. Nello specifico, come verrà mostrato nella parte relativa all'implementazione, questa funzionalità è stata utilizzata per registrare la classe stessa dell'agente in tuProlog e consentendo l'invocazione di metodi implementati lato Java direttamente dalla teoria dell'agente.
-
-%----------------------------
-\section{Alchemist}
+\section{Descrizione Alchemist}
 Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla natura. Esso fornisce un ambiente di simulazione sul quale è possibile sviluppare nuove incarnazioni, cioè nuove definizioni di modelli implementati su di esso. Ad oggi sono disponibili le funzionalità per:
 \begin{itemize}
 \item simulare un ambiente bidimensionale;
@@ -315,54 +67,20 @@ Un'\textbf{\textit{Azione}} è la definizione di una serie di operazioni che mod
 
 In Alchemist un'incarnazione è un'istanza concreta del meta-modello appena descritta e che implementa una serie di componenti base come: la definizione di una molecola e del tipo di dati della concentrazione, un set di condizioni, le azioni e le reazioni. Incarnazioni diverse possono modellare universi completamente differenti.
 
-\subsection{Esempi (?)}
 
+\section{Aspetti principali in Alchemist}
+Alchemist è uno strumento molto esteso e che può offrire tantissime possibilità se lo si conosce e si è in grado di padroneggiarlo.
+La conoscenza iniziale di questo ambiente era però praticamente nulla e, quindi è stato necessario impiegare del tempo per riuscire a padroneggiare i meccanismi di base, tra cui l'utilizzo delle classi delle entità del meta-modello e la scrittura della configurazione di una simulazione.
 
-%----------------------------
-\section{LINDA}
-LINDA è un modello di coordinazione e comunicazione tra diversi processi paralleli che operano su oggetti immagazzinati e recuperati dalla memoria associativa, virtuale, condivisa. Nel modello diverse primitive operano su una sequenza ordinata di oggetti, le `tuple', che vengono aggiunte ad un linguaggio sequenziale e una memoria associativa logica globale, detta spazio di tuple, nel quale i processi immagazzinano e recuperano le tuple.
-
-Il modello LINDA originale definisce quattro operazioni consentite sulle tuple e lo spazio di tuple:
-\begin{itemize}
-\item \textit{in}: legge una tupla e la consuma dallo spazio di tuple
-\item \textit{rd}: legge una tupla senza consumarla dallo spazio di tuple
-\item \textit{out}: inserisce una tupla nello spazio di tuple
-\item \textit{eval}: crea un processo per valutare le tuple e lo inserisce nello spazio di tuple.
-\end{itemize}
-
-LINDA è un modello di coordinazione utilizzato per definire altri modelli e tecnologie di coordinazione, dove gli agenti distribuiti interagiscono e si coordinano tramite scambio di messaggi utilizzando spazi di informazione condivisa e sfruttando la comunicazione generativa.
-
-Di seguito è descritta un'estensione del modello appena descritto chiamata Spatial Tuples dove le informazioni base assumono una posizione e un'estensione nello spazio fisico.
-
-\subsection{Spatial Tuples}
-Spatial Tuples è un estensione del modello base di tuple per i sistemi distribuiti multi-agente, dove
-\begin{itemize}
-\item le tuple sono posizionate nel mondo fisico e si possono muovere;
-\item il comportamento delle primitive di coordinamento può dipendere dalle proprietà spaziali del coordinamento degli agenti;
-\item lo spazio di tuple può essere concepito come un livello virtuale che aumenta la realtà fisica.
-\end{itemize}
-Spatial Tuples supporta esplicitamente la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo.
-
-Questo modello può risultare molto utile in scenari dove gli utenti si spostano all'interno di un ambiente fisico aumentato e devono coordinarsi con altri utenti, che siano persone o agenti.
-
-\subsubsection{Modello e linguaggio}
-Spatial Tuples si occupa prima di tutto di tuple spaziali. Una tupla spaziale è una tupla associata ad un'informazione spaziale. Le informazioni spaziali possono essere, ad esempio, GPS, amministrative, organizzative: in ogni caso la tupla viene associata a qualche luogo o regione dello spazio fisico.
+Gli aspetti principali di Alchemist sono la forte adattabilità del meta-modello sul quale è costrutito, il numero di implementazioni o astrazioni base già disponibili e la grande personalizzazione delle simulazioni.
 \\
-Una tupla spaziale decora lo spazio fisico e può funzionare come meccanismo base per aumentare la realtà con informazioni di ogni sorta. Una volta che la tupla è associata ad una regione o posizione, le sue informazioni possono essere pensate come proprietà attribuite a quella porzione di spazio fisico. Accedendo alle tuple con i meccanismi di Spatial Tuples, l'informazione può essere osservata da qualsiasi agente che si occupa dello spazio fisico specifico in modo tale da comportarsi di conseguenza.
+Il meta-modello fornisce una struttura molto solida sulla quale è possibile realizzare ambiti applicativi anche molto diversi tra loro.
 \\
-Inoltre, una tupla può essere associata anche ad un componente situato. In questo caso, se il componente cambia la sua posizione nel tempo, finchè non viene rimossa, anche la tupla si sposterà con esso.
+Inoltre, Alchemist, come citato poco fa, fornisce già una serie di implementazioni o astrazioni di classi relative a entità del meta-modello che permettono di avviare lo sviluppo di un'incarnazione in modo molto più rapido.
+\\
+Per quanto riguarda le simulazioni, queste sono realizzate tramite una configurazione che consiste in una mappa definita tramite il linguaggio YAML. La mappa è composta da diverse sezioni, ognuna caratterizzata da una specifica keyword, ed è altamenta configurabile: questo permette all'utente di testare tantissimi aspetti della simulazione.
 
-In Spatial Tuples viene introdotto un linguaggio di descrizione dello spazio per specificare le informazioni spaziali che decorano le truple. Questo linguaggio è ortogonale al linguaggio di comunicazione e ha lo scopo di fornire l'ontologia di base che definisce i concetti spaziali.
 
-\subsubsection{Primitive spaziali}
-Gli operatori base di Spatial Tuples sono: $out(t), rd(tt), in(tt)$ dove $t$ è la tupla e $tt$ è un template di tupla. Il funzionamento delle primitive è il seguente:
-\begin{itemize}
-\item $out$, permette di associare la tupla ad una regione o posizione;
-\item $rd$, cerca le tuple che corrispondono al template e ne ritorna una copia;
-\item $in$, come $rd$, cerca le tuple che corrispondo al template ma poi ne restituisce una consumandola dalla sorgente.
-\end{itemize}
-Le primitive $rd$ e $out$ sono dette `getter' e, in Spatial Tuples, sono:
-\begin{itemize}
-\item sospensive, se non ci sono tuple che fanno match con il template l'operazione è bloccata finchè non viene trovata una tupla
-\item non deterministiche, se vi sono più tuple che fanno match con il template una è scelta in modo non deterministico.
-\end{itemize}
+
+
+

@@ -1,0 +1,23 @@
+# sistema
+*/.DS_Store
+*/Thumb.db
+
+# latex
+*.aux
+*.lof
+*.log
+*.lol
+*.lot
+*.synctex.gz
+*.toc
+
+*/*.aux
+*/*.lof
+*/*.log
+*/*.lol
+*/*.lot
+*/*.synctex.gz
+*/*.toc
+
+# esterno
+template.tex

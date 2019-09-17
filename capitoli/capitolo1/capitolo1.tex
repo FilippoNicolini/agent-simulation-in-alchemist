@@ -1,12 +1,20 @@
 % crea il CAPITOLO
-\chapter{\hl{Introduzione}}
+\chapter{Introduzione}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
-In questo lavoro di tesi ci si è concentrati sulla realizzazione di un nuovo linguaggio ad agenti che permettesse di essere utilizzato in ambienti o piattaforme differenti.
+In questo lavoro preparatorio vengono descritti i modelli e gli strumenti che saranno poi utilizzati nel progetto di tesi (Alchemist, tuProlog, modello agenti BDI AgentSpeak) mostrando come sono composti e quali sono i loro punti salienti. Successivamente viene descritto il lavoro che è stato fatto su ogni ambiente per conoscere sia Alchemist che tuProlog, in modo da ottenere informazioni utili per impostare in modo corretto il progetto di tesi.
 
-\subsubsection{\hl{Obiettivo del lavoro}}
-L'obiettivo del lavoro è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
-Si vuole mostrare, inoltre, come è possibile realizzare un interprete che lavori con il nuovo linguaggio definito.
+\section{Obiettivo della tesi}
+L'obiettivo del lavoro di tesi è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
+Si vuole mostrare, inoltre, come è possibile creare un interprete all'interno del meta-simulatore Alchemist, realizzando un'opportuna incarnazione, che sfrutta il modello di agenti BDI definito da AgentSpeak e l'implementazione di Jason, in particolare relativamente al ciclo di ragionamento, e che permette l'esecuzione di agenti, definiti tramite le teorie utilizzando il nuovo linguaggio, in un ambiente simulato.
 
-\subsubsection{\hl{Benefici dell'approccio scelto}}
-Il beneficio del linguaggio è quindi un'architettura ad agenti che possa essere eseguita sia in un ambiente simulato che in uno reale, per tentare di esprimere tutto il potenziale del modello ad agenti. In questo lavoro verrà presentata una soluzione che implementa l'interprete del linguaggio in un ambiente simulato, il meta-simulatore Alchemist, ma si sarebbe potuta scegliere una qualsiasi altra piattaforma o ambiente sulla quale fosse possibile utilizzare la libreria tuProlog.
+\section{Obiettivo attività propedeutica}
+L'attività descritta in questo documento ha quindi l'obiettivo di analizzare e studiare Alchemist, tuProlog e il modello ad agenti BDI di AgentSpeak recependo le informazioni necessarie per permettere di impostare il lavoro di tesi in maniera più efficace.
+
+Per quanto riguarda Alchemist l'obiettivo è quello di imparare ad utilizzarlo, studiando: la struttura del suo meta-modello; come scrivere la configurazione della simulazione; come implementare un'incarnazione.
+
+Anche con tuProlog l'obiettivo è di studiare le sue funzionalità e il suo utilizzo, anche attraverso la comprensione di Prolog. Il processo di acquisizione di informazioni, descritto nel documento, racconta dello studio iniziato su Prolog, per comprendere le nozioni di base, e poi proseguito sulla libreria tuProlog, attraverso il manuale.
+
+In questa attività si è inoltre analizzato il modello ad agenti BDI proposto da AgentSpeak, sia per quanto riguarda la composizione che per il ciclo di ragionamento; per quest'ultimo è stato preso come esempio il processo definito in Jason, una delle implementazioni già note di AgentSpeak. In particolare, si è dedicato tempo all'approfondimento del ciclo di ragionamento per captarne l'utilizzo degli elementi e poter successivamente, per il progetto di tesi, riuscire a strutturare opportunamente l'interprete realizzato con Alchemist.
+
+Si è così potuto fare un raffronto tra il modello ad agenti e il meta-modello di Alchemist, cercando i possibili modi di effettuare l'integrazione tra gli agenti e Alchemist, utilizzando come collante tuProlog.

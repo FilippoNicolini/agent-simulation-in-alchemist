@@ -1,0 +1,110 @@
+% crea il CAPITOLO
+\chapter{Percorso di approfondimento}
+% imposta l'intestazione di pagina
+\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
+% mette i numeri arabi
+%\pagenumbering{arabic}
+
+In questo capitolo sono descritti i processi evolutivi di apprendimento dei due strumenti principali per lo sviluppo del lavoro di tesi, tuProlog e Alchemist. Inoltre viene descritto anche come è stato progettato il processo di integrazione tra il meta-modello di Alchemist e il modello ad agenti.
+
+%----------------------------
+\section{Approfondimento di tuProlog}
+Per quello che riguarda lo studio di tuProlog per prima cosa sono stati recuperati i materiali forniti durante le lezioni e i laboratori, dai quali sono stati estratti i concetti principali, non solo di tuProlog ma anche di Prolog.
+Le informazioni recuperate sono state poi raffrontate con la versione `3.0.0' del documento `Manuale tuProlog' attraverso il quale è stato possibile approfondire ulteriori aspetti di tuProlog.
+\\
+Sono state quindi estratte le informazioni relativamente ai predicati (libreria, teoria, built-in), alle entità della sintassi (atomi, variabili, operatori, \ldots) e configurazione del motore. Inoltre, si sono apprese ulteriori nozioni riguardo agli unificatori e agli operatori di conoscenza, ad esempio per inserire o recuperare informazioni dalle teorie o librerie.
+\\
+Inoltre, è stato molto utile approfondire lo studio delle librerie, alcune delle quali sono state poi utilizzate per la gestione della teoria dell'agente. In particolare, si è compreso come gestire la creazione e la decomposizione di termini e strutture e il recupero e la gestione delle clausole (utilizzate poi per la gestione dei fatti e delle regole presenti nelle teorie).
+
+Una parte certamente di risalto è da attribuire ad una funzionalità di tuProlog, già citata in precedenza, che consente una gestione dell'integrazione fra i due strumenti selezionati. Questo è possibile poichè tuProlog supporta la programmazione multi-paradigma e, attraverso l'apposita libreria OOLibrary, consente di manipolare oggetti Java anche tramite una teoria.
+\\
+La funzionalità specifica che verrà poi utilizzata nella tesi è la possibilità di registrare all'interno di variabili della teoria tuProlog oggetti istanziati lato Java. In questo modo sarà possibile invocare funzioni o manipolare le proprietà di un certo oggetto in relazione all'implementazione presente nella teoria caricata nel motore tuProlog.
+Questo apre ad una serie di scenari che possono facilitare il design dell'architettura ed inoltre agevolare l'implementazione del modello ad agenti.
+
+%----------------------------
+\section{Approfondimento di Alchemist}
+Il processo di apprendimento di Alchemist è stato un po' più lungo rispetto a quello di tuProlog per via del numero di parti da cui è composto.
+
+La prima fase è stata dedicata allo studio del meta-modello sul quale questo ambiente di simulazione si sviluppa; sono state analizzate le varie entità per capire il loro ruolo e il loro comportamento durante l'esecuzione della simulazione.
+
+Dopo il modello ci si è dedicati ad un'analisi relativa al materiale già presente all'interno di Alchemist. Partendo dalla documentazione, sono state analizzate le interfacce di ogni entità per approfondire le caratteristiche e studiarne le peculiarità da poter sfruttare in fase di design per il progetto di tesi.
+\\
+Successivamente è stata effettuate un'indagine sulle incarnazioni già presenti all'interno di Alchemist, in modo da capire in quali modi è stato utilizzato questo simulatore e in che modo sfruttare a pieno il modello.
+\\
+Proprio in questa fase, si è iniziato a pensare ai possibili punti di contatto tra il modello ad agenti e il meta-modello proposto da Alchemist. La descrizione del ragionamento e delle conclusioni è riportata nella sezione \ref{sctn:mapping}.
+
+\subsection{Mapping modelli}\label{sctn:mapping}
+\`E necessario capire quale risulta il migliore modo, in termini di performace e espressività, per unire i due modelli.
+In questa fase si vuole quindi pensare come realizzare sul meta-modello fornito da Alchemist il modello ad agenti cercando eventuali incongruenze o opportunità per massimizzare il risultato.
+
+Si è partiti analizzando le entità del meta-modello e per ognuna è stato posto l'interrogativo sul fatto che potesse essere un'agente.
+Fin da subito sono state ritenute inadatte l'Environment e la Molecola: il primo perchè è esso stesso lo spazio e non avrebbe potuto rappresentare lo spazio degli agenti, mentre le molecole perchè forniscono un livello di dettaglio troppo elevato e non hanno una struttura che consente di contenere lo stato dell'agente.
+
+Le entità rimaste da analizzare sono quindi il Nodo e la Reazione. Mappando il Nodo come agente ne deriva che l'Environment corrisponderà allo spazio degli agenti mentre, all'interno dell'agente, le Molecole e le Concentrazioni potranno essere utilizzate per gestire la `belief base' e le reazioni saranno riferite ai piani, utilizzando le Condizioni come clausola per scatenare le Azioni. Questo tipo di mapping consente di realizzare simulazioni di sistemi non complessi, in cui agenti allo stesso livello operano e comunicano tra loro.
+
+Posizionando l'agente nella Reazione, quindi più internamente rispetto al precedente mapping, il Nodo sarà quindi un contenitore di agenti e l'Environment lo spazio nel quale si muovono i gruppi di agenti. Ogni agente avrà il riferimento ad una Condizione e ad una Azione: quest'ultima conterrà il ciclo di ragionamento dell'agente mentre la Condizione, sempre vera, ne determinerà la clausola di esecuzione. Utilizzando questa seconda ipotesi sarà possibile realizzare simulazioni di sistemi complessi, nei quali dei nodi, che potrebbero essere dispositivi mobili (ad esempio cellulari), si muovo nello spazio ed ognuno dei quali al suo interno contiene un gruppo di agenti che possono interagire sia internamente che esternamente.
+
+Dopo aver analizzato le due possibili alternative presentate, è stato scelto il mapping in cui l'agente è posizionato nella Reazione poichè permette una maggiore espressività e un'apertura verso più scenari applicativi.
+
+\subsection{Configurazione di una simulazione}
+Successivamente ci si è dedicata alla comprensione della struttura della configurazione di una simulazione. Per poter scrivere una simulazione è necessario per prima cosa imparare le nozioni base di YAML, poichè il documento che il simulatore si aspetta in input è una mappa definita proprio tramite questo linguaggio.
+La struttura di una simulazione contiene una serie di keyword, che possono essere obbligatorie o opzionali, tra cui:
+\begin{itemize}
+\item incarnation, per definire l'incarnazione
+\item environment, per definire l'ambiente
+\item network-model, per definire la linking-rule
+\item displacement, per definire la disposizione e la tipologia di nodi e reazioni
+\end{itemize}
+le quali, in base al tipo, contengono un valore oppure una mappa innestata nella quale specificano altri parametri.
+
+Per effettuare i test delle problematiche analizzate durante lo svolgimento dell'attività propedeutica sono state scritte simulazioni molto basilari, dove ad esempio era presente un nodo con uno solo agente (tranne nel caso dello scambio di messaggi).
+
+Un esempio di configurazione è quello presentato nel Codice sorgente \ref{lst:SimulationExample}.
+
+\lstset{
+  basicstyle=\ttfamily,
+  captionpos=b,
+  frame=tb,
+  numbers=left
+}
+
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:SimulationExample},caption={Esempio configurazione di una simulazione}]
+incarnation: agent
+
+network-model:
+  type: ConnectWithinDistance
+  parameters: [10]
+
+displacements:
+  - in: {type: Circle, parameters: [1,0,0,2]}
+    programs:
+      -
+        - time-distribution: 1
+          program: "some_agent"
+\end{lstlisting}
+
+In questo caso si vuole eseguire una simulazione che utilizzi l'incarnazione ad agenti. L'environment non è espresso e sarà considerato quello di default ( ovvero Continuous2DEnvironment), mentre è specificata la keyword `network-model' utilizzata per la linking-rule: sfruttando la classe `ConnectWithinDistance' e passandogli un certo parametro si vuole che i nodi, la cui distanza è minore di quella indicata dal parametro, appartengano allo stesso vicinato.
+\\
+Nell'ultima parte viene invece specificata la disposizione dei nodi e delle reazioni o azioni in essi contenute. Nel caso mostrato, verrà creato, all'interno di un cerchio di centro (0,0) e di raggio 2, un solo nodo al cui interno sarà presente una reazione, identificata opportunamente dal parametro `some\_agent', la quale avrà come distribuzione temporale 1, ovvero verrà eseguita una volta ad ogni trigger da parte dello scheduler di Alchemist.
+
+\section{Integrazione di modelli e strumenti}
+Il passo successivo è stato quello di iniziare a prendere confidenza con il simulatore provando ad implementare alcuni problemi basilari che sarebbero tornati utili in futuro. Alcuni dei problemi affrontati sono:
+\begin{enumerate}
+\item agente che effettua una computazione elementare
+\item agente che effettua una computazione condizionata
+\item agente che è in grado di spostarsi nello spazio
+\item scambio di messaggi tra agenti (in questo punto è stato unito tuProlog)
+\end{enumerate}
+
+Nel fronteggiare i vari quesiti sono state prodotte implementazioni di piccole parti che sono servite come punto di partenza per la realizzazione del progetto di tesi.
+
+Si è iniziato implementando l'incarnazione attraverso la creazione del nodo e di una reazione, la quale al suo interno contiene un'azione. Quest'ultima è l'entità che viene innescata, se le condizioni si verificano, e attraverso il metodo $execute$ (invocato dal simulatore) esegue una serie operazioni definite nell'implementazione dell'azione.
+
+I primi due quesiti sono risultati complessi non tanto per la loro natura ma per lo scoglio iniziale nell'approccio ad Alchemist. Successivamente si è passati allo spostamento del nodo, sul quale è stato effettuato un ragionamento per permettere al nodo di spostarsi in ogni direzione e della distanza esatta percorsa nel tempo della simulazione. La soluzione prevede l'utilizzo di variabili per velocità, direzione e tau (tempo della simulazione dell'ultimo aggiornamento) con i quali è costruito un cerchio che ha come centro l'ultima posizione del nodo e come raggio la distanza calcolata con tempo (differenza tra tau attuale e quello dell'ultimo aggiornamento) e velocità. Sulla circonferenza, in base all'angolo definito dalla direzione, verrà preso il punto della nuova posizione del nodo.
+\\
+Dopo aver realizzato i primi tre quesiti descritti nel precedente elenco, si è passati alla risoluzione dell'ultima problematica per avere conoscenza dell'intera situazione, consentendo di avere cognizione dell'intero problema e del supporto che possono fornire gli strumenti descritti in questo documento. Per la realizzazione si è utilizzato il motore tuProlog all'interno della quale è stata caricata una semplice teoria che mandava indietro il messaggio ricevuto (l'esempio realizzato è stato il Ping Pong).
+
+La parte di integrazione di tuProlog è stata effettuata importanto la libreria `alice.tuprolog' in Alchemist e poi utilizzandone il motore, sia per caricare le teorie sia per l'interrogazione di quest'ultime.
+La parte di registrazione di oggetti Java all'interno di variabili tuProlog verrà inserita direttamente durante l'implementazione del progetto di tesi.
+
