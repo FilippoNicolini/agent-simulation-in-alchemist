@@ -6,9 +6,6 @@
 % report: stile tesi (oppure book)
 \documentclass[12pt,a4paper,openright,twoside]{report}
 
-%libreria per scrivere in italiano
-\usepackage[italian]{babel}
-
 % libreria per accettare i caratteri
 % digitati da tastiera come ?
 % si può usare anche
@@ -17,6 +14,9 @@
 % il tempo di compilazione
 % aumenta
 \usepackage[utf8]{inputenc}
+
+%libreria per scrivere in italiano
+\usepackage[italian]{babel}
 
 % libreria per impostare il documento
 \usepackage{fancyhdr}
@@ -53,6 +53,10 @@
 
 %per l'highlight delle modifiche
 \usepackage{color,soul}
+
+%note a piè di pagina che non riniziano da 1 ad ogni capitolo
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
 
 % example style for lstlistoflistings
 % tabsize = 2, %% Sets tab space width.
@@ -148,6 +152,11 @@
 \include{capitoli/capitolo3/capitolo3}
 
 \include{capitoli/capitolo4/capitolo4}
+
+\include{capitoli/capitolo5/capitolo5}
+
+%\include{capitoli/capitolo6/capitolo6}
+
 %-----------------------------------------
 %-----------------------------------------
 
@@ -237,6 +246,7 @@
 \bibitem {Astra} \texttt{http://astralanguage.com/wordpress/}
 \bibitem {tuProlog} \texttt{http://apice.unibo.it/xwiki/bin/view/Tuprolog/}
 \bibitem {Alchemist} \texttt{http://alchemistsimulator.github.io}
+\bibitem {Gradle} \texttt{https://gradle.org}
 \end{thesitography}
 
 % non numera l'ultima pagina sinistra

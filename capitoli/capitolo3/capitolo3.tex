@@ -4,7 +4,7 @@ Nel capitolo precedente è stato descritto lo stato attuale di lavori correlati 
 In questo lavoro di tesi si è voluto definire un nuovo linguaggio che fosse \textit{`platform indipendent'}, ovvero indipendente dall'ambiente sul quale viene utilizzato: è stato definito al pari di una libreria, senza nessun riferimento all'ambiente. Nei capitoli successivi verrà mostrato come, partendo dal linguaggio, è stata colmata la distanza con l'ambiente scelto.
 
 \section{Definizione linguaggio}\label{sctn:definizioneLinguaggio}
-Essendo tuProlog un interprete che opera su piattaforme differenti, si è voluto utilizzarlo nella definizione del linguaggio per permettere di utilizzare quest'ultimo facilemente, potendo sfruttare la libreria tuProlog per colmare la distanza tra l'ambiente e il linguaggio.
+Essendo tuProlog un interprete che opera su piattaforme differenti, si è voluto utilizzarlo nella definizione del linguaggio per permettere di utilizzare quest'ultimo facilmente, potendo sfruttare la libreria tuProlog per colmare la distanza tra l'ambiente e il linguaggio.
 
 Seguendo quella che è la struttura di AgentSpeak, è stato formalizzato questo linguaggio di programmazione ad agenti, e, di seguito, sono mostrate le definizioni.
 
@@ -12,7 +12,7 @@ Seguendo quella che è la struttura di AgentSpeak, è stato formalizzato questo 
 % Definizione 1
 \begin{defn}
 Se $b$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $belief(b(t_1, \ldots, t_n))$ è un atomo di belief.
-Se $b(t)$ e $c(s)$ sono atomi di belief, allora $b(t) \land c(s)$ e $\neg b(t)$ sono beliefs.
+Se $belief(b(t))$ e $belief(c(s))$ sono atomi di belief, allora $belief(b(t)) \land belief(c(s))$ e $\neg belief(b(t))$ sono beliefs.
 Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief. Un atomo di belief base sarà chiamato \textit{belief base}.
 \end{defn}
 
@@ -56,18 +56,18 @@ Un \textit{agente} è formato da $\langle B,P,I,A,S_O,S_I \rangle$, dove $B$ è 
 \smallskip
 % Definizione 8
 \begin{defn}
-Dato un evento $\epsilon$ ed un piano $p = `\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$, allora $p$ è rilevante per l'evento $\epsilon$ se e solo se esite un unificatore $\sigma$ tale per cui $d\sigma = e\sigma$. $\sigma$ è detto \textit{unificatore rilevante} per $\epsilon$.
+Dato un evento $\epsilon$ ed un piano $p = `\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$, allora $p$ è rilevante per l'evento $\epsilon$ se e solo se esiste un unificatore $\sigma$ tale per cui $d\sigma = e\sigma$. $\sigma$ è detto \textit{unificatore rilevante} per $\epsilon$.
 \end{defn}
 
 \smallskip
 % Definizione 9
 \begin{defn}
-Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$ è un \textit{piano applicabile} rispetto ad un evento $\epsilon$ se e solo se esite un identificatore rilevante $\sigma$ per $\epsilon$ e esite una sostituzione $\theta$ tale che $\forall (b_1, \ldots, b_m) \sigma\theta$ è una conseguenza logica di $B$.
+Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$ è un \textit{piano applicabile} rispetto ad un evento $\epsilon$ se e solo se esite un identificatore rilevante $\sigma$ per $\epsilon$ e esiste una sostituzione $\theta$ tale che $\forall (b_1, \ldots, b_m) \sigma\theta$ è una conseguenza logica di $B$.
 %La composizione $\sigma\theta$ è riferita all'\textit{unificatore applicabile} per l'evento $\epsilon$ e $\theta$ è riferita alla sostituzione della corretta risposta.
 \end{defn}
 
 %\bigskip
-%\textbf{TODO}
+%TODO
 %
 %\textbf{selezione intenzione (13,14,15,16)}
 %
@@ -115,20 +115,22 @@ Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \item $belief(distance(A, ND, OD)).$ oppure $belief(distance(A, ND)).$
 \end{itemize}
 
-Qui di seguito vengono analizzate ed esposte. Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
+Di seguito vengono analizzate ed esposte.
+\\
+Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
 
-La regola $`init'$ è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene azionato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare la `belief base' dell'agente.
+La regola $`init'$ è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
 
 \medskip
 Il fatto $`self(A)'$ permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
 
 \medskip
-I due letterali $`agent'$ e $`node'$ sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linugaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile $`agent'$ fa riferimento all'oggetto dell'agente stesso, mentre $`node'$ si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
+I due letterali $`agent'$ e $`node'$ sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linguaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile $`agent'$ fa riferimento all'oggetto dell'agente stesso, mentre $`node'$ si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
 
 \medskip
 Le regole $`addBelief(B)'$ e $`removeBelief(B)'$ sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare $`onAddBelief(B)'$, $`onRemoveBelief(B)'$. Più precisamente $`onAddBelief(B)'$ viene invocato quando viene aggiunto un belief, mentre $`onRemoveBelief(B)'$ è chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile $B$ corrisponde al belief inserito o rimosso.
 \\
-Diversamtene, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato $`onReceivedMessage(S, M)'$, dove $S$ rappresente il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
+Diversamente, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato $`onReceivedMessage(S, M)'$, dove $S$ rappresenta il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
 
 \medskip
 Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali $`achievement'$, $`test'$ sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato  è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
@@ -141,13 +143,13 @@ Per quanto riguarda la posizione dell'agente, potrà essere invocato $`belief(po
 \\
 La distanza da altri agenti può essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief $`belief(distance(A, ND))'$, dove $A$ è il nome dell'agente nel vicinato e $ND$ è la distanza che li separa. Se, invece, un agente era già nella lista del vicinato e vi rimane, allora viene inserito il belief $`belief(distance(A, ND, OD))'$, dove $A$ è il nome dell'agente nel vicinato, $ND$ è la nuova distanza che li separa e $OD$ è la distanza che li divideva precedentemente.
 
-\subsection{\hl{Gestione intenzioni}}
+\subsection{Gestione intenzioni}
 Le intenzioni sono la modalità con cui l'agente opera le sue azioni. Come descritto in precedenza, nel ciclo di ragionamento alla sezione \ref{ssctn:cicloRagionamentoAgentSpeak}, l'agente esegue una serie di passi che portano all'esecuzione di un'azione.
 Qui di seguito è descritto come avviene il ciclo di ragionamento utilizzando questo linguaggio. La spiegazione terrà conto solamente degli aspetti relativi alla parte tuProlog e quindi sarà incompleta fino al raggiungimento della sezione \ref{sctn:interpreteLinguaggio}. Le funzioni di selezione per i piani applicabili e le intenzioni non sono trattate in questa parte, poichè sono relative all'implementazione dell'interprete.
 
 L'agente lato tuProlog definisce il suo comportamento tramite una serie di regole e fatti che gli permettono di reagire ad eventi sia esterni che interni. Una percezione dell'ambiente può essere scatenata ad esempio da uno spostamento o una modifica della `belief base': quando questo avviene l'ambiente sul quale è utilizzato il linguaggio invoca una delle regole che, se implementata correttamente nella teoria dell'agente, consente all'agente di reagire all'evento. Un altro tipo di input che può ricevere l'agente è la ricezione di un messaggio. In tuProlog l'agente può reagire alla lettura del contenuto del messaggio poichè l'implementazione e la gestione delle code e la selezione dei messaggi viene fatta dall'interprete.
 
-La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un'inserimento all'interno di una lista, la quale poi viene restituita.
+La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un inserimento all'interno di una lista, la quale poi viene restituita.
 
 La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $intention(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione. Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma, lato tuProlog viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
 \\
@@ -240,7 +242,7 @@ init :-
 onResponseMessage(msg(X,Y)) :- true.
 \end{lstlisting}
 
-L'agente Bob, nel cuo ciclo di configurazione, effettua una richiesta allo spazio di tuple per ricevere messaggi a lui destinati. Inoltre, nella sua teoria, è definito un comportamento in caso di ricezione del messaggio: manda ad Alice lo stesso messaggio che ha ricevuto.
+L'agente Bob, nel suo ciclo di configurazione, effettua una richiesta allo spazio di tuple per ricevere messaggi a lui destinati. Inoltre, nella sua teoria, è definito un comportamento in caso di ricezione del messaggio: manda ad Alice lo stesso messaggio che ha ricevuto.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Bob},caption={Bob}]
 init :-
