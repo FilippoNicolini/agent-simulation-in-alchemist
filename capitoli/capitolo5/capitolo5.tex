@@ -110,7 +110,7 @@ Per la realizzazione della classe dell'agente si è scelto, anche in questo caso
 \\
 La scelta successiva è stata quella relativa al design della classe da implementare. Dopo un'accurata analisi è stato scelto di realizzare, invece che un'implementazione definitiva, una classe astratta che descrive le proprietà base dell'agente e ne implementa le funzionalità principali (inizializzazione dell'agente e gestione di messaggi, di `belief base', di intenzioni e di operazioni negli spazi di tuple), lasciando comunque al programmatore la scelta della caratterizzazione dell'agente. La scelta di creare una classe astratta è dovuto al fatto di non voler dare nessuna implementazione del ciclo di ragionamento ma fornire implementazioni dei comportamenti e azioni basilari che lo compongono: in questo modo è possibile facilmente definire nuovi comportamenti o creare agenti partendo da quelli già realizzati.
 \\
-Non sono quindi implementati i metodi $execute()$, $cloneAction(Node n, Reaction r)$, definiti dall'interfaccia Action, dalla cui implementazione è caratterizzato il comportamento dell'agente. In particolare, il metodo $execute()$, che è quello che rappresenta il ciclo di ragionamento, è invocato periodicamente dal core di Alchemist (questo perchè le Condizioni collegate alla stessa Reazione sono impostate per essere sempre vere) per lo svolgimento delle azioni.
+Non sono quindi implementati i metodi $execute()$, $cloneAction(node, reaction)$, definiti dall'interfaccia Action, dalla cui implementazione è caratterizzato il comportamento dell'agente. In particolare, il metodo $execute()$, che è quello che rappresenta il ciclo di ragionamento, è invocato periodicamente dal core di Alchemist (questo perchè le Condizioni collegate alla stessa Reazione sono impostate per essere sempre vere) per lo svolgimento delle azioni.
 
 All'interno della classe sono definite le seguenti proprietà: due code per i messaggi (una per quelli in entrata e una per quelli in uscita), il motore tuProlog, lo stack contenente gli identificativi delle intenzioni presenti nella teoria, riferimenti alla reazione e al generatore random.
 
@@ -136,7 +136,6 @@ La funzione implementata per la gestione della `belief base' utilizza i fatti ge
 
 Nel capitolo precedente è stata descritta la procedura che porta all'esecuzione e alla rimozione delle intenzioni presenti nella teoria dell'agente. Però non è stato descritto qual è il procedimento che porta alla creazione di un'intenzione.
 Nella sezione \ref{sctn:DettaglioImplementazioni} verrà mostrato come è possibile creare un'intenzione partendo da un termine e poi cercando nella teoria dell'agente una regola adatta ad esso.
-%TODO - rimuovere se si toglie la sotto-sezione nel Dettaglio implementazioni
 
 Il funzionamento delle azioni interne è stato descritto in maniera approfondita nella sezione \ref{sctn:GestioneAzioni} utilizzando come esempio l'azione per l'invio di un messaggio. All'interno della classe dell'agente è quindi presente questa funzione $executeInternalAction(action)$ con la quale l'interprete implementato esegue una sequenza di operazioni che portano al compimento dell'azione. Come invocare funzionalità implementate in Alchemist dalla teoria è mostrato nella sezione \ref{sctn:DettaglioImplementazioni}.
 
@@ -151,13 +150,11 @@ Per quanto riguarda il metodo per l'invio della richiesta, l'agente recupera i f
 Il metodo che consente all'agente di ricevere il risultato della richiesta è stato implementato fornendo in ingresso solamente un parametro, il termine recuperato dallo spazio di tuple. In questo modo all'interno della teoria dell'agente sarà sufficiente trovare una regola $onResponseMessage(T)$, dove $T$ è il parametro ricevuto, idonea al contesto per poi creare una nuova intenzione da inserire tra quelle da eseguire.
 
 \subsection{Dettaglio implementazioni}\label{sctn:DettaglioImplementazioni}
-In questa sezione verranno descritti alcuni dettagli implementativi dell'implementazione realizzata, quali:
-\begin{itemize}
-\item funzionamento dell'agnete `Postman';
-\item utilizzo di oggetti Java in tuProlog;
-\item interrogazioni della teoria dell'agente tramite Alchemist.
-\end{itemize}
+In questa sezione verranno descritti alcuni dettagli relativi all'implementazione realizzata quali il funzionamento dell'agnete `Postman', l'utilizzo di oggetti Java in tuProlog, la creazione delle intenzioni.
+%TODO CAPIRE --> interrogazioni della teoria dell'agente tramite Alchemist. 
 
+
+\subsubsection{Agente `Postman'}
 Per la gestione dei messaggi, l'agente implementa al suo interno i metodi per prelevare e inserire da entrambe le code ma internamente utilizza solo quelli per leggere nuovi messaggi e per aggiungerne nella coda di quelli in uscita.
 Il vero e proprio scambio di messaggi è demandato all'agente `Postman' creato specificatamente per questo compito. Questo agente nel suo ciclo di ragionamento ha come unico compito quello di invocare la funzione $postman()$ implementata nel nodo, e mostrato nel Codice sorgente \ref{lst:ImplementazioneFunzionePostman}.
 \lstset{
@@ -208,6 +205,7 @@ Quando opportunamente invocato, questo metodo recupera tutti i nodi dell'ambient
 \\
 L'esecuzione del metodo è previsto che venga fatta una sola volta e globalmente: per questo è stata implementata la classe PostmanAgent, implementazione della classe AbstractAgent, la quale effettua nel suo ciclo di ragionamento solamente questa operazione.
 
+\subsubsection{Referenziazione e utilizzo oggetti Java in tuProlog}
 Per poter referenziare oggetti Java all'interno della teoria dell'agente è stata sfruttata una funzionalità di tuProlog attraverso l'utilizzo della libreria Object-Oriented. Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
 \begin{lstlisting}[firstnumber=1,label={lst:BindingOggettiJavaIntuProlog},caption={Binding oggetti Java in tuProlog}]
 // tuProlog engine
@@ -252,11 +250,47 @@ agent <- doSomethingWithParams(`term',V)
 % using return result
 agent <- getNextRand returns R,
 TMP is R * 0.5.
-
 \end{lstlisting}
 
+\subsubsection{Creazione intenzioni}
+Le intenzioni sono utilizzate per la gestione dei comportamenti dell'agente. Un'intenzione, come detto nella sezione \ref{sctn:AgentiBDI}, rappresentano un'insieme di azioni che l'agente deve completare per completare un certo comportamento, ovvero per reagire ad eventi per cui gli agenti sono stati programmati.
 
-\textbf{TODO - descrivere come si crea un'intenzione (prima completare il codice) [recupero body e creazione intenzione]}
+Le azioni all'interno dell'interprete vengono create quindi in relazione agli eventi o alla creazioni di nuovi goal.
+La procedura per creare un'intenzione inizia con dalla definizione della struttura del template utilizzata per cercare il piano adatto per reagire a quell'evento. Invocando la funzione $createPlanStruct(term)$, dove $tem$ è l'evento per il quale si sta creando l'intenzione, viene restituito un oggetto strutturato come mostrato nel Codice sorgente \ref{lst:OggettoStrutturaPiano}.
+\lstset{
+  numberstyle=\footnotesize\color{black},
+  basicstyle=\ttfamily,
+  breakatwhitespace=true,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=7pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=tb,
+  language=Java,
+  commentstyle=\color{gray},
+  keywordstyle=\color{blue},
+  stringstyle=\color{red}
+}
+\medskip
+\begin{lstlisting}[firstnumber=1,label={lst:OggettoStrutturaPiano},caption={Oggetto che definisce la struttura del piano}]
+return new Struct('<-', term, new Var('GUARD'), new Var('BODY'))
+\end{lstlisting}
+
+L'oggetto $struct$ che è stato creato viene poi passato all'invocazione del metodo $createIntention(term, errMsg)$, dove $errMsg$ è una stringa contenente un messaggio utilizzato in caso di errore.
+All'interno del metodo viene utilizzata la struttura all'interno del motore tuProlog per interrogare la teoria dell'agente e recuperare una lista di piani rilevanti (nella teoria sono definiti come fatti). \\
+\\
+Successivamente per ogni piano recuperato viene controllata la veridicità della guardia attraverso l'utilizzo di regole opportunamente definite nella libreria tuProlog dell'agente che è stata creata. La guardia definisce il contesto e quindi determina se un piano rilevante è anche applicabile.
+Se la guardia non è verificata il piano viene scartato altrimenti si passa al recupero del corpo, ovvero la lista di azioni che deve essere eseguita.
+\\
+Le azioni possono essere descritte in due diverse modalità: si può trovare una lista di azioni, caso in cui viene recuperato un fatto che descrive un piano per reagire ad un evento, oppure può essere il corpo di una regola. Nel primo caso la lista viene semplicemente recuperata mentre nel secondo caso il corpo viene trasformato in una lista di azioni.
+\\
+Ottenuta la lista di azioni $body$ si inizia la vera e propria creazione dell'azione: per prima cosa viene generato un identificativo univoco $id$ e successivamente viene creata la struttura $intention(id,body)$ che poi è inserita all'interno della teoria dell'agente. Se l'inserimento è completato con successo l'$id$ è inserito anche nella lista lato Java che mantiene gli identificativi di tutte le intenzioni presenti nella teoria dell'agente, e che è utilizzata per gestire l'esecuzione delle intenzioni con metodo Round-Robin.
+
 
 \subsection{Tool di sviluppo}
 Per lo sviluppo di questo progetto, oltre all'utilizzo di ambienti applicativi per l'implementazione dell'interprete, ci si è appoggiati ad altri strumenti esterni per la gestione e verifica del codice sorgente prodotto. Qui di seguito sono citati e descritti gli strumenti utilizzati.
