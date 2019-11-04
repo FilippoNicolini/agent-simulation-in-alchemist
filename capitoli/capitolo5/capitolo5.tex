@@ -1,5 +1,5 @@
 \chapter{Dettagli implementativi e di deploy}
-In questo capitolo sono descritti alcuni dettagli relativi all'implementazione dell'interprete che è stato realizzato in Alchemist. In particolare verrà descritta la gerarchia delle classi definite all'interno dell'incarnazione e successivamente le proprietà e le funzionalità di quelle principali: Incarnation (AgentIncarnation), Nodo (AgentsContainerNode), Action (AbstractAgent).
+In questo capitolo sono descritti alcuni dettagli relativi all'implementazione dell'interprete che è stato realizzato in Alchemist. In particolare verrà descritta la gerarchia delle classi definite all'interno dell'incarnazione e successivamente le proprietà e le funzionalità di quelle principali: Incarnation (AgentIncarnation), Node (AgentsContainerNode), Action (AbstractAgent).
 
 Successivamente sono descritti gli strumenti utilizzati per supportare lo sviluppo di questo progetto: Gradle per la gestione delle librerie all'interno di Alchemist, GitHub per la gestione del repository e del codice sorgente, Travis CI per il monitoraggio di eventuali anomalie prodotte.
 
@@ -150,9 +150,7 @@ Per quanto riguarda il metodo per l'invio della richiesta, l'agente recupera i f
 Il metodo che consente all'agente di ricevere il risultato della richiesta è stato implementato fornendo in ingresso solamente un parametro, il termine recuperato dallo spazio di tuple. In questo modo all'interno della teoria dell'agente sarà sufficiente trovare una regola $onResponseMessage(T)$, dove $T$ è il parametro ricevuto, idonea al contesto per poi creare una nuova intenzione da inserire tra quelle da eseguire.
 
 \subsection{Dettaglio implementazioni}\label{sctn:DettaglioImplementazioni}
-In questa sezione verranno descritti alcuni dettagli relativi all'implementazione realizzata quali il funzionamento dell'agnete `Postman', l'utilizzo di oggetti Java in tuProlog, la creazione delle intenzioni.
-%TODO CAPIRE --> interrogazioni della teoria dell'agente tramite Alchemist. 
-
+In questa sezione verranno descritti alcuni dettagli relativi all'implementazione realizzata quali il funzionamento dell'agnete `Postman', la referenziazione e l'utilizzo di oggetti Java in tuProlog, la creazione delle intenzioni.
 
 \subsubsection{Agente `Postman'}
 Per la gestione dei messaggi, l'agente implementa al suo interno i metodi per prelevare e inserire da entrambe le code ma internamente utilizza solo quelli per leggere nuovi messaggi e per aggiungerne nella coda di quelli in uscita.

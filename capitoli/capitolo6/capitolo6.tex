@@ -100,7 +100,7 @@ loadNuggets(NUGGETS) :-
 Nel corpo della regola $init$ viene inizialmente recuperato un numero random, attraverso l'invocazione del metodo $generateNextRandom()$ definito nell'agente, che rappresenta le pepite da posizionare all'interno della miniera.
 Il caricamento delle risorse viene fatto tramite l'invocazione della regola $loadNuggets(NUGGETS)$ con la quale sono inseriti i fatti nello spazio di tuple: se le risorse sono state tutte caricate viene invocato il metodo $setConcentration()$,definito appositamente all'interno dell'agente, che viene utilizzato per impostare le molecole per tematizzare graficamente lo spazio di tuple nella simulazione.
 
-\subsubsection{Implementazione classe Goldmine}
+\subsubsection{Implementazione classe miniera}
 Per quanto riguarda la classe della miniera si è deciso, come detto poco sopra, di utilizzare lo spazio di tuple. La classe astratta AbstractSpatialTuple definisce al suo interno la struttura base dello spazio di tuple e le funzioni per eseguire i suoi comportamenti caratteristici $in$, $rd$ e $out$, rispettivamente trasformati nelle azioni $writeTuple$, $readTuple$, $takeTuple$.
 Per definire la miniera è stata quindi definita la classe Goldmine che estende la classe astratta implementando quindi un semplice spazio di tuple.
 Oltre ad essere uno spazio di tuple, la classe però implementa anche la super classe astratta AbstractAgent che fa essere Goldmine anche un agente: è quindi necessario implementare all'interno della classe anche i metodi $execute()$ e $cloneAction(node, reaction)$. Il primo di quest'ultimi è quello più importante poichè definisce in che modo lo spazio di tuple opererà nel suo ciclo di ragionamento permettendogli di reagire alle richieste ricevute.
@@ -174,8 +174,7 @@ La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, do
   numbers=none,
   frame=tb,
   stringstyle=\color{black},
-  morekeywords={randomDirection,randomSpeed,handlePosition,changeDirection,checkMineDistance},
-  keywordstyle=\color{blue}
+  morekeywords={randomDirection,randomSpeed,handlePosition,changeDirection,checkMineDistance}
 }
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Goldmine},caption={Teoria miniera}]
@@ -209,7 +208,7 @@ Gli altri due contesti, relazionati ad eventi quali la ricezione di un messaggio
 \\
 Tra le azioni definite nei corpi dei vari fatti una spiegazione la merita l'utilizzo del belief $mine(X,Y)$. Questo viene utilizzato per salvare la posizione della miniera da cui è stata recuperata l'ultima risorsa, prima di andare al deposito per consegnarla, in modo tale da poter tornare direttamente alla miniera, una volta depositata la pepita, per continuare ad estrarre risorse risultando più veloce ed efficace.
 
-\subsubsection{Implementazione classe Miner}
+\subsubsection{Implementazione classe minatore}
 Per quanto riguarda la parte lato interprete relativa all'agente minatore è stata utilizzata la classe SimpleAgent che estende da AbstractAgent. Questa classe rappresenta un esempio di come può essere immediata l'implementazione di un agente, che racchiude tutte le funzionalità principali, a partire da quello che è già stato prodotto e mostrato precedentemente in questo documento.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:SimpleAgentReasoningCycle},caption={Ciclo di ragionamento per l'agente completo}]
@@ -253,10 +252,16 @@ La funzione $retrieveTuples()$ recupera ed invia immediatamente tutte le richies
 Per concludere viene invocata la funzione $executeIntention()$ che sceglie un'intenzione tra quelle presenti all'interno dell'agente (il metodo di selezione è Round-Robin), la esegue e poi la inserisce in coda alla lista delle intenzioni.
 
 \subsection{Deposito - Deposit}
-\textbf{TODO - completare riscrivendo il comportamento implementato progetto}
+Per quanto riguarda il deposito, il suo compito è semplicemente quello di raccogliere le risorse che i minatori gli consegnano.
+Nella soluzione proposta il deposito è stato implementato da un agente ma, come detto nell'introduzione al capitolo è possibile realizzare simulazioni con un'implementazione diversa.
 
+\subsubsection{Teoria tuProlog deposito}
+Per quanto riguarda la teoria del deposito non è necessario definire alcun piano poichè esso non ha compiti se non quello di accettare le risorse ricevute. Si è quindi definita una teoria con una regola $init$ vuota (ovvero che ha come unica istruzione nel corpo `true').
 
-
+\subsubsection{Implementazione classe deposito}
+La classe utilizzata per rivestire questo ruolo all'interno della simulazione è anche in questo caso la classe SimpleAgent poichè è un'implementazione di un agente completo già pronta per essere utilizzata.
+\\
+Le funzionalità disponibili sono sicuramente maggiori rispetto a quelle che sono effettivamente utilizzate ma, data la struttura già fornita della classe astratta, questo non impatta sull'efficienza e rimane molto semplice da utilizzare.
 
 \section{Configurazione della simulazione}
 Per definire la simulazione si deve scrivere un'opportuna configurazione nella quale sono descritti, attraverso le keyword, quali oggetti utilizzare nella simulazione in relazione al modello creato. Nel Codice sorgente \ref{lst:GoldminersSimulation} sono mostrate e descritte in dettaglio le varie parti che compongono la configurazione e che sono state precedentemente spiegate nella sezione \ref{sctn:ScrivereUnaSimulazione}.
@@ -309,8 +314,3 @@ Attraverso la keyword $program$ si definiscono le reazioni che saranno inserite 
 Per definire una reazione sono stati utilizzati una distribuzione temporale ed una stringa; quest'ultima sarà poi utilizzata durante la creazione di istanze della classe AgentReaction e con la quale verrà istanziata all'interno della reazione la classe dell'agente relativa.
 \\
 Come parametro della distribuzione temporale è stato scelto 9: questo valore ha consentito, anche in base al valore di distribuzione temporale associato all'azione di spostamento posizionata in maniera intrinseca nel nodo, di avere un comportamento che è sembrato molto fluido.
-
-
-
-\section{Vantaggi approccio scelto}
-\textbf{TODO - lasciare qui o mettere nelle conclusioni?}

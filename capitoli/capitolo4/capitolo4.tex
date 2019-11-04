@@ -62,7 +62,6 @@ takeTuple(T) :-
 Terminata la definizione delle regole per la gestione degli eventi è stata aggiunta la libreria `alice.tuprolog' dalla quale è stato importato all'interno della classe dell'agente il motore tuProlog per la realizzazione delle invocazioni verso la teoria dell'agente.
 Ogni istanza dell'agente ha un motore tuProlog al cui interno è caricata la libreria che implementa il nuovo linguaggio e una teoria specifica scritta dal programmatore dell'agente che descrive il comportamento dell'agente.
 L'agente nel meta-modello è riferito all'entità Reazione ma nell'implementazione il ciclo di ragionamento dell'agente, ovvero il cuore, risiederà nell'Azione: la classe che definisce l'agente implementerà l'interfaccia relativa a tale entità.
-%Sono stati definiti due costruttori, uno che imposta solamente il nome dell'agente e il generatore random per l'agente e un altro che prende in ingresso anche la reazione a cui è riferito l'agente e che è utilizzata per ottenere la distribuzione temporale.
 
 Per fare un'invocazione, da Alchemist, di fatti o regole definiti nella teoria dell'agente vengono utilizzate alcune funzionalità messe a disposizione dalla libreria 'alice.tuprolog' che sono descritte qui di seguito.
 \\
@@ -80,9 +79,12 @@ Per quanto riguarda invece l'esecuzione dell'intenzione sono state definite una 
 
 \`E inoltre necessario descrivere in che modo vengono selezionati i piani applicabili e le intenzioni per completare la descrizione degli step che sono effettuati.
 \\
-Per quanto riguarda la selezione di piani applicabili, in base all'implementazione attuale, viene utilizzata la selezione del motore tuProlog poichè sfrutta l'ordinamento con cui sono definite le regole e i fatti nella teoria per scegliere quello giusto, anche attraverso l'utilizzo del contesto.
+Per quanto riguarda la selezione delle azioni internamente viene utilizzata la selezione del motore tuProlog che sfrutta l'ordinamento con cui sono definite le regole e i fatti nella teoria. Una volta selezionata l'azione viene eseguita.
+Per quanto riguarda la selezione dei piani relativi agli eventi e ai goal, la selezione avviene utilizzando il contesto, ovvero la guardia, che permette di definire se un piano è applicabile a quella certa situazione.
+Una volta selezionato il piano viene creata un'intenzione che è opportunamente inserita nella lista delle intenzioni.
 \\
-Diversamente per quanto riguarda le intenzioni avviene la seguente gestione. Nella teoria dell'agente sono salvate tutte le intenzioni mentre nell'interprete viene salvata una lista contenente solamente gli identificativi delle rispettive intenzioni presenti nella teoria. La tipologia di selezione è Round-Robin, ogni intenzione avrà lo stesso spazio di esecuzione delle altre. L'intenzione da eseguire viene presa dalla testa dello stack e una volta finita la sua esecuzione viene posizionata in coda: in questo modo si assicura che ogni intenzione possa essere eseguita.
+Diversamente per quanto riguarda l'intenzione da eseguire avviene la seguente gestione.
+Nella teoria dell'agente sono salvate tutte le intenzioni mentre nell'interprete viene salvata una lista contenente solamente gli identificativi delle rispettive intenzioni presenti nella teoria. La tipologia di selezione è Round-Robin, ogni intenzione avrà lo stesso spazio di esecuzione delle altre. L'intenzione da eseguire viene presa dalla testa dello stack e una volta finita la sua esecuzione viene posizionata in coda: in questo modo si assicura che ogni intenzione possa essere eseguita.
 
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneRegoleInvocazioneEsecuzioneIntenzione},caption={Implementazione regole per invocazione esecuzione di un'intenzione}]

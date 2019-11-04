@@ -1,4 +1,14 @@
 \chapter*{Conclusioni}
+Con questo lavoro di tesi è stato definito un nuovo linguaggio per la programmazione ad agenti basato sulla struttura del modello di AgentSpeak al quale è stato integrata la gestione del ragionamento degli agenti proposta dall'interprete Jason.
+\\
+Il linguaggio definito permette di scrivere teorie tuProlog per implementare il comportamento degli agenti sfruttando gli eventi e i predicati messi a disposizione.
+Questo linguaggio non si occupa di gestire la piattaforma sulla quale opereranno gli agenti ma solo di dare una definizione degli elementi che permetteranno all'agente di essere autonomo, reattivo e proattivo.
 
-%TODO migliorie
-%TODO SI PUO' eliminare l'agente postman ed inserirlo nell'interprete
+L'interprete di questo linguaggio potrà essere implementato in qualsiasi ambiente, da quello reale a quello simulato, poichè grazie all'utilizzo della libreria tuProlog sarà possibile realizzare efficientemente la gestione delle interazioni con le primitive del nuovo linguaggio.
+\\
+Per l'interprete quindi sarà necessario implementare un applicativo che gestisca lo scheduling degli eventi, in caso di ambiente simulato, o la comunicazione con i percettori, in caso di ambiente reali, e trasmetta le informazioni alla teoria dell'agente utilizzando il linguaggio attraverso la libreria tuProlog.
+
+\subsection*{Vantaggi approccio scelto}
+Il linguaggio è stato realizzato con l'obiettivo di fornire una nuova prospettiva più snella e dinamica che permettesse di portare la potenza del modello ad agenti su varie piattaforme cercando di semplificare il lavoro di integrazione e di implementazione con questo modello.
+
+Attraverso il linguaggio definito in questo lavoro è possibile portare il modello ad agenti da un ambiente simulato, come l'interprete che è stato realizzato all'interno di questo progetto di tesi, ad un ambiente reale, realizzando ad esempio un applicativo per dispositivi mobile ognuno dei quali esegue degli agenti i quali comunicano con altri agenti presenti in altri device.
