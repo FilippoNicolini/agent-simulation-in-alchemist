@@ -14,7 +14,7 @@ Precedentemente in questo lavoro si è accennato alle classi dell'incarnazione u
 
 L'immagine presente in Figura \ref{fig:UMLGerarchiaClassi} mostra lo schema UML delle classi realizzate.
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure}[ht] % [h] sta per here, cioè la figura va qui
 %\begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=15cm]{images/UML_agenti.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
@@ -31,22 +31,24 @@ Nello schema si può notare che la classe dell'incarnazione è stata realizzata 
 Diversamente, per il Nodo e la Reazione si è scelto di estendere le rispettive classi astratte già presenti all'interno di Alchemist, le quali al loro interno implementano l'interfaccia di riferimento. La classe del nodo verrà spiegata più in dettaglio nella sezione \ref{sctn:AgentsContainerNode}, mentre per la reazione, che è l'entità individuata per rappresentare l'agente, è stata implementata la classe senza conferire particolare caratteristica poichè il core dell'agente è realizzato, come già accennato nella sezione \ref{sctn:InvocazioneEsecuzioneIntenzioni}, in un'entità contenuta al suo interno, ovvero l'Azione.
 \\
 Come si può vedere dallo schema l'azione è l'entità che ha avuto il maggior numero di implementazioni. Per la realizzazione dell'Azione si è partiti descrivendo le funzionalità generiche dell'agente all'interno di una classe astratta per fornire un'esemplificazione e una base di partenza da poter utilizzare con poco sforzo o eventualmente ampliare per realizzare comportamenti specifici.
-Ad esempio, per l'integrazione del modello SpatialTuples è stata estesa la classe base dell'agente per realizzare una nuova classe astratta (AbstractSpatialTuple) che, allo stesso modo della classe padre, offre la possibilità utilizzare degli spazi di tuple avendo già una solida base di partenza. La classe dell'agente è descritta nella sezione \ref{sctn:AbstractAgent}. Le altre classi implementate a partire dalla classe AbstractAgent sono implementazioni specifiche di agenti che sono state utilizzate per la realizzazione di simulazioni di scenari di test. Le classi che estendono AbstractSpatialTuple sono anch'esse realizzate come agenti ma incarnano il comportamento degli spazi di tuple.
+Ad esempio, per l'integrazione del modello SpatialTuples è stata estesa la classe base dell'agente per realizzare una nuova classe astratta (AbstractSpatialTuple) che, allo stesso modo della classe padre, offre la possibilità di utilizzare degli spazi di tuple avendo già una solida base di partenza. La classe dell'agente è descritta nella sezione \ref{sctn:AbstractAgent}.
+Le altre classi implementate a partire dalla classe AbstractAgent sono implementazioni specifiche di agenti che sono state utilizzate per la realizzazione di simulazioni di scenari di test. Le classi che estendono AbstractSpatialTuple sono anch'esse realizzate come agenti ma incarnano il comportamento degli spazi di tuple.
 
 \subsection{L'incarnazione}\label{sctn:AgentIncarnation}
-Per realizzare la classe principale dell'incarnazione, e solo per questo caso, è stata implementata direttamente la corrispondente interfaccia, ovvero Incarnation. Questa interfaccia definisce i metodi per poter implementare in maniera specifica ogni singola entità del meta-modello di Alchemist. All'interno della classe AgentIncarnation, che implementa appunto l'interfaccia Incarnation, sono state implementate le varie funzioni che, in fase di esecuzione, saranno opportunamente richiamate dal simulatore. Qui di seguito viene fornita una breve descrizione di come sono stati implementati i metodi definiti nell'interfaccia.
+Per realizzare la classe principale dell'incarnazione, e solo per questo caso, è stata implementata direttamente la corrispondente interfaccia, ovvero Incarnation.
+Questa interfaccia definisce i metodi per poter implementare in maniera specifica ogni singola entità del meta-modello di Alchemist. All'interno della classe AgentIncarnation, che implementa appunto l'interfaccia Incarnation, sono state implementate le varie funzioni che, in fase di esecuzione, saranno opportunamente richiamate dal simulatore. Qui di seguito viene fornita una breve descrizione di come sono stati implementati i metodi definiti nell'interfaccia.
 
 All'interno del metodo per la creazione di un oggetto dell'entità Molecola viene creata un'istanza della classe SimpleMolecule, implementazione già presente all'interno di Alchemist, che a partire da una stringa (utilizzata come identificativo) crea una corrispondente molecola.
 
 Per quanto riguarda la Distribuzione Temporale, come accennato nella sezione \ref{sctn:SpostamentoNodo}, viene utilizzata la classe DiraComb, già implementata in Alchemist, che permette di creare eventi periodici ad una distanza temporale definita tramite un parametro.
 
-Per creare il Nodo sono utilizzati i riferimenti all'Environment, per gestire funzioni come lo spostamento e il vicinato, e al RandomGenerator, impiegato per ottenere randomicità negli agenti. All'interno del metodo per la creazione di un Nodo è invocato il costruttore della classe AgentsContainerNode che ne fornisce un'istanza: l'oggetto creato è poi restituito all'applicazione per essere utilizzato durante la simulazione.
+Per creare il Nodo sono utilizzati i riferimenti all'Environment, che è utilizzato per gestire funzionalità come lo spostamento e il vicinato, e al RandomGenerator, il quale è impiegato per ottenere randomicità negli agenti. All'interno del metodo per la creazione di un Nodo è invocato il costruttore della classe AgentsContainerNode che ne fornisce un'istanza: l'oggetto creato è poi restituito all'applicazione per essere utilizzato durante la simulazione.
 
 Per poterne gestire lo spostamento, come accennato nella sezione \ref{sctn:SpostamentoNodo}, all'interno di ogni nodo è stato inserito uno specifico agente incaricato di questo compito. L'operazione di inserimento avviene all'interno del metodo per la creazione del Nodo; dopo aver ottenuto un'istanza di AgentsContainerNode si crea una Reazione, che al suo interno conterrà l'azione per gestire il movimento, la quale è aggiunta al nodo prima di essere restituito.
 \\
 Per creare questa Reazione, viene eseguito lo stesso procedimento descritto all'interno dell'apposito metodo definito all'interno della classe ma variando le funzioni invocate e la tipologia di alcuni oggetti istanziati.
 
-Per creare una `normale' Reazione viene per prima cosa creata un'istanza della classe AgentReaction e poi invocati i metodi per creare le istanze di azioni e condizioni, passando i rispettivi parametri che specificano, tra gli altri, la classe dell'oggetto da istanziare. A questo punto, gli oggetti ottenuti dall'invocazione delle due funzioni, vengono inseriti all'interno dei rispettivi set della reazione, la quale viene infine ritornata.
+Per creare una `normale' Reazione viene per prima cosa creata un'istanza della classe AgentReaction e poi invocati i metodi per creare le istanze di azioni e condizioni, passando gli opportuni parametri che specificano, tra gli altri, la classe dell'oggetto da istanziare. A questo punto, gli oggetti ottenuti dall'invocazione delle due funzioni, vengono inseriti all'interno dei rispettivi set della reazione, la quale viene infine ritornata.
 \\
 Nel caso della reazione per lo spostamento, sono create sul momento le istanze degli oggetti che andranno a crearla e con il seguente ordine:
 \begin{itemize}
@@ -75,7 +77,7 @@ Al momento sono gestiti i casi per le seguenti classi:
 
 
 \subsection{Il contenitore degli agenti - Nodo}\label{sctn:AgentsContainerNode}
-Il nodo, nell'implementazione dell'interprete realizzata, è uno spazio (o contenitore di agenti) che gestisce i comportamenti dell'agente verso l'esterno, come ad esempio lo spostamento del nodo stesso e l'esecuzione di azioni esterne, ma implementa anche una serie di funzioni di utili alla gestione della comunicazione tra agenti (recupero dell'elenco degli agenti nel vicinato, gestione dei messaggi fra agenti). Il nodo, come detto precedentemente, è definito tramite la classe AgentsContainerNode creata estendendo la classe astratta AbstractNode che a sua volta implementa l'interfaccia Node.
+Il nodo, nell'implementazione dell'interprete realizzata, è uno spazio (o contenitore di agenti) che gestisce i comportamenti dell'agente verso l'esterno, come ad esempio lo spostamento del nodo stesso e l'esecuzione di azioni esterne, ma implementa anche una serie di funzioni utili alla gestione della comunicazione tra agenti (recupero dell'elenco degli agenti nel vicinato, gestione dei messaggi fra agenti). Il nodo, come detto precedentemente, è definito tramite la classe AgentsContainerNode creata estendendo la classe astratta AbstractNode che a sua volta implementa l'interfaccia Node.
 
 All'interno della classe sono definite le proprietà che contengono l'ambiente, il generatore random, i valori per gestire lo spostamento del nodo ed una struttura per il monitoraggio degli agenti presenti al suo interno.
 Le istanze di Environment e RandomGenerator sono create all'interno del core di Alchemist e poi passate al costruttore della classe che le memorizza all'interno della classe. %, dopo averle registrate, inizializza inoltre la variabile che mantiene il tempo per dell'ultimo aggiornamento della posizione.
@@ -88,11 +90,12 @@ Inoltre, è implementato il metodo $updateAgentsPosition()$ che innesca l'aggior
 
 Per la gestione della mappa, utilizzata per il monitoraggio degli agenti, sono presenti due metodi: uno per effettuare l'inserimento, invocato come descritto nella sezione \ref{sctn:AgentIncarnation} durante la creazione di istanze dell'entità Reazione, e uno per ottenere la struttura completa.
 
-Il concetto di vicinato viene gestito da Alchemist attraverso la funzione di linking-rule, che utilizza il parametro `network-model' se opportunamente impostato in fase di configurazione della simulazione. Lato implementativo è sufficiente richiedere all'Environment di fornire tutti i nodi presenti nel vicinato con i quali è poi possibile effettuare altre operazioni come, ad esempio, ottenere la distanza tra i vari nodi e recuperare gli agenti presenti in ogni nodo, utilizzando l'apposita mappa.
+Il concetto di vicinato viene gestito da Alchemist attraverso la funzione di linking-rule, che utilizza il parametro `network-model' se opportunamente impostato in fase di configurazione della simulazione.
+Lato implementativo, è sufficiente richiedere all'Environment di fornire tutti i nodi presenti nel vicinato con i quali è poi possibile effettuare altre operazioni come, ad esempio, ottenere la distanza tra i vari nodi e recuperare gli agenti presenti in ogni nodo, utilizzando l'apposita mappa.
 \\
 Lo stesso meccanismo è utilizzato per recuperare e operare negli spazi di tuple, definiti utilizzando l'estensione SpatialTuples. In questo caso, non è stato sufficiente il solo recupero di tutti i nodi ma sono stati applicati i filtri per ottenere solo gli agenti la cui istanza derivi da AbstractSpatialTuple.
-Secondo la scelta implementativa effettuata, è necessario specificare due insiemi differenti per le diverse primitive invocabili sullo spazio di tuple: la scrittura è fatta su un solo spazio di tuple ovvero quello più vicino mentre la lettura su tutti quelli del vicinato.
-Il secondo caso è il più immediato poichè si recupera l'elenco di tutti gli agenti presenti nei nodi del vicinato ed è verificato solamente che l'istanza dell'agente sia implementazione della classe astratta AbstractSpatialTuple. Ogni agente che corrisponde a questa condizione viene aggiunto ad una lista, la quale è poi ritornata come output.
+Secondo la scelta implementativa effettuata, è necessario specificare due insiemi differenti per le diverse primitive invocabili sullo spazio di tuple: la scrittura è fatta su un solo spazio di tuple, ovvero quello più vicino, mentre la lettura su tutti quelli del vicinato.
+Il secondo caso è il più immediato poichè si recupera l'elenco di tutti gli agenti presenti nei nodi del vicinato e si verifica solamente che l'istanza dell'agente sia un'implementazione della classe astratta AbstractSpatialTuple. Ogni agente che corrisponde a questa condizione viene aggiunto ad una lista, la quale è poi ritornata come output.
 \\
 Diversamente, per quanto riguarda la scrittura, serve individuare lo spazio di tuple più vicino, recuperandolo tramite la mappa di agenti del nodo che lo contiene. Utilizzando l'ambiente, vengono confrontate le distanze di tutti i nodi rispetto a quello attuale e, si recupera quello più vicino che contiene almeno un'agente che sia istanza della classe astratta AbstractSpatialTuple. Di quel nodo viene selezionato il primo agente trovato che corrisponde ai canoni poichè verosimilmente, in base alle scelte implementative, in ogni nodo vi è un solo spazio di tuple.
 
@@ -153,7 +156,7 @@ Il metodo che consente all'agente di ricevere il risultato della richiesta è st
 In questa sezione verranno descritti alcuni dettagli relativi all'implementazione realizzata quali il funzionamento dell'agnete `Postman', la referenziazione e l'utilizzo di oggetti Java in tuProlog, la creazione delle intenzioni.
 
 \subsubsection{Agente `Postman'}
-Per la gestione dei messaggi, l'agente implementa al suo interno i metodi per prelevare e inserire da entrambe le code ma internamente utilizza solo quelli per leggere nuovi messaggi e per aggiungerne nella coda di quelli in uscita.
+Per la gestione dei messaggi, l'agente implementa al suo interno i metodi per prelevarli e inserirli da entrambe le code. Internamente utilizza solo le funzioni per leggere nuovi messaggi e per aggiungere quelli da inviare nella coda di quelli in uscita.
 Il vero e proprio scambio di messaggi è demandato all'agente `Postman' creato specificatamente per questo compito. Questo agente nel suo ciclo di ragionamento ha come unico compito quello di invocare la funzione $postman()$ implementata nel nodo, e mostrato nel Codice sorgente \ref{lst:ImplementazioneFunzionePostman}.
 \lstset{
   numberstyle=\footnotesize\color{black},
@@ -199,12 +202,13 @@ outMessages.forEach(message -> {
 });
 \end{lstlisting}
 
-Quando opportunamente invocato, questo metodo recupera tutti i nodi dell'ambiente, quindi oltre il concetto di vicinato, e da ognuno ne estrae gli agenti, attraverso l'apposita struttura, i quali vengono uniti insieme per creare un'unica lista. Quest'ultima viene iterata per recuperare tutti i messaggi in uscita presenti in ogni agente e poi per ogni messaggio viene estrapolato il nome del destinatario. Attraverso il nome si risale al riferimento dell'agente sul quale viene invocato il metodo per inserire il messaggio nella coda di quelli in entrata.
+Quando opportunamente invocato, questo metodo recupera tutti i nodi dell'ambiente (quindi non solamente quelli del vicinato) e da ognuno ne estrae, utilizzando l'apposita struttura, gli agenti, i quali vengono uniti insieme per creare un'unica lista. Quest'ultima viene iterata per recuperare tutti i messaggi in uscita presenti in ogni agente e poi per ogni messaggio viene estrapolato il nome del destinatario. Attraverso il nome si risale al riferimento dell'agente sul quale viene invocato il metodo per inserire il messaggio nella coda di quelli in entrata.
 \\
 L'esecuzione del metodo è previsto che venga fatta una sola volta e globalmente: per questo è stata implementata la classe PostmanAgent, implementazione della classe AbstractAgent, la quale effettua nel suo ciclo di ragionamento solamente questa operazione.
 
 \subsubsection{Referenziazione e utilizzo oggetti Java in tuProlog}
-Per poter referenziare oggetti Java all'interno della teoria dell'agente è stata sfruttata una funzionalità di tuProlog attraverso l'utilizzo della libreria Object-Oriented. Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
+Per poter referenziare oggetti Java all'interno della teoria dell'agente è stata sfruttata una funzionalità di tuProlog attraverso l'utilizzo della libreria Object-Oriented.
+Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che si riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
 \begin{lstlisting}[firstnumber=1,label={lst:BindingOggettiJavaIntuProlog},caption={Binding oggetti Java in tuProlog}]
 // tuProlog engine
 Prolog engine = new Prolog();
@@ -228,7 +232,7 @@ Come si può vedere nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} r
 Lato tuProlog l'utilizzo di questo strumento è molto intuitivo. Dopo aver registrato gli oggetti, nel modo appena mostrato, è sufficiente invocare i metodi implementati all'interno della classe come mostrato nel Codice sorgente \ref{lst:UtilizzoBindingIntuProlog}. Qui di seguito daremo una descrizione degli esempi mostrati.
 Nella prima riga viene fatta un'invocazione di una funzione $doSomething()$ che non ha parametri in ingresso.
 Nel secondo esempio l'invocazione riguarda la funzione $doSomethingWithParams(string, term)$ che riceve parametri di tipo String e Term. La signature del metodo Java è fondamentale: se il tipo degli oggetti attesi non corrisponde a quelli passati il metodo risulterà non invocato.
-Nell'ultimo caso è mostrato come invocare funzioni che ritornino un risultato come output e come quest'ultimo possa essere inserito all'interno di una nuova variabile da poter utilizzare all'interno della regola.
+Nell'ultimo caso è mostrato come si possono invocare funzioni che ritornano un risultato come output e come quest'ultimo possa essere inserito all'interno di una nuova variabile da poter utilizzare all'interno della regola.
 
 \lstset{
   basicstyle=\ttfamily,
@@ -251,10 +255,10 @@ TMP is R * 0.5.
 \end{lstlisting}
 
 \subsubsection{Creazione intenzioni}
-Le intenzioni sono utilizzate per la gestione dei comportamenti dell'agente. Un'intenzione, come detto nella sezione \ref{sctn:AgentiBDI}, rappresentano un'insieme di azioni che l'agente deve completare per completare un certo comportamento, ovvero per reagire ad eventi per cui gli agenti sono stati programmati.
+Le intenzioni sono utilizzate per la gestione dei comportamenti dell'agente. Un'intenzione, come detto nella sezione \ref{sctn:AgentiBDI}, rappresenta un'insieme di azioni che l'agente deve compiere per completare un certo comportamento, e cioè per reagire ad eventi per cui l'agente è stato programmato.
 
 Le azioni all'interno dell'interprete vengono create quindi in relazione agli eventi o alla creazioni di nuovi goal.
-La procedura per creare un'intenzione inizia con dalla definizione della struttura del template utilizzata per cercare il piano adatto per reagire a quell'evento. Invocando la funzione $createPlanStruct(term)$, dove $tem$ è l'evento per il quale si sta creando l'intenzione, viene restituito un oggetto strutturato come mostrato nel Codice sorgente \ref{lst:OggettoStrutturaPiano}.
+La procedura per creare un'intenzione inizia dalla definizione della struttura del template utilizzata per cercare il piano adatto per reagire a quell'evento. Invocando la funzione $createPlanStruct(term)$, dove $tem$ è l'evento per il quale si sta creando l'intenzione, viene restituito un oggetto strutturato come mostrato nel Codice sorgente \ref{lst:OggettoStrutturaPiano}.
 \lstset{
   numberstyle=\footnotesize\color{black},
   basicstyle=\ttfamily,
@@ -297,7 +301,7 @@ Per lo sviluppo di questo progetto, oltre all'utilizzo di ambienti applicativi p
 Gradle è un sistema open source che permette l'automazione dello sviluppo focalizzandosi su flessibilità ed efficienza \cite{Gradle}. I vantaggi offerti sono:
 \begin{itemize}
 \item alta personalizzazione: è modellato in modo da poter essere personalizzabile ed esteso;
-\item veloce: completa task velocemente riutilizzando gli output da precedenti; esecuzioni, processando solamente i cambiamenti ed eseguendo task in parallelo
+\item veloce: completa task velocemente riutilizzando gli output da precedenti esecuzioni, processando solamente i cambiamenti ed eseguendo task in parallelo;
 \item potente: è lo strumento ufficiale per la build di Android e fornisce supporto per i più popolari linguaggi e tecnologie.
 \end{itemize}
 All'interno di Alchemist, questo tool di sviluppo è stato utilizzato per la gestione dell'intero progetto e non solo per librerie esterne. Essendo presenti all'interno del progetto principale varie incarnazioni o sotto-progetti per parti in comune è necessario gestirne le dipendenze in modo efficace. Attraverso un'opportuna configurazione, sia del file principale che di quelli presenti in ogni progetto interno, sono stati gestiti una serie di meccanismi per l'importazione al fine di realizzare le incarnazioni.
@@ -326,7 +330,7 @@ Travis CI è un servizio di Continuous Integration (CI) usato per creare build e
 La CI è la pratica di unire frequentemente piccole modifiche al codice piuttosto che una grande quantità alla fine dello sviluppo. Questa metodologia consente di produrre un software più sano sviluppando e testando cambiamenti più piccoli.
 Travis CI supporta il processo di sviluppo creando e testando automaticamente le modifiche apportate al codice, fornendo un feedback immediato sul successo della modifica.
 Quando si esegue una build, Travis CI clona il repository GitHub in un nuovo ambiente virtuale ed esegue una serie di attività per creare e testare il codice: se una o più di queste attività falliscono la compilazione viene considerata interrotta, altrimenti la generazione viene considerata completata e Travis CI può distribuire il codice.
-Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si può prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni.
+Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si possono prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni.
 
 
 \section{Metriche di progetto}

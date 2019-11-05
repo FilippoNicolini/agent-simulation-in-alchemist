@@ -67,7 +67,7 @@ Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h
 \end{defn}
 
 %\bigskip
-%TODO
+%TODO riportare piani applicabili e intenzioni
 %
 %\textbf{selezione intenzione (13,14,15,16)}
 %
@@ -105,12 +105,12 @@ Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \item $node$
 \item $addBelief(B).$
 \item $removeBelief(B).$
-\item $onAddBelief(B) :- \ldots$
-\item $onRemoveBelief(B) :- \ldots$
-\item $onReceivedMessage(S, M) :- \ldots$
-\item $achievement(t).$
-\item $test(t).$
-\item $concurrent(t).$
+\item $`\leftarrow'(onAddBelief(B), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
+\item $`\leftarrow'(onRemoveBelief(B), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
+\item $`\leftarrow'(onReceivedMessage(S,M), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
+\item $`\leftarrow'(achievement(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
+\item $`\leftarrow'(test(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
+\item $`\leftarrow'(concurrent(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
 \item $belief(position(X,Y)).$
 \item $belief(distance(A, ND, OD)).$ oppure $belief(distance(A, ND)).$
 \end{itemize}
@@ -133,7 +133,7 @@ Le regole $`addBelief(B)'$ e $`removeBelief(B)'$ sono utilizzabili per aggiunger
 Diversamente, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato $`onReceivedMessage(S, M)'$, dove $S$ rappresenta il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
 
 \medskip
-Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali $`achievement'$, $`test'$ sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato  è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
+Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali $`achievement'$, $`test'$ sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
 In combinazione, i due letterali appena citati possono essere usati in combinazione con $`concurrent'$, mostrato nella Definizione \ref{defn:triggeringEvents}, che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione può essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
 
 \medskip
@@ -151,7 +151,8 @@ L'agente lato tuProlog definisce il suo comportamento tramite una serie di regol
 
 La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un inserimento all'interno di una lista, la quale poi viene restituita.
 
-La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $intention(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione. Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma, lato tuProlog viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
+La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $intention(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
+Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
 \\
 La regola $execute$ si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
 \begin{itemize}
@@ -174,7 +175,7 @@ Con questa estensione, viene data la possibilità agli agenti di poter inserire 
 \\
 Utilizzando $`writeTuple(T)'$ il programmatore è in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalità: $`readTuple(TT)'$ e $`takeTuple(TT)'$. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece $`takeTuple(TT)'$, si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
 \\
-Entrambe le due modalità di getter seguono la semantica standard dei modelli basati su tuple, e quindi sono:
+Entrambe le due modalità che recuperano le informazioni, ovvero $readTuple(TT)$ e $takeTuple(TT)$, seguono la semantica standard dei modelli basati su tuple, e quindi sono:
 \begin{itemize}
 \item sospensive: se non ci sono tuple che si abbinano al template l'operazione è bloccata finchè non viene trovata una tupla;
 \item non deterministiche: se ci sono più tuple che si abbinano al template una è scelta in modo non deterministico.
@@ -212,19 +213,21 @@ Per far iniziare lo scambio di messaggi è stato utilizzato `init' per impostare
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:PingAgent},caption={Agente Ping}]
 init :-
-  addBelief(intention(0,[iSend('pong_agent','ping')])),
-  agent <- insertIntention(0).
+    agent <- generateNextRandom returns ID,
+    asserta(intention(ID,[iSend('pong_agent','ping')])),
+    agent <- insertIntention(ID).
 
-onReceivedMessage(S,pong) :-
-  iSend(S, ping).
+'<-'(onReceivedMessage(S,pong),[true],[iSend(S, ping)]).
 \end{lstlisting}
 
 In entrambe le teorie dei due agenti è stata richiamata $`iSend(S, M)'$, dove $S$ è il destinatario e $M$ è il messaggio, che è un'azione interna dichiarata e gestita nell'ambiente sul quale è utilizzato il linguaggio. Nel Codice sorgente \ref{lst:PingAgent} viene inviato all'agente Pong il messaggio `ping', mentre nel Codice sorgente \ref{lst:PongAgent} il messaggio inviato all'agente Ping è `pong'.
 
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:PongAgent},caption={Agente Pong}]
-onReceivedMessage(S,ping) :-
-  iSend(S, pong).
+init :-
+    true.
+
+'<-'(onReceivedMessage(S,ping),[true],[iSend(S, pong)]).
 \end{lstlisting}
 
 \subsubsection{Message passing through Spatial Tuples}
@@ -234,30 +237,30 @@ L'agente Alice nel suo ciclo di configurazione, esegue due scritture sulla `lava
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Alice},caption={Alice}]
 init :-
-  writeTuple(blackboard,msg(bob,hello)),
-  writeTuple(blackboard,msg(carl,hello)),
-  takeTuple(blackboard,msg(alice,X)),
-  takeTuple(blackboard,msg(alice,X)).
+  writeTuple(bb,msg(bob,hello)),
+  writeTuple(bb,msg(carl,hello)),
+  takeTuple(bb,msg(alice,X)),
+  takeTuple(bb,msg(alice,X)).
 
-onResponseMessage(msg(X,Y)) :- true.
+'<-'(onResponseMessage(msg(X,Y)),[true],[true]).
 \end{lstlisting}
 
 L'agente Bob, nel suo ciclo di configurazione, effettua una richiesta allo spazio di tuple per ricevere messaggi a lui destinati. Inoltre, nella sua teoria, è definito un comportamento in caso di ricezione del messaggio: manda ad Alice lo stesso messaggio che ha ricevuto.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Bob},caption={Bob}]
 init :-
-  takeTuple(blackboard,msg(bob,X)).
+  takeTuple(bb,msg(bob,X)).
 
-onResponseMessage(msg(bob,X)) :-
-  writeTuple(blackboard,msg(alice,X)).
+'<-'(onResponseMessage(msg(bob,X)),
+		[true],[writeTuple(bb,msg(alice,X))]).
 \end{lstlisting}
 
 Come Bob, l'agente Carl esegue lo stesso comportamento di Bob.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:Carl},caption={Carl}]
 init :-
-  takeTuple(blackboard,msg(carl,X)).
+  takeTuple(bb,msg(carl,X)).
 
-onResponseMessage(msg(carl,X)) :-
-  writeTuple(blackboard,msg(alice,X)).
+'<-'(onResponseMessage(msg(carl,X)),
+		[true],[writeTuple(bb,msg(alice,X))]).
 \end{lstlisting}

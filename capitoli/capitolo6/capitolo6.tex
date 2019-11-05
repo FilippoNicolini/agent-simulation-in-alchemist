@@ -2,7 +2,7 @@
 In questo capitolo è mostato come il linguaggio e l'incarnazione realizzati sono stati applicati ad uno scenario di test noto per quanto riguarda i sistemi multi agente (MAS).
 Viene per prima cosa descritto il problema e successivamente analizzati i vari ruoli all'interno della scena.
 \\
-La soluzione proposta è una ma non l'unica possibile. Una possibile modifica può esser ad esempio la modifica del modo in ci le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$. 
+La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$. 
 
 \section{Descrizione problema}
 Il quesito che è stato preso in esame per presentare le funzionalità del progetto sviluppato è noto come `Goldminers' ed è stato definito da Jomi H\"ubner e Rafael Bordini.
@@ -43,13 +43,13 @@ Dall'immagine si può osservare che l'effetto può essere composto da molteplici
 Per quanto riguarda la tematizzazione scelta per questa simulazione sono stati utilizzati i controlli presenti nella prima metà della finestra.
 \newline
 
-Sono state definite delle stringhe identificative per le molecole e che si riferiscono univocamente i vari ruoli nella scena: minatore (miner), miniera (goldmine), deposito (deposit), pepita (nugget).
+Sono state definite delle stringhe identificative per le molecole che si riferiscono univocamente ai vari ruoli nella scena: minatore (miner), miniera (goldmine), deposito (deposit), pepita (nugget).
 Per stringa è stato creato un relativo stile definito da un colore (tramite il modello RGBA), un fattore di scala e una dimensione per rappresentare il nodo.
 \\
 L'associazione tra ogni effetto e la rispettiva molecola viene realizzato spuntando la casella di controllo relativa a `Draw only nodes containing a molecule' ed inserendo nella casella di testo sottostante la stringa identificativa della molecola che si vuole abbinare.
 \newline
 
-Nell'implementazione dell'interprete sono opportunamente create le molecole utilizzando la classe SimpleMolecule passando come parametro l'identificativo le stringhe descritte poco sopra. Gli oggetti istanziati sono poi inseriti all'interno del nodo.
+Nell'implementazione dell'interprete sono opportunamente create le molecole utilizzando la classe SimpleMolecule, passando come parametro identificativo le stringhe descritte poco sopra. Gli oggetti istanziati sono poi inseriti all'interno del nodo.
 
 Una volta creato lo stile desiderato è possibile salvarlo (viene generato un file con estensione .aes) in modo da poterlo riutilizzare.
 All'avvio di una simulazione di default non è presente nessuna tematizzazione però è possibile caricare un file salvato in precedenza.
@@ -59,7 +59,7 @@ La tematizzazione non è necessaria al fine dell'esecuzione della simulazione ma
 \section{Implementazione agenti}
 L'agente, come già accennato in precedenza, è composto e definito tramite due parti:
 \begin{itemize}
-\item la \textbf{teoria} che definisce a quali eventi e come reagire in base ad un contesto;
+\item la \textbf{teoria} che definisce come e a quali eventi reagire in base ad un contesto;
 \item la \textbf{classe} che definisce in che modo i comportamenti sono trasmessi dall'interprete alla teoria.
 \end{itemize}
 In questa sezione sono descritte le teorie e le classi degli agenti che sono stati implementati per la realizzazione dello scenario di test.
@@ -103,7 +103,7 @@ Il caricamento delle risorse viene fatto tramite l'invocazione della regola $loa
 \subsubsection{Implementazione classe miniera}
 Per quanto riguarda la classe della miniera si è deciso, come detto poco sopra, di utilizzare lo spazio di tuple. La classe astratta AbstractSpatialTuple definisce al suo interno la struttura base dello spazio di tuple e le funzioni per eseguire i suoi comportamenti caratteristici $in$, $rd$ e $out$, rispettivamente trasformati nelle azioni $writeTuple$, $readTuple$, $takeTuple$.
 Per definire la miniera è stata quindi definita la classe Goldmine che estende la classe astratta implementando quindi un semplice spazio di tuple.
-Oltre ad essere uno spazio di tuple, la classe però implementa anche la super classe astratta AbstractAgent che fa essere Goldmine anche un agente: è quindi necessario implementare all'interno della classe anche i metodi $execute()$ e $cloneAction(node, reaction)$. Il primo di quest'ultimi è quello più importante poichè definisce in che modo lo spazio di tuple opererà nel suo ciclo di ragionamento permettendogli di reagire alle richieste ricevute.
+Oltre ad essere uno spazio di tuple, la classe però implementa anche la super classe astratta AbstractAgent che fa essere Goldmine anche un agente: è quindi necessario implementare all'interno della classe anche i metodi $execute()$ e $cloneAction(node, reaction)$. Il primo di questi due metodi è quello più importante, poichè definisce in che modo lo spazio di tuple opererà nel suo ciclo di ragionamento permettendo a quest'ultimo di reagire alle richieste ricevute.
 \\
 Per la tematizzazione all'interno della simulazione è stato implementato il metodo $setConcentration()$. Questo metodo, come già accennato nella sezione precedente, viene utilizzato per inserire un oggetto molecola nel nodo, la quale è utilizzata per la tematizzazione della simulazione. La molecola viene creata ed inserita con le istruzioni presenti nel Codice sorgente \ref{lst:CreazioneInserimentoMolecola} solo dopo aver verificato che nella teoria dell'agente sono effettivamente presenti delle risorse.
 \lstset{
@@ -136,16 +136,16 @@ La stringa `nugget' è quella che deve essere inserita nella casella di testo a 
 Per via della necessità di tematizzare la simulazione si è dovuto sovrascrivere il metodo dello spazio di tuple relativo alla funzionalità $out$, o $takeTuple$.
 Qui di seguito è descritta la funzionalità già implementata nella classe astratta. Nel paragrafo successivo viene invece riportata la modifica effettuata per definire la tematizzazione della miniera all'interno della simulazione.
 
-Nell'implementazione della funzionalità già fornita la procedura seguita è la seguente:
+Nell'implementazione della funzionalità già definita all'interno della classe astratta, la procedura è la seguente:
 \begin{enumerate}
 \item recupero di una tupla che corrisponda al template tramite il predicato $retract$;
 \item interrogazione per ottenere dal termine estratto il template popolato con i valori recuperati;
 \item invio del template popolato tramite un messaggio all'agente che lo aveva richiesto.
 \end{enumerate}
 Nel caso l'operazione di recupero della tupla non vada a successo quella richiesta viene aggiunta tra quelle in attesa, le quali, se previsto nel ciclo di ragionamento, periodicamente vengono verificate nuovamente per poter essere completate.
-Nel caso in cui la richiesta del template è riuscita e questa è presente nell'elenco di quelle in attesa allora viene rimossa prima di procedere con l'operazione indicata nell'elenco con il numero 2.
+Nel caso in cui la richiesta del template è andata a successo e questa è presente nell'elenco di quelle in attesa allora la stessa viene rimossa prima di procedere con l'operazione indicata nell'elenco con il numero 2.
 
-La modifica effettuata è relativa solamente alla tematizzazione, ovvero l'inserimento o rimozione di un oggetto molecola, e quindi la funzionalità principale è rimasta quella appena descritta.
+La modifica effettuata è relativa solamente alla tematizzazione, cioè all'inserimento o alla rimozione di un oggetto molecola, e quindi la funzionalità principale rimane quella appena descritta.
 Il codice aggiunto è stato inserito prima di effettuare l'operazione di invio del messaggio all'agente. L'aggiunta consiste in un'interrogazione per verificare se dopo aver estratto una risorsa sono presenti ancora pepite, presenti nella teoria sotto forma di fatti, all'interno della miniera. In caso affermativo viene lasciata la molecola che era stata impostata precedentemente invocando dalla teoria la funzionalità $setConcentration()$. Diversamente, se non sono più presenti risorse nella miniera la molecola viene rimossa e, se la tematizzazione della simulazione è opportunamente configurata, il cambiamento porterà ad una modifica dello stile del nodo.
 
 \subsection{Minatore - Miner}
@@ -177,7 +177,7 @@ La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, do
   morekeywords={randomDirection,randomSpeed,handlePosition,changeDirection,checkMineDistance}
 }
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Goldmine},caption={Teoria miniera}]
+\begin{lstlisting}[firstnumber=1,label={lst:Miner},caption={Teoria minatore}]
 init :-
     addBelief(deposit(2,2)),
     addBelief(harvesting),
@@ -204,7 +204,7 @@ Dopo la regola $init$ sono descritti i fatti che definiscono il comportamento de
 I fatti seguono la seguente struttura $'<-'(EVENT, GUARD, BODY).$, dove $EVENT$ è l'evento al quale l'agente vuole reagire, $GUARD$ identifica il contesto o la condizione per cui le azioni contenute nel $BODY$ possano essere eseguite.
 \\
 I fatti identificati dalle fasi 1 e 4 agiscono entrambi in relazione all'evento di aggiornamento della posizione. Il contesto della fase 1 è relativo allo stato `harvesting' mentre quello della fase 4 è la vicinanza del nodo che contiene l'agente rispetto alla miniera che deve raggiungere.
-Gli altri due contesti, relazionati ad eventi quali la ricezione di un messaggio dallo spazio di tuple ed l'aggiornamento della distanza dal nodo contenente l'agente deposito, sono associati alla rimozione di un certo stato e che quindi risulta bloccante finchè lo stato da rimuovere non è presente all'interno della `belief base' dell'agente.
+Gli altri due contesti, relazionati ad eventi quali la ricezione di un messaggio dallo spazio di tuple e l'aggiornamento della distanza dal nodo contenente l'agente deposito, sono associati alla rimozione di un certo stato che quindi risulta bloccante finchè lo stato da rimuovere non è presente all'interno della `belief base' dell'agente.
 \\
 Tra le azioni definite nei corpi dei vari fatti una spiegazione la merita l'utilizzo del belief $mine(X,Y)$. Questo viene utilizzato per salvare la posizione della miniera da cui è stata recuperata l'ultima risorsa, prima di andare al deposito per consegnarla, in modo tale da poter tornare direttamente alla miniera, una volta depositata la pepita, per continuare ad estrarre risorse risultando più veloce ed efficace.
 
@@ -246,17 +246,17 @@ Dal ciclo di ragionamento successivo vengono eseguite le funzioni per:
 \item inviare le richieste agli spazi di tuple;
 \item eseguire un'intenzione.
 \end{enumerate}
-La funzione $beliefBaseChanges()$ recupera tutte le modifiche alla `belief base' e per ognuna per la quale esiste un comportamento nella teoria genera un'intenzione inserita opportunamente nella teoria. In modo simile, $readMessage()$ recupera, se presente, un messaggio dalla lista di quelli in entrata e, anche in questo caso, se nella teoria è previsto un comportamento viene generata un'intenzione.
+La funzione $beliefBaseChanges()$ recupera tutte le modifiche effettuate alla `belief base' e, per ognuna per cui esiste un comportamento nella teoria, genera un'intenzione inserita opportunamente nella teoria. In modo simile, $readMessage()$ recupera, se presente, un messaggio dalla lista di quelli in entrata e, anche in questo caso, se nella teoria è previsto un comportamento viene generata un'intenzione.
 \\
 La funzione $retrieveTuples()$ recupera ed invia immediatamente tutte le richieste agli spazi di tuple opportuni.
 Per concludere viene invocata la funzione $executeIntention()$ che sceglie un'intenzione tra quelle presenti all'interno dell'agente (il metodo di selezione è Round-Robin), la esegue e poi la inserisce in coda alla lista delle intenzioni.
 
 \subsection{Deposito - Deposit}
-Per quanto riguarda il deposito, il suo compito è semplicemente quello di raccogliere le risorse che i minatori gli consegnano.
-Nella soluzione proposta il deposito è stato implementato da un agente ma, come detto nell'introduzione al capitolo è possibile realizzare simulazioni con un'implementazione diversa.
+Per quanto riguarda il deposito, il suo compito è semplicemente quello di raccogliere le risorse consegnate dai minatori.
+Nella soluzione proposta il deposito è stato implementato da un agente ma, come detto nell'introduzione del capitolo, è possibile realizzare simulazioni con un'implementazione diversa.
 
 \subsubsection{Teoria tuProlog deposito}
-Per quanto riguarda la teoria del deposito non è necessario definire alcun piano poichè esso non ha compiti se non quello di accettare le risorse ricevute. Si è quindi definita una teoria con una regola $init$ vuota (ovvero che ha come unica istruzione nel corpo `true').
+Per quanto riguarda la teoria del deposito non è necessario definire alcun piano poichè esso non ha compiti se non quello di accettare le risorse ricevute. Si è quindi definita una teoria contenente una regola $init$ vuota (ovvero che ha come unica istruzione del corpo `true').
 
 \subsubsection{Implementazione classe deposito}
 La classe utilizzata per rivestire questo ruolo all'interno della simulazione è anche in questo caso la classe SimpleAgent poichè è un'implementazione di un agente completo già pronta per essere utilizzata.
