@@ -2,7 +2,7 @@
 In questo capitolo è mostato come il linguaggio e l'incarnazione realizzati sono stati applicati ad uno scenario di test noto per quanto riguarda i sistemi multi agente (MAS).
 Viene per prima cosa descritto il problema e successivamente analizzati i vari ruoli all'interno della scena.
 \\
-La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$. 
+La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$.
 
 \section{Descrizione problema}
 Il quesito che è stato preso in esame per presentare le funzionalità del progetto sviluppato è noto come `Goldminers' ed è stato definito da Jomi H\"ubner e Rafael Bordini.
@@ -37,7 +37,7 @@ Alchemist nella finestra della simulazione permette di definire degli effetti da
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
 \caption[Tematizzazione della simulazione]{Tematizzazione della simulazione} \label{fig:tematizzazioneSimulazione}
 \end{center}
-\end{figure} 
+\end{figure}
 
 Dall'immagine si può osservare che l'effetto può essere composto da molteplici fattori.
 Per quanto riguarda la tematizzazione scelta per questa simulazione sono stati utilizzati i controlli presenti nella prima metà della finestra.
@@ -167,7 +167,7 @@ Le regole $ randomDirection(D)$ e $randomSpeed(S)$ restituiscono nella variabile
 La regola $handlePosition$ si occupa, in modo molto simile a quello che viene fatto nella regola $init$, di generare una nuova velocità e un delta per la direzione da impostare nel nodo, mentre $changeDirection(X,Y)$ modifica solamente la direzione calcolando il valore corretto per raggiungere il punto (X,Y) data la posizione corrente.
 \\
 La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, dopo aver consegnato la pepita al deposito e essersi diretto alla miniera, è effettivamente arrivato a destinazione e può tornare nello stato `harvesting'.
- 
+
 \lstset{
   basicstyle=\ttfamily,
   captionpos=b,
@@ -215,20 +215,20 @@ Per quanto riguarda la parte lato interprete relativa all'agente minatore è sta
 @Override
 public void execute() {
     if (this.isInitialized()) {
-    
+
         //Agent's reasoning cycle
-    
+
         this.beliefBaseChanges();
-    
+
         this.readMessage();
-    
+
         // SpatialTuples extension
         this.retrieveTuples();
-    
+
         this.executeIntention();
     } else {
         this.initializeAgent();
-        
+
         this.initReasoning();
     }
 }
@@ -314,3 +314,46 @@ Attraverso la keyword $program$ si definiscono le reazioni che saranno inserite 
 Per definire una reazione sono stati utilizzati una distribuzione temporale ed una stringa; quest'ultima sarà poi utilizzata durante la creazione di istanze della classe AgentReaction e con la quale verrà istanziata all'interno della reazione la classe dell'agente relativa.
 \\
 Come parametro della distribuzione temporale è stato scelto 9: questo valore ha consentito, anche in base al valore di distribuzione temporale associato all'azione di spostamento posizionata in maniera intrinseca nel nodo, di avere un comportamento che è sembrato molto fluido.
+
+
+\section{Metriche di progetto}
+Le metriche di progetto rappresentano un insieme di indicatori per tenere sotto controllo e prevedere l'andamento delle principali variabili del progetto (costi, tempi, qualità, risorse).
+Le metriche includono solitamente una serie di indicatori standard ma ne possono essere aggiunti altri \textit{ad hoc} in relazione al progetto.
+\\
+Con le metriche è possibile quantificare in modo obiettivo le performance del progetto misurando gli indicatori predisposti. L'uso principale delle metriche è quello di misurare l'avanzamento del progetto. Il loro utilizzo permette di identificare i problemi di costo/schedulazione prima che diventino criticità e aiutare a focalizzarsi sul completamento delle attività.
+
+\subsection{Metriche software del progetto}
+Con le metriche di progetto si misura il codice, quindi è possibile analizzare solamente la parte del lavoro di tesi relativa all'implementazione dell'interprete del linguaggio all'interno del simulatore Alchemist.
+La figura \ref{fig:codeMetrics} è stata ottenuta tramite l'utilizzo del plugin CodeMR Metrics disponibile nell'IDE IntelliJ IDEA. Inoltre, è stato utilizzato anche il plugin Statistics per avere un dettaglio maggiore per quanto riguarda le SLOC.
+%crea l'ambiente figura;
+\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{center} % centra nel mezzo della pagina la figura
+\includegraphics[width=12cm]{images/codeMetrics.png} % inserisce una figura larga 12.5cm
+% inserisce la legenda ed etichetta la figura con \label{fig:prima}
+\caption[Metriche di progetto]{Metriche di progetto} \label{fig:codeMetrics}
+\end{center}
+\end{figure}
+
+\medskip
+Per la realizzazione dell'incarnazione ad agenti all'interno di Alchemist sono state definite dieci classi Java per implementare la struttura e mostrare come creare le diverse tipologie di agenti. Il totale delle righe presenti all'interno dei file è 2.085, di cui 1.109 sono SLOC e 751 sono di documentazione.
+In questo numero non sono calcolate, come accennato precedentemente, le righe scritte per la definizione delle teorie degli agenti utilizzate per la realizzazione degli scenari di test.
+
+La complessità ciclomatica è utilizzata per misurare la complessità di un programma misurando il numero di cammini linearmente indipendenti attraverso il grafo di controllo di flusso.
+L'incarnazione realizzata all'interno di Alchemist ha un valore totale di complessità ciclomatica pari a 220, con una media di 2.10.
+%crea l'ambiente figura;
+\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{center} % centra nel mezzo della pagina la figura
+\includegraphics[width=14cm]{images/complessitaCiclomatica.png} % inserisce una figura larga 12.5cm
+% inserisce la legenda ed etichetta la figura con \label{fig:prima}
+\caption[Complessità ciclomatica]{Complessità ciclomatica} \label{fig:cyclomaticComplexity}
+\end{center}
+\end{figure}
+
+Nell'immagine \ref{fig:cyclomaticComplexity} è mostrato in dettaglio la complessità ciclomatica delle varie classi, anche quelle innestate, implementate all'interno dell'incarnazione, misurata utilizzando il plugin MetricsReloaded disponibile nell'IDE IntelliJ IDEA. Per ogni classe viene descritto il valore relativo alla complessità operazionale media (OCavg) e quello relativo alla complessità totale(WMC).
+La complessità ciclomatica totale dell'incarnazione è 187, la cui media ripartita tra le viarie classi è 15.58.
+Si può notare fin da subito che la classe AbstractAgent, la quale definisce tutte le funzionalità di base dell'agente, risulti essere di una complessità ben maggiore rispetto a tutte le altre classi, seguita dalla classe del nodo e poi da quelle che utilizzano il modello SpatialTuples.
+Proprio tra quest'ultime, nello specifico Blackboard e Goldmine che sono due implementazioni della classe AbtractSpatialTuple, sono presenti le classi con una compkessità ciclomatica media più alta. Questa caratterizzazione può essere spiegata dal fatto che per definire gli spazi di tuple, vista l'ereditarietà dalla classe AbstractAgent, è stato necessario implementare le funzionalità di gestione dello spazio di tuple, nella classe AbstractSpatialTuple, o nuove personalizzazioni della funzionalità base, nelle implementazioni specifiche degli spazi di tuple.
+
+Per quanto riguarda i metodi presenti all'interno delle varie classi non è mostrato il dettaglio ma sono riportati soltanto i valori totali.
+La complessità ciclomatica essenziale, ev(G), è 117, la complessità di design, iv(G), è 213 mentre la complessità ciclomatica totale, v(G), è 220.
+

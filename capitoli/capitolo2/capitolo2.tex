@@ -60,17 +60,17 @@ ASTRA è basato su AgentSpeak(L), ovvero fornisce tutte le stesse funzionalità 
 \section{Agenti BDI con AgentSpeak}\label{sctn:AgentiBDI}
 Il modello BDI consente di rappresentare le caratteristiche e le modalità di raggiungimento di un obiettivo secondo il paradigma ad agenti. Gli agenti BDI forniscono un meccanismo per separare le attività di selezione di un piano, fra quelli presenti nella sua teoria, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo speso nella scelta del piano e quello per eseguirlo.
 
-I \textbf{beliefs} sono informazioni dello stato dell'agente, ovvero ciò che l'agente sa del mondo \cite{AgentSpeakInJason} il suo insieme è chiamato `belief base' o `belief set'.
+I \textbf{beliefs} sono informazioni dello stato dell'agente, ovvero ciò che l'agente sa del mondo \cite{JasonAgentSpeak} il suo insieme è chiamato `belief base' o `belief set'.
 
-I \textbf{desires} rappresentano tutti i possibili piani che un agente potrebbe eseguire \cite{AgentSpeakInJason}. Rappresentano ciò che l'agente vorrebbe realizzare o portare a termine: i \textit{goals} sono desideri che l'agente persegue attivamente ed è quindi bene che tra loro siano coerenti, cosa che non è obbligatoria per quanto riguarda il resto dei desideri.
+I \textbf{desires} rappresentano tutti i possibili piani che un agente potrebbe eseguire \cite{JasonAgentSpeak}. Rappresentano ciò che l'agente vorrebbe realizzare o portare a termine: i \textit{goals} sono desideri che l'agente persegue attivamente ed è quindi bene che tra loro siano coerenti, cosa che non è obbligatoria per quanto riguarda il resto dei desideri.
 
-Le \textbf{intentions} identificano i piani a cui l'agente ha deciso di lavorare o a cui sta già lavorando e a loro volta possono contenere altri piani \cite{AgentSpeakInJason}.
+Le \textbf{intentions} identificano i piani a cui l'agente ha deciso di lavorare o a cui sta già lavorando e a loro volta possono contenere altri piani \cite{JasonAgentSpeak}.
 
 Gli \textbf{eventi} innescano le attività reattive, ovvero la caratteristica di proattività degli agenti, come ad esempio l'aggiornamento dei beliefs, l'invocazione di piani o la modifica dei goals.
 
 \subsection{Definizione}
-\textbf{AgentSpeak} è un linguaggio di programmazione basato su un linguaggio del primo ordine con eventi e azioni \cite{AgentSpeak(L)}. Il comportamento degli agenti è dettato da quanto definito nel programma scritto in AgentSpeak.
-I beliefs correnti di un agente sono relativi al suo stato attuale, all'enviroment e agli altri agenti. Gli stati che un agente vuole determinare sulla base dei suoi stimoli esterni e interni sono i desideri \cite{AgentSpeak(L)}. L'adozione di programmi per soddisfare tali stimoli è detta intenzioni.
+\textbf{AgentSpeak} è un linguaggio di programmazione basato su un linguaggio del primo ordine con eventi e azioni \cite{AgentSpeak}. Il comportamento degli agenti è dettato da quanto definito nel programma scritto in AgentSpeak.
+I beliefs correnti di un agente sono relativi al suo stato attuale, all'enviroment e agli altri agenti. Gli stati che un agente vuole determinare sulla base dei suoi stimoli esterni e interni sono i desideri \cite{AgentSpeak}. L'adozione di programmi per soddisfare tali stimoli è detta intenzioni.
 
 \subsection{Descrizione formale}
 Vengono ora mostrate le definizioni che formalizzano questo linguaggio di programmazione.
@@ -79,7 +79,7 @@ Di seguito, nelle prime cinque definizioni, viene formalizzato il linguaggio e, 
 \medskip
 Le specifiche del linguaggio consistono in un set di beliefs e in un set di piani. Quest'ultimi sono sensibili al contesto e richiamati da eventi che permettono la scomposizione gerarchica degli obiettivi e l'esecuzione di azioni.
 
-L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di funzione, simboli di predicati, simboli di azioni, quantificatori e simboli di punteggiatura. Oltre alle logiche del primo ordine, sono usati `!' (per achievement), `?' (per test), `;' (per operazioni sequenziali), `$\leftarrow$' (per implicazione) \cite{AgentSpeak(L)}.
+L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di funzione, simboli di predicati, simboli di azioni, quantificatori e simboli di punteggiatura. Oltre alle logiche del primo ordine, sono usati `!' (per achievement), `?' (per test), `;' (per operazioni sequenziali), `$\leftarrow$' (per implicazione) \cite{AgentSpeak}.
 
 \smallskip
 % Definizione 1
@@ -186,39 +186,39 @@ Il ciclo di ragionamento è il modo in cui l'agente prende le sue decisioni e me
 
 %/---AGGIORNAMENTO BELIEF BASE---/
 \subsubsection{a. Percezione ambiente}
-La percezione effettuata dall'agente all'interno del ciclo di ragionamento è utilizzata per poter aggiornare il suo stato. L'agente interroga dei componenti capaci di rilevare i cambiamenti nell'ambiente \cite{AgentSpeakInJason} e di emettere dati consultabili utilizzando opportune interfacce.
+La percezione effettuata dall'agente all'interno del ciclo di ragionamento è utilizzata per poter aggiornare il suo stato. L'agente interroga dei componenti capaci di rilevare i cambiamenti nell'ambiente \cite{JasonAgentSpeak} e di emettere dati consultabili utilizzando opportune interfacce.
 
 \subsubsection{b. Aggiornamento beliefs}
-Ottenuta la lista delle percezioni è necessario aggiornare la `belief base'. Ogni percezione non ancora presente nel set viene aggiunta e al contrario quelle presenti nel set e che non sono nella lista delle percezioni vengono rimosse \cite{AgentSpeakInJason}.
+Ottenuta la lista delle percezioni è necessario aggiornare la `belief base'. Ogni percezione non ancora presente nel set viene aggiunta e al contrario quelle presenti nel set e che non sono nella lista delle percezioni vengono rimosse \cite{JasonAgentSpeak}.
 Ogni cambiamento effettuato nella `belief base' produce un evento: quelli generati da percezioni dell'ambiente sono detti eventi esterni; quelli interni, rispetto agli altri, hanno associata un'intenzione.
 
 \subsubsection{c. Ricezione e selezione messaggi}
-L'altra sorgente di informazioni per un agente sono gli altri agenti presenti nel sistema. L'interprete controlla i messaggi diretti all'agente e li rende a lui disponibili \cite{AgentSpeakInJason}: ad ogni iterazione del ciclo può essere processato solo un messaggio. Inoltre, può essere assegnata una priorità ai messaggi in coda definendo una funzione di prelazione per l'agente.
+L'altra sorgente di informazioni per un agente sono gli altri agenti presenti nel sistema. L'interprete controlla i messaggi diretti all'agente e li rende a lui disponibili \cite{JasonAgentSpeak}: ad ogni iterazione del ciclo può essere processato solo un messaggio. Inoltre, può essere assegnata una priorità ai messaggi in coda definendo una funzione di prelazione per l'agente.
 \\
-Prima di essere processati i messaggi passano all'interno di una funzione di selezione che definisce quali messaggi possono essere accettati dall'agente \cite{AgentSpeakInJason}. Questa funzione può essere implementata ad esempio per far ricevere solo i messaggi di un certo agente.
+Prima di essere processati i messaggi passano all'interno di una funzione di selezione che definisce quali messaggi possono essere accettati dall'agente \cite{JasonAgentSpeak}. Questa funzione può essere implementata ad esempio per far ricevere solo i messaggi di un certo agente.
 
 %/---SELEZIONE EVENTO E ESECUZIONE INTENZIONE---/
 \subsubsection{d. Selezione evento}
-Gli eventi rappresentano la percezione del cambiamento nell'ambiente o dello stato interno dell'agente \cite{AgentSpeakInJason}, come il goal. Ci possono essere vari eventi in attesa ma in ogni ciclo di ragionamento può esserne gestito uno solo, il quale viene scelto dalla funzione di selezione degli eventi che ne seleziona uno dalla lista di quelli in attesa. Se la lista di eventi fosse vuota si passa direttamente alla penultima fase del ciclo di ragionamento \cite{AgentSpeakInJason}, ovvero la selezione di un'intenzione.
+Gli eventi rappresentano la percezione del cambiamento nell'ambiente o dello stato interno dell'agente \cite{JasonAgentSpeak}, come il goal. Ci possono essere vari eventi in attesa ma in ogni ciclo di ragionamento può esserne gestito uno solo, il quale viene scelto dalla funzione di selezione degli eventi che ne seleziona uno dalla lista di quelli in attesa. Se la lista di eventi fosse vuota si passa direttamente alla penultima fase del ciclo di ragionamento \cite{JasonAgentSpeak}, ovvero la selezione di un'intenzione.
 
 \subsubsection{e. Recupero piani rilevanti}
-Una volta selezionato l'evento è necessario trovare un piano che permetta all'agente di agire per gestirlo. Per fare ciò viene recuperata dalla `Plan Library' la lista dei piani rilevanti, verificando quali possano essere unificati con l'evento selezionato \cite{AgentSpeakInJason}. L'unificazione è il confronto relativo a predicati e termini. Al termine di questa fase si otterrà un set di piani rilevanti per l'evento selezionato che verrà raffinato successivamente.
+Una volta selezionato l'evento è necessario trovare un piano che permetta all'agente di agire per gestirlo. Per fare ciò viene recuperata dalla `Plan Library' la lista dei piani rilevanti, verificando quali possano essere unificati con l'evento selezionato \cite{JasonAgentSpeak}. L'unificazione è il confronto relativo a predicati e termini. Al termine di questa fase si otterrà un set di piani rilevanti per l'evento selezionato che verrà raffinato successivamente.
 
 \subsubsection{f. Selezione piano appplicabile}
 Ogni piano ha un contesto che definisce con quali informazioni dell'agente può essere usato.
 Per piano applicabile si intende quel piano che, in relazione allo stato dell'agente, può avere una possibilità di successo.
-Viene quindi controllato che il contesto sia una conseguenza logica della `belief base' dell'agente \cite{AgentSpeakInJason}. Vi possono anche essere più piani in grado di gestire un evento ma l'agente deve selezionarne uno solo ed impegnarsi ad eseguirlo.
+Viene quindi controllato che il contesto sia una conseguenza logica della `belief base' dell'agente \cite{JasonAgentSpeak}. Vi possono anche essere più piani in grado di gestire un evento ma l'agente deve selezionarne uno solo ed impegnarsi ad eseguirlo.
 \\
-La selezione viene fatta tramite un'apposita funzione che, inoltre, tiene conto dell'ordinamento dei piani in base alla loro posizione nel codice sorgente oppure dell'ordine di inserimento. Quando un piano è scelto, viene creata un'istanza di quel piano che viene inserita nel set delle intenzioni \cite{AgentSpeakInJason}: sarà l'istanza ad essere manipolata dall'interprete e non il piano nella libreria.
+La selezione viene fatta tramite un'apposita funzione che, inoltre, tiene conto dell'ordinamento dei piani in base alla loro posizione nel codice sorgente oppure dell'ordine di inserimento. Quando un piano è scelto, viene creata un'istanza di quel piano che viene inserita nel set delle intenzioni \cite{JasonAgentSpeak}: sarà l'istanza ad essere manipolata dall'interprete e non il piano nella libreria.
 
-Ci sono due possibili modalità per la creazione di un'intenzione e dipende dal fatto che l'evento selezionato sia esterno o interno \cite{AgentSpeakInJason}. Nel primo caso viene semplicemente creata l'intenzione, altrimenti viene inserita un'altra intenzione in testa a quella che ha generato l'evento, poichè è necessario eseguire fino al completamento un piano per raggiungere tale goal.
+Ci sono due possibili modalità per la creazione di un'intenzione e dipende dal fatto che l'evento selezionato sia esterno o interno \cite{JasonAgentSpeak}. Nel primo caso viene semplicemente creata l'intenzione, altrimenti viene inserita un'altra intenzione in testa a quella che ha generato l'evento, poichè è necessario eseguire fino al completamento un piano per raggiungere tale goal.
 
 \subsubsection{g. Selezione intenzione}
-A questo punto, se erano presenti eventi da gestire, è stata aggiunta un'altra intenzione nello stack. Un agente ha tipicamente più di un'intenzione nel set delle intenzioni che potrebbe essere eseguita, ognuna delle quali rappresenta un diverso punto di attenzione \cite{AgentSpeakInJason}. Ad ogni ciclo di ragionamento avviene l'esecuzione di una sola intenzione, la cui scelta è importante per come l'agente opererà nell'ambiente.
+A questo punto, se erano presenti eventi da gestire, è stata aggiunta un'altra intenzione nello stack. Un agente ha tipicamente più di un'intenzione nel set delle intenzioni che potrebbe essere eseguita, ognuna delle quali rappresenta un diverso punto di attenzione \cite{JasonAgentSpeak}. Ad ogni ciclo di ragionamento avviene l'esecuzione di una sola intenzione, la cui scelta è importante per come l'agente opererà nell'ambiente.
 
 \subsubsection{h. Esecuzione intenzione}
 L'intenzione, scelta nello step precedente, non è altro che il corpo di un piano formato da una sequenza di istruzioni, ognuna delle quali, una volta eseguita, viene rimossa dall'istanza del piano.
-Terminata l'esecuzione di un'intenzione, quest'ultima viene restituita al set delle intenzioni a meno che non debba aspettare un messaggio o un feedback dell'azione \cite{AgentSpeakInJason}: in questo caso viene memorizzata in una struttura e restituita una volta ricevuta la risposta.
+Terminata l'esecuzione di un'intenzione, quest'ultima viene restituita al set delle intenzioni a meno che non debba aspettare un messaggio o un feedback dell'azione \cite{JasonAgentSpeak}: in questo caso viene memorizzata in una struttura e restituita una volta ricevuta la risposta.
 Se un'intenzione è sospesa non può essere selezionata per l'esecuzione nel ciclo di ragionamento.
 
 \subsubsection{Scambio di messaggi}
@@ -242,7 +242,7 @@ Jason è la maggiore implementazione di AgentSpeak e, oltre ad implementare le s
 
 %----------------------------
 \section{tuProlog}
-tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile.
+tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{tuProlog}.
 tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
 
 \subsection{Caratteristiche tuProlog}
@@ -260,7 +260,7 @@ Una peculiare modalità di utilizzo di tuProlog sfruttata in questo progetto è 
 
 %----------------------------
 \section{Alchemist}
-Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla natura. Esso fornisce un ambiente di simulazione sul quale è possibile sviluppare nuove incarnazioni, cioè nuove definizioni di modelli implementati su di esso. Ad oggi sono disponibili le funzionalità per:
+Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla natura \cite{Alchemist}. Esso fornisce un ambiente di simulazione sul quale è possibile sviluppare nuove incarnazioni, cioè nuove definizioni di modelli implementati su di esso. Ad oggi sono disponibili le funzionalità per:
 \begin{itemize}
 \item simulare un ambiente bidimensionale;
 \item simulare mappe del mondo reale, con supporto alla navigazione e importazione di tracciati in formato gpx;
@@ -286,11 +286,11 @@ Il meta-modello di Alchemist può essere compreso osservando la figura \ref{fig:
 \end{center}
 \end{figure}
 
-L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
+L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi \cite{Alchemist}. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
 
 \`E detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
 
-Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment.
+Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment \cite{Alchemist}.
 
 La \textbf{\textit{Molecola}} è il nome di un dato, paragonabile a quello che rappresenta il nome di una variabile per i linguaggi imperativi.
 Il valore da associare ad una molecola è detto \textbf{\textit{Concentrazione}}.
@@ -346,18 +346,18 @@ Di seguito è descritta un'estensione del modello appena citato che è chiamata 
 \subsection{Spatial Tuples}
 Spatial Tuples è un estensione del modello base di tuple per i sistemi distribuiti multi-agente, dove
 \begin{itemize}
-\item le tuple sono posizionate nel mondo fisico e si possono muovere;
-\item il comportamento delle primitive di coordinamento può dipendere dalle proprietà spaziali del coordinamento degli agenti;
-\item lo spazio di tuple può essere concepito come un livello virtuale che aumenta la realtà fisica.
+\item le tuple sono posizionate nel mondo fisico e si possono muovere \cite{SpatialTuples};
+\item il comportamento delle primitive di coordinamento può dipendere dalle proprietà spaziali del coordinamento degli agenti \cite{SpatialTuples};
+\item lo spazio di tuple può essere concepito come un livello virtuale che aumenta la realtà fisica \cite{SpatialTuples}.
 \end{itemize}
-Spatial Tuples supporta esplicitamente la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo.
+Spatial Tuples supporta esplicitamente la consapevolezza dello spazio e la coordinazione basata sullo spazio dell'agente in scenari di calcolo pervasivo \cite{SpatialTuples}.
 
 Questo modello può risultare molto utile in scenari dove gli utenti si spostano all'interno di un ambiente fisico aumentato e devono coordinarsi con altri utenti, che siano persone o agenti.
 
 \subsubsection{Modello e linguaggio}
 Spatial Tuples si occupa prima di tutto di tuple spaziali. Una tupla spaziale è una tupla associata ad un'informazione spaziale. Le informazioni spaziali possono essere, ad esempio, GPS, amministrative, organizzative: in ogni caso la tupla viene associata a qualche luogo o regione dello spazio fisico.
 \\
-Una tupla spaziale decora lo spazio fisico e può funzionare come meccanismo base per aumentare la realtà con informazioni di ogni sorta. Una volta che la tupla è associata ad una regione o posizione, le sue informazioni possono essere pensate come proprietà attribuite a quella porzione di spazio fisico. Accedendo alle tuple con i meccanismi di Spatial Tuples, l'informazione può essere osservata da qualsiasi agente che si occupa dello spazio fisico specifico in modo tale da comportarsi di conseguenza.
+Una tupla spaziale decora lo spazio fisico e può funzionare come meccanismo base per aumentare la realtà con informazioni di ogni sorta. Una volta che la tupla è associata ad una regione o posizione, le sue informazioni possono essere pensate come proprietà attribuite a quella porzione di spazio fisico \cite{SpatialTuples}. Accedendo alle tuple con i meccanismi di Spatial Tuples, l'informazione può essere osservata da qualsiasi agente che si occupa dello spazio fisico specifico in modo tale da comportarsi di conseguenza.
 \\
 Inoltre, una tupla può essere associata anche ad un componente situato. In questo caso, se il componente cambia la sua posizione nel tempo, finchè non viene rimossa, anche la tupla si sposterà con esso.
 

@@ -316,10 +316,10 @@ GitHub è un servizio di hosting per progetti software. Le principali funzionali
 \item documentazione
 \end{itemize}
 
-Alla base vi è sicuramente la possibilità di ospitare codice sorgente all'interno di vari repository che possono essere pubblici, privati o open source con la possibilità di versionare ogni singola modifica e tenendo traccia di chi l'abbia prodotta.
+Alla base vi è sicuramente la possibilità di ospitare codice sorgente all'interno di vari repository che possono essere pubblici, privati o open source con la possibilità di versionare ogni singola modifica e tenendo traccia di chi l'abbia prodotta \cite{GitHub}.
 Tramite questo meccanismo è più semplice revisionare il codice e gestire eventuali risoluzioni di bug o miglioramenti, potenzialmente suggeriti anche da persone esterne se il repository lo permette.
 \\
-GitHub permette di mantenere una documentazione allegata al progetto consentendo di creare singole pagine collegabili tra loro oppure caricare l'intera documentazione posizionata nella cartella `docs/' nel branch `master'.
+GitHub permette di mantenere una documentazione allegata al progetto consentendo di creare singole pagine collegabili tra loro oppure caricare l'intera documentazione posizionata nella cartella `docs/' nel branch `master' \cite{GitHub}.
 \\
 Un'altra funzionalità è quella della gestione del progetto con la quale consente di assegnare task ad uno specifico membro all'interno di un team e controllarne l'evoluzione nel tempo, catturando istantanee sulla situazione attuale del progetto.
 \\
@@ -328,61 +328,11 @@ GitHub inoltre permette di utilizzare al suo interno delle integrazioni di altre
 \subsubsection{Travis CI}
 Travis CI è un servizio di Continuous Integration (CI) usato per creare build e test di progetti software ospitati su GitHub.
 La CI è la pratica di unire frequentemente piccole modifiche al codice piuttosto che una grande quantità alla fine dello sviluppo. Questa metodologia consente di produrre un software più sano sviluppando e testando cambiamenti più piccoli.
-Travis CI supporta il processo di sviluppo creando e testando automaticamente le modifiche apportate al codice, fornendo un feedback immediato sul successo della modifica.
+Travis CI supporta il processo di sviluppo creando e testando automaticamente le modifiche apportate al codice, fornendo un feedback immediato sul successo della modifica \cite{TravisCI}.
 Quando si esegue una build, Travis CI clona il repository GitHub in un nuovo ambiente virtuale ed esegue una serie di attività per creare e testare il codice: se una o più di queste attività falliscono la compilazione viene considerata interrotta, altrimenti la generazione viene considerata completata e Travis CI può distribuire il codice.
-Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si possono prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni.
+Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si possono prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni \cite{TravisCI}.
 
 
-\section{Metriche di progetto}
-Le metriche di progetto rappresentano un insieme di indicatori per tenere sotto controllo e prevedere l'andamento delle principali variabili del progetto (costi, tempi, qualità, risorse).
-Le metriche includono solitamente una serie di indicatori standard ma ne possono essere aggiunti altri \textit{ad hoc} in relazione al progetto.
-\\
-Con le metriche è possibile quantificare in modo obiettivo le performance del progetto misurando gli indicatori predisposti. L'uso principale delle metriche è quello di misurare l'avanzamento del progetto. Il loro utilizzo permette di identificare i problemi di costo/schedulazione prima che diventino criticità e aiutare a focalizzarsi sul completamento delle attività.
-
-\subsection{Metriche software}
-Le metriche software sono delle misure di alcune proprietà del software o delle sue specifiche.
-Le metriche software possono essere utilizzate per stimare: il budget per il progetto, la produttività individuale e la qualità, la produttività del progetto e la qualità, la qualità del software.
-\\
-Per qualità del software si intende la misura in cui un prodotto software soddisfa un certo numero di aspettative rispetto sia al suo funzionamento sia alla sua struttura interna; per fare ciò sono state portate avanti tre fasi:
-\begin{itemize}
-\item definizione di un insieme di parametri di qualità;
-\item realizzazione di tecniche per la misurazione di tali parametri;
-\item sviluppo di tecnologie e metodologie per facilitare la realizzazione del codice.
-\end{itemize}
-I parametri rispetto a cui misurare o definire la qualità del software sono divisi in esterni e interni.
-I parametri esterni si riferiscono alla qualità del software così come è percepita dai suoi utenti e includono correttezza, affidabilità, robustezza, efficienza, usabilità, eco-compatibilità. %TODO descrivere velocemente le caratteristiche
-I parametri interni si riferiscono alla qualità del codice del software così come è percepita dagli sviluppatori e includono verificabilità, manutenibilità, riparabilità, evolvibilità, riusabilità, portabilità, leggibilità, modularità. %TODO descrivere velocemente le caratteristiche
-
-Le metriche software più utilizzate sono:
-\begin{itemize}
-\item source lines of code (SLOC);
-\item complessità ciclomatica;
-\item punti funzione;
-\item errori per linee di codice;
-\item numero di classi e interfacce.
-\end{itemize}
-
-La SLOC è una metrica che misura le dimensioni del software basandosi sul numero di linee di codice sorgente. Questo metodo viene utilizzato per stabilire la complessità di un software e per stimare le risorse necessarie per la produzione e il mantenimento del software. \`E quindi utile per definire l'ordine di grandezza del codice ma non per misurare esattamente il codice: ha senso effettuare confronti un progetto di 10.000 SLOC e uno di 100.000 SLOC ma non tra progetti di 20.000 e 21.000 SLOC.
-
-La complessità ciclomatica è utilizzata per misurare la complessità di un programma misurando il numero di cammini linearmente indipendenti attraverso il grafo di controllo di flusso. I nodi del grafo corrispondono a gruppi invisibili di istruzioni mentre gli archi connettono due nodi se il secondo gruppo di istruzioni può essere eseguito immediatamente dopo il primo gruppo. La complessità può essere applicata a singole funzioni, moduli o classi.
-Ad esempio, se ne codice non sono presenti punti decisionali o cicli allora la complessità sarà 1 altrimenti ci saranno più cammini percorribili in base al numero di alternative possibili.
-La complessità viene valutata tramite la formula $v(G) = e - n + 2p$, dove $v(G)$ è la complessità ciclomatica del grafo, $e$ è il numero degli archi, $n$ è il numero di nodi, $p$ il numero di componenti connesse.
-
-Il punto funzione è un'unità di misura utilizzata per esprimere la dimensione delle funzionalità fornite da un prodotto software.
-Gli obiettivi dell'analisi sono:
-\begin{itemize}
-\item misurare le funzionalità che l'utente riceve e richiede;
-\item misurare i risultati dello sviluppo e/o la manutenzione del software indipendentemente dalla tecnologia utilizzata;
-\item fornire una misura che sia coerente tra progetti e produttori differenti.
-\end{itemize}
-
-
-\subsection{Metriche software del progetto}
-Con le metriche di progetto si misura il codice, quindi è possibile analizzare solamente la parte del lavoro di tesi relativa all'implementazione dell'interprete del linguaggio all'interno del simulatore Alchemist.
-\\
-Per la realizzazione dell'incarnazione ad agenti all'interno di Alchemist sono state definite una libreria tuProlog e nove classi Java per implementare il modello e il linguaggio e per mostrare come creare le diverse tipologie di agenti. Il totale delle righe di codice prodotte è 2.000 SLOC. In questo numero non sono calcolate le righe scritte per la definizione delle teorie e le classi specifiche degli agenti per la realizzazione di problemi di test.
-
-\textbf{TODO - completare le metriche a progetto finito}
 
 \section{Scrivere una simulazione}\label{sctn:ScrivereUnaSimulazione}
 % style for general source code
