@@ -60,7 +60,9 @@ takeTuple(T) :-
 
 \subsection{Invocazione regole ed esecuzione intenzioni}\label{sctn:InvocazioneEsecuzioneIntenzioni}
 Terminata la definizione delle regole per la gestione degli eventi è stata aggiunta la libreria `alice.tuprolog' dalla quale è stato importato all'interno della classe dell'agente il motore tuProlog per la realizzazione delle invocazioni verso la teoria dell'agente.
+Le API di tuProlog permettono a Java di sfruttare il motore Prolog: gli oggetti istanziati che rappresentano entità Prolog (termini, atomi, liste, variabili, numeri e anche teorie e librerie) che possono essere utilizzate per effettuare interrogazioni e ottenere il risultato lato Java \cite{2p-alpnews2013}.
 Ogni istanza dell'agente ha un motore tuProlog al cui interno è caricata la libreria che implementa il nuovo linguaggio e una teoria specifica scritta dal programmatore dell'agente che descrive il comportamento dell'agente.
+
 L'agente nel meta-modello è riferito all'entità Reazione ma nell'implementazione il ciclo di ragionamento dell'agente, ovvero il cuore, risiederà nell'Azione: la classe che definisce l'agente implementerà l'interfaccia relativa a tale entità.
 
 Per fare un'invocazione, da Alchemist, di fatti o regole definiti nella teoria dell'agente vengono utilizzate alcune funzionalità messe a disposizione dalla libreria 'alice.tuprolog' che sono descritte qui di seguito.
@@ -143,15 +145,15 @@ La funzione che calcola la nuova posizione del nodo è descritta nel Codice sorg
 \begin{lstlisting}[firstnumber=1,label={lst:ImplementazioneAggiornamentoPosizioneNodo},caption={Implementazione aggiornamento posizione nodo}]
 void changeNodePosition(Time t1) {
   Position currPos = this.getNodePosition();
-  
+
   double radius = (t1.toDouble() - this.t0.toDouble()) * this.speed;
-  
+
   double coordX = currPos.getCoordinate(0) + radius * Math.cos(this.radAngle);
-  
+
   double coordY = currPos.getCoordinate(1) + radius * Math.sin(this.radAngle);
-  
+
   this.environment.moveNodeToPosition(this, this.environment.makePosition(coordX, coordY));
-  
+
   this.t0 = t1;
 }
 \end{lstlisting}

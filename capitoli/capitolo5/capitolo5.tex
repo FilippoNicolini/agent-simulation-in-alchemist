@@ -208,6 +208,13 @@ L'esecuzione del metodo è previsto che venga fatta una sola volta e globalmente
 
 \subsubsection{Referenziazione e utilizzo oggetti Java in tuProlog}
 Per poter referenziare oggetti Java all'interno della teoria dell'agente è stata sfruttata una funzionalità di tuProlog attraverso l'utilizzo della libreria Object-Oriented.
+L'esclusivo approccio di tuProlog mantiene i due modelli computazionali chiaramente separati, in modo che né lo stile dichiarativo di Prolog né lo stile imperativo/OO di Java si influenzino a vicenda \cite{2p-alpnews2013}.
+Questa funzione è fornita dalla libreria JavaLibrary, la quale è organizzata su due punti:
+\begin{itemize}
+   \item una mappatura tra tipi di oggetto e tipi Prolog adeguati \cite{2p-alpnews2013};
+   \item un set di predicati per eseguire operazioni su oggetti Java \cite{2p-alpnews2013}.
+\end{itemize}
+
 Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che si riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
 \begin{lstlisting}[firstnumber=1,label={lst:BindingOggettiJavaIntuProlog},caption={Binding oggetti Java in tuProlog}]
 // tuProlog engine

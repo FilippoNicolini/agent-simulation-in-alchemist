@@ -242,7 +242,7 @@ Jason è la maggiore implementazione di AgentSpeak e, oltre ad implementare le s
 
 %----------------------------
 \section{tuProlog}
-tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{tuProlog}.
+tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java \cite{tuProlog}. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{2p-alpnews2013}.
 tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
 
 \subsection{Caratteristiche tuProlog}
@@ -256,6 +256,14 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 
 In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java `alice.tuprolog', e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
 
+La funzionalità più caratteristica di tuProlog è la programmazione multi-paradigma.
+Progettato intenzionalmente per supportare un'integrazione semplice, pervasiva, multi-linguaggio/multi-paradigma \cite{2p-alpnews2013}, tuProlog permette di:
+\begin{itemize}
+   \item utilizzare oggetti, librerie e classi Java/.NET direttamente dal codice Prolog \cite{2p-alpnews2013};
+   \item utilizzare il motore tuProlog dal codice Java/.NET \cite{2p-alpnews2013};
+   \item aumentare le capacità di tuProlog definendo nuove librerie multi-linguaggio, ad esempio Prolog + linguaggio OO \cite{2p-alpnews2013}.
+\end{itemize}
+
 Una peculiare modalità di utilizzo di tuProlog sfruttata in questo progetto è stata la registrazione di oggetti Java all'interno della teoria dell'agente. In questo modo è possibile utilizzare uno stesso oggetto sia nella parte Java che in quella tuProlog. Nello specifico, come verrà mostrato nella parte relativa all'implementazione, questa funzionalità è stata utilizzata per registrare la classe stessa dell'agente in tuProlog e consentendo l'invocazione di metodi implementati lato Java direttamente dalla teoria dell'agente.
 
 %----------------------------
@@ -268,6 +276,9 @@ Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla n
 \item eseguire simulazioni biologiche utilizzando reazioni in stile chimico;
 \item eseguire programmi Protelis, Scafi, SAPERE (scritti in un linguaggio basato su tuple come LINDA).
 \end{itemize}
+
+L'intero framework è stato progettato per essere completamente modulare ed estensibile \cite{alchemist-jos2013}.
+L'intero motore o parti di esso possono essere implementati senza toccare nulla nel modello e, dall'altra parte, il modello può essere esteso o modificato senza influire sul motore \cite{alchemist-jos2013}.
 
 Gli aspetti principali di Alchemist sono la forte adattabilità del meta-modello sul quale è costruito, il numero di implementazioni o astrazioni base già disponibili e la grande personalizzazione delle simulazioni.
 Il meta-modello fornisce una struttura molto solida sulla quale è possibile realizzare ambiti applicativi anche molto diversi tra loro.
@@ -322,7 +333,9 @@ La \textbf{\textit{Distribuzione temporale}} indica il numero di eventi, in un d
 
 Un'\textbf{\textit{Azione}} è la definizione di una serie di operazioni che modellano un cambiamento nel nodo o nell'environment.
 
-In Alchemist un'incarnazione è un'istanza concreta del meta-modello appena descritta e che implementa una serie di componenti base come: la definizione di una molecola e del tipo di dati della concentrazione, un set di condizioni, le azioni e le reazioni. Incarnazioni diverse possono modellare universi completamente differenti.
+Ogni volta che viene fatta una nuova definizione delle entità del meta-modello viene automaticamente definita una nuova incarnazione di Alchemist \cite{alchemist-jos2013}.
+In Alchemist un'incarnazione è un'istanza concreta del meta-modello appena descritto e che implementa una serie di componenti base come: la definizione di una molecola e del tipo di dati della concentrazione, un set di condizioni, le azioni e le reazioni. Incarnazioni diverse possono modellare universi completamente differenti.
+Per ogni incarnazione, è possibile definire una serie di azioni, condizioni, reazioni e nodi specififci e tutte le entità già definite per un tipo di entità più generico possono essere riutilizzate \cite{alchemist-jos2013}.
 
 %TODO \subsection{Esempi (?)}
 
