@@ -37,20 +37,20 @@ Se $a$ è un simbolo di azione e $t_1, \ldots, t_n$ sono termini del primo ordin
 \smallskip
 % Definizione 5
 \begin{defn}
-%Se $e$ è un \textit{evento di attivazione} e $h_1, \ldots, h_n$ sono goals o azioni, allora $e :- $h_1, \ldots, h_n$ è un piano. L'espressione a sinistra di `:-' è la testa, quella sulla destra il corpo: se quest'ultimo è vuoto viene definito con l'espressione \textit{true}.
 Se $e$ è un \textit{evento di attivazione}, $b_1, \ldots, b_m$ sono belief o guardie e $h_1, \ldots, h_n$ sono goals o azioni, allora $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$ è un piano.
+Il contesto è definito da $[b_1, \ldots, b_m]$, mentre il corpo da $[h_1, \ldots, h_n]$. Il contesto vuoto o il corpo vuoto sono definiti entrambi da $[true]$.
 \end{defn}
 
 \smallskip
 % Definizione 6
-\begin{defn}\label{defn:intenzione}
-Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione è definita come $intention(i, [p_1, \ldots, p_n])$, dove $i$ è l'identificativo univoco dell'intenzione e $[p_1, \ldots,p_n]$ è lo stack formata da azioni, belief o goal: $p_1$ è la coda e $p_n$ è la testa.
+\begin{defn}
+Un \textit{agente} è formato da $\langle B,P,I,A,S_O,S_I \rangle$, dove $B$ è una `belief base', $P$ è un set di piani, $I$ è un set di intenzioni, $A$ è un set di azioni. La funzione $S_O$ sceglie un piano dal set di quelli applicabili; la funzione $S_I$ sceglie l'intenzione da eseguire dal set $I$.
 \end{defn}
 
 \smallskip
 % Definizione 7
-\begin{defn}
-Un \textit{agente} è formato da $\langle B,P,I,A,S_O,S_I \rangle$, dove $B$ è una `belief base', $P$ è un set di piani, $I$ è un set di intenzioni, $A$ è un set di azioni. La funzione $S_O$ sceglie un piano dal set di quelli applicabili; la funzione $S_I$ sceglie l'intenzione da eseguire dal set $I$.
+\begin{defn}\label{defn:intenzione}
+Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione è definita come $intention(i, [p_1, \ldots, p_n])$, dove $i$ è l'identificativo univoco dell'intenzione e $[p_1, \ldots,p_n]$ è lo stack formata da azioni, belief o goal: $p_1$ è la coda e $p_n$ è la testa.
 \end{defn}
 
 \smallskip
@@ -66,27 +66,30 @@ Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h
 %La composizione $\sigma\theta$ è riferita all'\textit{unificatore applicabile} per l'evento $\epsilon$ e $\theta$ è riferita alla sostituzione della corretta risposta.
 \end{defn}
 
+\smallskip
+% Definizione 11
+\begin{defn}
+Sia $S_O(O_\epsilon) = p$, dove $O_\epsilon$ è il set dei piani applicabili per l'evento $\epsilon$ e $p$ è $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])$. Il piano $p$ è destinato all'evento $\epsilon$ se e solo se esiste un \textit{unificatore applicabile} $\sigma$ per cui $[i_1 \ddagger (`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])) \sigma] \in I$.
+\end{defn}
+
+\smallskip
+% Definizione 13
+\begin{defn}
+Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger `\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h_n])]$. L'intenzione $i$ si dice che è eseguita se e solo se $h_1$ è eseguito.
+\end{defn}
+
 %\bigskip
-%TODO riportare piani applicabili e intenzioni
-%
-%\textbf{selezione intenzione (13,14,15,16)}
-%
-%\smallskip
-%% Definizione 13
-%\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow !g(t);h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $\langle +!g(t), i \rangle \in E$.
-%\end{defn}
-%
+%a-a-a-a-a-a-a-a-a-a-a-a-a-
 %\smallskip
 %% Definizione 14
 %\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow ?g(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $\forall g(t) \theta$ è una conseguenza logica di B e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger (f : c_1 \land \ldots \land c_y) \theta \leftarrow h_2 \theta; \ldots; h_n \theta]$.
+%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger `\leftarrow'(e, [b_1, \ldots, b_m], [h_1, h_2, \ldots, h_n])]$. L'intenzione $i$ si dice che è eseguita se e solo se esiste una sostituzione $\theta$ tale che $\forall h_1 \theta$ è una conseguenza logica di B e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger `\leftarrow'(e, [b_1, \ldots, b_m] \theta, [h_2 \theta, \ldots, h_n \theta])]$.
 %\end{defn}
 %
 %\smallskip
 %% Definizione 15
 %\begin{defn}
-%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow a(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita  se e solo se $a(t) \in A$, e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow h_2; \ldots; h_n]$.
+%Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow a(t); h_2; \ldots; h_n]$. L'intenzione $i$ si dice che è eseguita se e solo se $a(t) \in A$, e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldots \land c_y \leftarrow h_2; \ldots; h_n]$.
 %\end{defn}
 %
 %\smallskip
@@ -94,6 +97,9 @@ Un piano $p$ è definito da $`\leftarrow'(e, [b_1, \ldots, b_m], [h_1, \ldots, h
 %\begin{defn}
 %Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(t) : c_1 \land \ldots \land c_y \leftarrow true]$, dove $p_{z-1}$ è $e : b_1 \land \ldots \land b_x \leftarrow !g(s); h_2; \ldots; h_n$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $g(t)\theta = g(s)\theta$ e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger (e : b_1 \land \ldots \land b_x)\theta \leftarrow (h_2; \ldots; h_n) \theta]$.
 %\end{defn}
+%
+%\bigskip
+%a-a-a-a-a-a-a-a-a-a-a-a-a-
 
 \section{API del linguaggio}
 Il linguaggio appena definito è ciò che è messo a disposizione del programmatore dell'agente per descrivere il suo comportamento. Oltre questo, sono state definite altre sintassi che permettano al programmatore di gestire ogni evento o situazione per l'agente.

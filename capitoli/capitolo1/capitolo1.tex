@@ -5,7 +5,15 @@
 In questo lavoro di tesi si vuole realizzare un nuovo linguaggio ad agenti, che si ispira al modello BDI di AgentSpeak, che permetta di essere utilizzato in ambienti o piattaforme differenti, ovvero sia simulati che reali.
 
 \subsection*{Obiettivo del lavoro}
-L'obiettivo del lavoro di tesi è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria. Si vuole mostrare, inoltre, come è possibile creare un interprete all'interno del meta-simulatore Alchemist, realizzando un'opportuna incarnazione, che sfrutta il modello di agenti BDI definito da AgentSpeak e l'implementazione di Jason, in particolare relativamente al ciclo di ragionamento, e che permette l'esecuzione di agenti, definiti tramite le teorie utilizzando il nuovo linguaggio, in un ambiente simulato.
+L'obiettivo del lavoro di tesi è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
+\\
+AgentSpeak è un linguaggio orientato agli agenti basato sulla programmazione logica e l'architettura BDI per programmare agenti autonomi. Il modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano e consente di programmare agenti intelligenti.
+tuProlog è una libreria che permette di sfruttare il linguaggio Prolog, incapsulato in un core minimale, all'interno di applicazioni e infrastrutture distribuite.
+
+Si vuole mostrare, inoltre, come è possibile creare un interprete all'interno del meta-simulatore Alchemist, realizzando un'opportuna incarnazione, che sfrutta il modello di agenti BDI definito da AgentSpeak e l'implementazione di Jason, in particolare relativamente al ciclo di ragionamento, e che permette l'esecuzione di agenti, definiti tramite le teorie utilizzando il nuovo linguaggio, in un ambiente simulato.
+\\
+Alchemist è un simulatore per il calcolo pervasivo, aggregato e naturale, che si basa su un meta-modello flessibile, il quale permette di realizzare implementazioni di modelli completamente diversi tra loro.
+Jason è un interprete di una versione estesa di AgentSpeak che implementa un linguaggio e fornisce una piattaforma per sviluppare sistemi multi-agente.
 
 \subsection*{Benefici dell'approccio scelto}
 Il beneficio del linguaggio risiede intrinsecamente nell'architettura del modello ad agenti BDI poichè cerca di esprimere tutto il potenziale del paradigma ad agenti.
@@ -20,23 +28,24 @@ L'agente quindi si comporterà in modo diverso rispetto a come verrà realizzato
 \end{itemize}
 
 \subsection*{Struttura dell'elaborato}
-In questo capitolo è stato descritto l'obiettivo del lavoro e quelli che sono i benefici che si vogliono ottenere.
-A seguire è fatto un breve accenno del contenuto dei prossimi capitoli presenti in questo lavoro di tesi.
+In questo capitolo è stato descritto l'obiettivo del lavoro ed i benefici che si vogliono ottenere.
+A seguire è accennato il contenuto dei prossimi capitoli presenti in questo lavoro di tesi.
 
-Nel secondo capitolo sono descritti inizialmente i lavori correlati al modello ad agenti, ai sistemi multi-agente e sistemi distribuiti; a seguire è fornita una descrizione del modello ad agenti formalizzato da AgentSpeak e del ciclo di ragionamento utilizzato dall'interprete Jason.
+Nel secondo capitolo sono descritti inizialmente i lavori correlati al modello ad agenti, ai sistemi multi-agente e sistemi distribuiti, a cui segue una descrizione del modello ad agenti formalizzato da AgentSpeak e del ciclo di ragionamento utilizzato dall'interprete Jason.
 Successivamente sono descritte le caratteristiche di tuProlog, Alchemist e del modello SpatialTuples, il quale definisce un'estensione del modello base di tuple per i sistemi multi-agente.
 
-Nel terzo capitolo è definito il nuovo linguaggio ad agenti, il quale unisce la solidità del modello di AgentSpeak alle semantiche operazionali del ciclo di ragionamento di Jason, seguito dalle API messe a disposizione per poter programmare l'operato di un agente.
+Nel terzo capitolo è definito il nuovo linguaggio ad agenti, il quale unisce la solidità del modello AgentSpeak alle semantiche operazionali del ciclo di ragionamento Jason, e le relative API messe a disposizione per poter programmare l'operato di un agente.
 All'interno del capitolo è descritto come avviene la gestione delle intenzioni nella teoria dell'agente ed inoltre sono presenti alcuni esempi base che mostrano il funzionamento del linguaggio.
 
-Nel quarto capitolo iniziata a descrivere la parte dell'implementazione dell'interprete che, per questo progetto di tesi, è stata effettuata all'interno del simulatore Alchemist.
-Si parte dall'analisi del mapping per proseguire con la descrizione della libreria, implementata per gestire le primitive del linguaggio che è stato definito, e di alcune situazioni, come la gestione delle azioni e lo spostamento del nodo, in cui questa è stata utilizzata per la gestire il collegamento tra l'interprete e la teoria.
+Nel quarto capitolo è iniziata la descrizione dell'implementazione dell'interprete che, per questo progetto di tesi, è stato realizzato all'interno del simulatore Alchemist.
+Inizia dall'analisi del mapping per proseguire con la descrizione della libreria, implementata per gestire le primitive del linguaggio che è stato definito, e di alcune situazioni, come la gestione delle azioni e lo spostamento del nodo, in cui questa è stata utilizzata per la gestire il collegamento tra l'interprete e la teoria.
 
 Nel quinto capitolo si è scesi più nello specifico dell'implementazione dell'interprete descrivendo come sono state create le varie classi, in modo particolare le entità Incarnation, Node e Action.
-Successivamente è mostrato un ulteriore dettaglio di alcune funzionalità peculiari dell'implementazione, quali la gestione dei messaggi attraverso l'agente Postman, la referenziazione di oggetti Java nelle teorie tramite tuProlog e il modo in cui sono create le intenzioni.
+Successivamente è mostrato un ulteriore dettaglio sull'implementazione di alcune funzionalità peculiari dell'interprete, quali la gestione dei messaggi attraverso l'agente Postman, la referenziazione di oggetti Java nelle teorie tramite tuProlog e il modo in cui sono create le intenzioni.
 A seguire sono accennate brevemente le caratteristiche dei tool di sviluppo utilizzati e di come scrivere la configurazione di una simulazione.
 
-Nel sesto capitolo è descritto uno scenario di test noto nei sistemi multi-agente, il problema dei Goldminers, e sono descritte le classi e le teorie implementate per poterlo realizzare. Inoltre è presente una sezione per mostrare come è stato possibile tematizzare la simulazione per poterne controllare l'evoluzione nel tempo in maniera più semplice.
-Al termine del capitolo sono indicate, all'interno della sezione delle metriche di progetto, alcuni indicatori che permettono di analizzare meglio il lavoro svolto.
+Nel sesto capitolo è descritto uno scenario di test noto nei sistemi multi-agente, il problema dei Goldminers, e sono descritte le classi e le teorie implementate per poterlo realizzare.
+All'interno del capitolo è presente una sezione per spiegare come è stato possibile tematizzare la simulazione; grazie allo stile creato è stato possibile controllare lo sviluppo dello scenario nel tempo in maniera più semplice.
+Nella sezione delle metriche di progetto, sono descritti alcuni indicatori che permettono di analizzare meglio il lavoro svolto.
 
-Infine, nel settimo capitolo, sono analizzati i risultati ottenuti sia attraverso il linguaggio che tramite la definizione dell'interprete.
+Infine, nel settimo capitolo, sono descritti e analizzati i risultati ottenuti sia attraverso il linguaggio che tramite la definizione dell'interprete.
