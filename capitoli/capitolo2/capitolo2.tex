@@ -52,7 +52,7 @@ Rispetto a SCA (Service Component Architecture) i componenti sono sempre entità
 
 \subsection*{ASTRA}
 ASTRA è un linguaggio di programmazione ad agenti per creare sistemi intelligenti distrubuiti/concorrenti costruiti su Java \cite{Astra}.
-\\
+%
 ASTRA è basato su AgentSpeak(L), ovvero fornisce tutte le stesse funzionalità base, ed inoltre le aumenta con una serie di feature orientate a creare un linguaggio di programmazione ad agenti più pratico.
 
 
@@ -200,7 +200,7 @@ Ogni cambiamento effettuato nella `belief base' produce un evento: quelli genera
 \paragraph{\alph{reasoningCycleCounter}) Ricezione e selezione messaggi.}
 \stepcounter{reasoningCycleCounter}
 L'altra sorgente di informazioni per un agente sono gli altri agenti presenti nel sistema. L'interprete controlla i messaggi diretti all'agente e li rende a lui disponibili \cite{JasonAgentSpeak}: ad ogni iterazione del ciclo può essere processato solo un messaggio. Inoltre, può essere assegnata una priorità ai messaggi in coda definendo una funzione di prelazione per l'agente.
-\\
+
 Prima di essere processati i messaggi passano all'interno di una funzione di selezione che definisce quali messaggi possono essere accettati dall'agente \cite{JasonAgentSpeak}. Questa funzione può essere implementata ad esempio per far ricevere solo i messaggi di un certo agente.
 
 %/---SELEZIONE EVENTO E ESECUZIONE INTENZIONE---/
@@ -235,7 +235,7 @@ Se un'intenzione è sospesa non può essere selezionata per l'esecuzione nel cic
 \subsubsection{Scambio di messaggi}
 Lo scambio di messaggi è la comunicazione standard che avviene tra agenti per comunicare tra loro e operare in base al contenuto ricevuto.
 La comunicazione definita da AgentSpeak utilizza tre parti. La prima è la coda dei messaggi in input, ovvero una lista contenente tutti i messaggi che il sistema o interprete riceve e che sono destinati all'agente. La seconda è la coda dei messaggi di output che si allunga ogni volta che l'agente vuole inviare un messaggio ad un altro agente. L'ultima è una struttura all'interno della quale vengono memorizzate le intenzioni che sono sospese dall'esecuzione poichè aspettano una risposta dal canale di comunicazione dei messaggi.
-\\
+
 L'interprete è il mezzo per il quale i messaggi vengono trasmessi. Esso infatti ha il compito di recuperare tutti i messaggi nella coda in uscita di ogni agente e successivamente recapitarli. Per la consegna viene recuperato l'agente destinatario di ogni messaggio e poi quest'ultimo viene posizionato nella coda di quelli in input dell'agente, in modo tale che possa recuperarne il contenuto al prossimo ciclo di ragionamento.
 
 \section{Caratteristiche Jason}
@@ -327,7 +327,7 @@ Il valore da associare ad una molecola è detto \textbf{\textit{Concentrazione}}
 \end{figure}
 
 Una \textbf{\textit{Reazione}} è un qualsiasi evento che può cambiare lo stato dell'environment ed è definita tramite una distribuzione temporale, una lista di condizioni e una o più azioni.
-\\La frequenza con cui avvengono dipende da:
+La frequenza con cui avvengono dipende da:
 \begin{itemize}
 \item un parametro statico di frequenza;
 \item il valore di ogni condizione;
@@ -380,9 +380,9 @@ Questo modello può risultare molto utile in scenari dove gli utenti si spostano
 
 \subsubsection{Modello e linguaggio}
 Spatial Tuples si occupa prima di tutto di tuple spaziali. Una tupla spaziale è una tupla associata ad un'informazione spaziale. Le informazioni spaziali possono essere, ad esempio, GPS, amministrative, organizzative: in ogni caso la tupla viene associata a qualche luogo o regione dello spazio fisico.
-\\
+
 Una tupla spaziale decora lo spazio fisico e può funzionare come meccanismo base per aumentare la realtà con informazioni di ogni sorta. Una volta che la tupla è associata ad una regione o posizione, le sue informazioni possono essere pensate come proprietà attribuite a quella porzione di spazio fisico \cite{SpatialTuples}. Accedendo alle tuple con i meccanismi di Spatial Tuples, l'informazione può essere osservata da qualsiasi agente che si occupa dello spazio fisico specifico in modo tale da comportarsi di conseguenza.
-\\
+%
 Inoltre, una tupla può essere associata anche ad un componente situato. In questo caso, se il componente cambia la sua posizione nel tempo, finchè non viene rimossa, anche la tupla si sposterà con esso.
 
 In Spatial Tuples viene introdotto un linguaggio di descrizione dello spazio per specificare le informazioni spaziali che decorano le tuple. Questo linguaggio è ortogonale al linguaggio di comunicazione e ha lo scopo di fornire l'ontologia di base che definisce i concetti spaziali.

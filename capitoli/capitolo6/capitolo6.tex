@@ -1,22 +1,20 @@
 \chapter{Test case}\label{chap:validation}
 In questo capitolo è mostato come il linguaggio e l'incarnazione realizzati sono stati applicati ad uno scenario di test noto per quanto riguarda i sistemi multi agente (MAS).
 Viene per prima cosa descritto il problema e successivamente analizzati i vari ruoli all'interno della scena.
-\\
+
 La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$.
 
 \section{Descrizione problema}
-Il quesito che è stato preso in esame per presentare le funzionalità del progetto sviluppato è noto come `Goldminers' ed è stato definito da Jomi H\"ubner e Rafael Bordini.
-
-\medskip
-\fbox{\parbox[t][][t]{1\textwidth}{
-In questo scenario un gruppo di agenti minatori deve recuperare pepite d'oro da miniere sparse nell'ambiente e riportarle in un deposito.
-}}
-\medskip
+Il quesito che è stato preso in esame per presentare le funzionalità del progetto sviluppato è noto come `Goldminers' ed è stato definito da Jomi H\"ubner e Rafael Bordini come segue:
+%
+\begin{center}
+	\textit{In questo scenario un gruppo di agenti minatori deve recuperare pepite d'oro da miniere sparse nell'ambiente e riportarle in un deposito.}	
+\end{center}
 
 Il quesito è stato quindi applicato al progetto realizzato in questo lavoro di tesi e sono stati delineati i comportamenti dei ruoli (minatore, miniera, deposito) all'interno della scena: ognuno di essi sarà una specializzazione dell'agente. All'interno di ogni nodo sarà contenuto solo un agente, oltre a quello per il movimento che è `fissato' nel nodo, per via dell'implementazione dell'interprete.
-\\
+
 Nella scena gli agenti sono posizionati casualmente all'interno di aree delimitate da cerchi, i quali sono posizionati nell'ambiente secondo le direttive della configurazione. Per ogni tipologia di ruolo è definita l'area del cerchio nel quale sono posizionati gli agenti.
-\\
+%
 Qui di seguito è descritto come il problema sarà implementato all'interno dell'interprete realizzato.
 
 I minatori conoscono la posizione del deposito: il loro compito è quello di recuperare le pepite e consegnarle al deposito.
@@ -31,7 +29,7 @@ Quando il minatore esaurisce la miniera torna allo stato iniziale, ovvero muoven
 Alchemist nella finestra della simulazione permette di definire degli effetti da applicare ai nodi della simulazione per tematizzarli. La finestra attraverso la quale è possibile definire lo stile è mostrata in Figura \ref{fig:tematizzazioneSimulazione}.
 
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure} % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=6cm]{images/tematizzazioneSimulazione.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
@@ -41,13 +39,15 @@ Alchemist nella finestra della simulazione permette di definire degli effetti da
 
 Dall'immagine si può osservare che l'effetto può essere composto da molteplici fattori.
 Per quanto riguarda la tematizzazione scelta per questa simulazione sono stati utilizzati i controlli presenti nella prima metà della finestra.
-\newline
+
+\paragraph*{}
 
 Sono state definite delle stringhe identificative per le molecole che si riferiscono univocamente ai vari ruoli nella scena: minatore (miner), miniera (goldmine), deposito (deposit), pepita (nugget).
 Per stringa è stato creato un relativo stile definito da un colore (tramite il modello RGBA), un fattore di scala e una dimensione per rappresentare il nodo.
-\\
+
 L'associazione tra ogni effetto e la rispettiva molecola viene realizzato spuntando la casella di controllo relativa a `Draw only nodes containing a molecule' ed inserendo nella casella di testo sottostante la stringa identificativa della molecola che si vuole abbinare.
-\newline
+
+\paragraph*{}
 
 Nell'implementazione dell'interprete sono opportunamente create le molecole utilizzando la classe SimpleMolecule, passando come parametro identificativo le stringhe descritte poco sopra. Gli oggetti istanziati sono poi inseriti all'interno del nodo.
 
@@ -67,7 +67,7 @@ In questa sezione sono descritte le teorie e le classi degli agenti che sono sta
 \subsection{Miniera - Goldmine}
 La miniera è un'entità che è posizionata in modo casuale all'interno dell'ambiente, che mantiene la sua posizione nel tempo e che contiene delle risorse.
 Data questa descrizione la sua realizzazione è stata subito associata agli spazi di tuple. Si è quindi implementata la classe Goldmine estendendo la classe AbstractSpatialTuple.
-\\
+
 Per iniziare è stata scritta la teoria dell'agente in cui è definito il suo comportamento e solo successivamente è stata implementata la classe all'interno dell'interprete e le relative funzionalità.
 
 \subsubsection{Teoria tuProlog miniera}
@@ -80,7 +80,7 @@ La teoria di questo agente è poco complessa poichè definisce solamente il cari
   stringstyle=\color{black}
 }
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Goldmine},caption={Teoria miniera}]
+\begin{lstlisting}[float,firstnumber=1,label={lst:Goldmine},caption={Teoria miniera}]
 init :-
     agent <- generateNextRandom returns RAND,
     NUGGETS is RAND * 1.0,
@@ -126,12 +126,13 @@ Per la tematizzazione all'interno della simulazione è stato implementato il met
   stringstyle=\color{red}
 }
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:CreazioneInserimentoMolecola},caption={Creazione e inserimento molecola}]
+\begin{lstlisting}[float,firstnumber=1,label={lst:CreazioneInserimentoMolecola},caption={Creazione e inserimento molecola}]
 SimpleMolecule sm = new SimpleMolecule("nugget");
 this.getNode().setConcentration(sm, 0);
 \end{lstlisting}
 La stringa `nugget' è quella che deve essere inserita nella casella di testo a fianco dell'etichetta Molecule nella Figura \ref{fig:tematizzazioneSimulazione} e che deve essere abilitata cliccando la checkbox appena sopra.
-\newline
+
+\paragraph*{}
 
 Per via della necessità di tematizzare la simulazione si è dovuto sovrascrivere il metodo dello spazio di tuple relativo alla funzionalità $out$, o $takeTuple$.
 Qui di seguito è descritta la funzionalità già implementata nella classe astratta. Nel paragrafo successivo viene invece riportata la modifica effettuata per definire la tematizzazione della miniera all'interno della simulazione.
@@ -161,11 +162,11 @@ Il comportamento del minatore è stato scomposto in 4 fasi o stati:
 
 \subsubsection{Teoria tuProlog minatore}
 Le fasi descritte sono state poi riportate all'interno della teoria dell'agente, mostrata nel Codice sorgente \ref{lst:Goldmine}, per definirne il comportamento in relazione agli eventi innescati dall'interprete. Le invocazioni evidenziate in blu sono relative a regole definite all'interno della teoria dell'agente e che non sono state mostrate.
-\\
+
 Le regole $ randomDirection(D)$ e $randomSpeed(S)$ restituiscono nella variabile passata, rispettivamente $D$ e $S$, il valore ottenuto dall'invocazione combinata delle funzioni definite all'interno della classe AbstractAgent, e quindi disponibile in tutte le implementazioni di un agente, che generano un valore random e lo applicano alla distribuzione di Levy.
-\\
+
 La regola $handlePosition$ si occupa, in modo molto simile a quello che viene fatto nella regola $init$, di generare una nuova velocità e un delta per la direzione da impostare nel nodo, mentre $changeDirection(X,Y)$ modifica solamente la direzione calcolando il valore corretto per raggiungere il punto (X,Y) data la posizione corrente.
-\\
+
 La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, dopo aver consegnato la pepita al deposito e essersi diretto alla miniera, è effettivamente arrivato a destinazione e può tornare nello stato `harvesting'.
 
 \lstset{
@@ -177,7 +178,7 @@ La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, do
   morekeywords={randomDirection,randomSpeed,handlePosition,changeDirection,checkMineDistance}
 }
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:Miner},caption={Teoria minatore}]
+\begin{lstlisting}[float,firstnumber=1,label={lst:Miner},caption={Teoria minatore}]
 init :-
     addBelief(deposit(2,2)),
     addBelief(harvesting),
@@ -199,19 +200,19 @@ init :-
 '<-'(onAddBelief(distance(deposit,ND)), [removeBelief(toDeposit)], [iSend(deposit,nugget), addBelief(toMine), belief(mine(X,Y)), changeDirection(X,Y)]).
 \end{lstlisting}
 Nella fase di configurazione iniziale, regola $init$, vengono impostati all'interno della teoria del minatore il belief relativo alla posizione del deposito e quello relativo allo stato iniziale dell'agente, `harvesting'. Successivamente sono generati i valori per direzione e velocità che poi sono impostati nel nodo.
-\\
+
 Dopo la regola $init$ sono descritti i fatti che definiscono il comportamento dell'agente, mostrato ad inizio sezione, e che gli permettono di reagire al verificarsi di opportuni eventi.
-I fatti seguono la seguente struttura $'<-'(EVENT, GUARD, BODY).$, dove $EVENT$ è l'evento al quale l'agente vuole reagire, $GUARD$ identifica il contesto o la condizione per cui le azioni contenute nel $BODY$ possano essere eseguite.
-\\
+I fatti seguono la seguente struttura $\leftArrow(EVENT, GUARD, BODY).$, dove $EVENT$ è l'evento al quale l'agente vuole reagire, $GUARD$ identifica il contesto o la condizione per cui le azioni contenute nel $BODY$ possano essere eseguite.
+
 I fatti identificati dalle fasi 1 e 4 agiscono entrambi in relazione all'evento di aggiornamento della posizione. Il contesto della fase 1 è relativo allo stato `harvesting' mentre quello della fase 4 è la vicinanza del nodo che contiene l'agente rispetto alla miniera che deve raggiungere.
 Gli altri due contesti, relazionati ad eventi quali la ricezione di un messaggio dallo spazio di tuple e l'aggiornamento della distanza dal nodo contenente l'agente deposito, sono associati alla rimozione di un certo stato che quindi risulta bloccante finchè lo stato da rimuovere non è presente all'interno della `belief base' dell'agente.
-\\
+
 Tra le azioni definite nei corpi dei vari fatti una spiegazione la merita l'utilizzo del belief $mine(X,Y)$. Questo viene utilizzato per salvare la posizione della miniera da cui è stata recuperata l'ultima risorsa, prima di andare al deposito per consegnarla, in modo tale da poter tornare direttamente alla miniera, una volta depositata la pepita, per continuare ad estrarre risorse risultando più veloce ed efficace.
 
 \subsubsection{Implementazione classe minatore}
 Per quanto riguarda la parte lato interprete relativa all'agente minatore è stata utilizzata la classe SimpleAgent che estende da AbstractAgent. Questa classe rappresenta un esempio di come può essere immediata l'implementazione di un agente, che racchiude tutte le funzionalità principali, a partire da quello che è già stato prodotto e mostrato precedentemente in questo documento.
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:SimpleAgentReasoningCycle},caption={Ciclo di ragionamento per l'agente completo}]
+\begin{lstlisting}[float,firstnumber=1,label={lst:SimpleAgentReasoningCycle},caption={Ciclo di ragionamento per l'agente completo}]
 @Override
 public void execute() {
     if (this.isInitialized()) {
@@ -236,9 +237,9 @@ public void execute() {
 Per implementare la classe SimpleAgent (denominata in questo modo perchè implementa un agente con tutte le funzionalità principali) è stato sufficiente implementare il costruttore, richiamando quello di AbstractAgent, e i due metodi $cloneAction(node, reaction)$ e $execute()$.
 Nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} è mostrato come è stato definito il ciclo di ragionamento.
 Come si può notare è stata utilizzata una condizione, che utilizza un flag definito nella classe astratta, per determinare se l'agente è stato inizializzato, ovvero se ha completato la configurazione iniziale.
-\\
+
 Nel primo ciclo di ragionamento avviene appunto la configurazione iniziale. La prima funzione che viene chiamata è $initializeAgent()$ che termina la configurazione utilizzata dall'interprete, e all'interno della quale viene modificato il flag citato in precedenza, e poi viene invocata $initReasoning()$ che esegue quanto previsto dalla regola $init$ se presente nella teoria dell'agente.
-\\
+
 Dal ciclo di ragionamento successivo vengono eseguite le funzioni per:
 \begin{enumerate}
 \item controllare le modifiche alla `belief base';
@@ -247,11 +248,11 @@ Dal ciclo di ragionamento successivo vengono eseguite le funzioni per:
 \item eseguire un'intenzione.
 \end{enumerate}
 La funzione $beliefBaseChanges()$ recupera tutte le modifiche effettuate alla `belief base' e, per ognuna per cui esiste un comportamento nella teoria, genera un'intenzione inserita opportunamente nella teoria. In modo simile, $readMessage()$ recupera, se presente, un messaggio dalla lista di quelli in entrata e, anche in questo caso, se nella teoria è previsto un comportamento viene generata un'intenzione.
-\\
+
 La funzione $retrieveTuples()$ recupera ed invia immediatamente tutte le richieste agli spazi di tuple opportuni.
 Per concludere viene invocata la funzione $executeIntention()$ che sceglie un'intenzione tra quelle presenti all'interno dell'agente (il metodo di selezione è Round-Robin), la esegue e poi la inserisce in coda alla lista delle intenzioni.
 
-\subsection{Deposito - Deposit}
+\subsection{Deposito (Deposit)}
 Per quanto riguarda il deposito, il suo compito è semplicemente quello di raccogliere le risorse consegnate dai minatori.
 Nella soluzione proposta il deposito è stato implementato da un agente ma, come detto nell'introduzione del capitolo, è possibile realizzare simulazioni con un'implementazione diversa.
 
@@ -260,14 +261,14 @@ Per quanto riguarda la teoria del deposito non è necessario definire alcun pian
 
 \subsubsection{Implementazione classe deposito}
 La classe utilizzata per rivestire questo ruolo all'interno della simulazione è anche in questo caso la classe SimpleAgent poichè è un'implementazione di un agente completo già pronta per essere utilizzata.
-\\
+%
 Le funzionalità disponibili sono sicuramente maggiori rispetto a quelle che sono effettivamente utilizzate ma, data la struttura già fornita della classe astratta, questo non impatta sull'efficienza e rimane molto semplice da utilizzare.
 
 \section{Configurazione della simulazione}
 Per definire la simulazione si deve scrivere un'opportuna configurazione nella quale sono descritti, attraverso le keyword, quali oggetti utilizzare nella simulazione in relazione al modello creato. Nel Codice sorgente \ref{lst:GoldminersSimulation} sono mostrate e descritte in dettaglio le varie parti che compongono la configurazione e che sono state precedentemente spiegate nella sezione \ref{sctn:ScrivereUnaSimulazione}.
 
 \medskip
-\begin{lstlisting}[firstnumber=1,label={lst:GoldminersSimulation},caption={Configurazione simulazione Goldminers}]
+\begin{lstlisting}[float,firstnumber=1,label={lst:GoldminersSimulation},caption={Configurazione simulazione Goldminers}]
 incarnation: agent
 
 network-model:
@@ -305,28 +306,28 @@ La prima cosa che si può notare nella configurazione è la specifica dell'incar
 Il secondo parametro impostato in configurazione è il `network-model', il parametro che definisce la `linking-rule', che descrive in che modo ogni nodo presente all'interno dell'ambiente è collegato con gli altri. Attraverso questa regola cambia il numero di nodi presenti nel vicinato di ogni nodo. Nel caso specifico, è stato scelto di utilizzare una classe che utilizza la relazione di distanza per collegare i vari nodi ed alla quale è stato passato come parametro il valore 2; per ogni nodo, sono considerati suoi vicini tutti i nodi che ad ogni istante della simulazione siano posizionati all'interno di un cerchio di dimensione 2 il cui centro è il nodo stesso.
 
 Il terzo ed ultimo parametro è `displacements' che definisce una lista con la disposizione dei nodi ed il loro contenuto.
-\\
+%
 La lista si compone di due keyword: $in$ e $programs$. La prima richiede un oggetto che definisce il tipo della geometria e i parametri per costruirla, mentre la seconda utilizza un'ulteriore lista all'interno della quale sono definite le reazioni associate ad ogni nodo.
 
 Per tutti i ruoli della scena è stato utilizzato il cerchio come geometria per posizionare i nodi, passando per ognuno dimensioni e quantità di nodi differenti.
-\\
+
 Attraverso la keyword $program$ si definiscono le reazioni che saranno inserite nei nodi: come si può notare dalla configurazione, per ogni nodo è stata definita una sola reazione.
 Per definire una reazione sono stati utilizzati una distribuzione temporale ed una stringa; quest'ultima sarà poi utilizzata durante la creazione di istanze della classe AgentReaction e con la quale verrà istanziata all'interno della reazione la classe dell'agente relativa.
-\\
+
 Come parametro della distribuzione temporale è stato scelto 9: questo valore ha consentito, anche in base al valore di distribuzione temporale associato all'azione di spostamento posizionata in maniera intrinseca nel nodo, di avere un comportamento che è sembrato molto fluido.
 
 
 \section{Metriche di progetto}
 Le metriche di progetto rappresentano un insieme di indicatori per tenere sotto controllo e prevedere l'andamento delle principali variabili del progetto (costi, tempi, qualità, risorse).
 Le metriche includono solitamente una serie di indicatori standard ma ne possono essere aggiunti altri \textit{ad hoc} in relazione al progetto.
-\\
+
 Con le metriche è possibile quantificare in modo obiettivo le performance del progetto misurando gli indicatori predisposti. L'uso principale delle metriche è quello di misurare l'avanzamento del progetto. Il loro utilizzo permette di identificare i problemi di costo/schedulazione prima che diventino criticità e aiutare a focalizzarsi sul completamento delle attività.
 
 \subsection{Metriche software del progetto}
 Con le metriche di progetto si misura il codice, quindi è possibile analizzare solamente la parte del lavoro di tesi relativa all'implementazione dell'interprete del linguaggio all'interno del simulatore Alchemist.
 La figura \ref{fig:codeMetrics} è stata ottenuta tramite l'utilizzo del plugin CodeMR Metrics disponibile nell'IDE IntelliJ IDEA. Inoltre, è stato utilizzato anche il plugin Statistics per avere un dettaglio maggiore per quanto riguarda le SLOC.
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure} % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=12cm]{images/codeMetrics.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
@@ -341,7 +342,7 @@ In questo numero non sono calcolate, come accennato precedentemente, le righe sc
 La complessità ciclomatica è utilizzata per misurare la complessità di un programma misurando il numero di cammini linearmente indipendenti attraverso il grafo di controllo di flusso.
 L'incarnazione realizzata all'interno di Alchemist ha un valore totale di complessità ciclomatica pari a 220, con una media di 2.10.
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure} % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=14cm]{images/complessitaCiclomatica.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}

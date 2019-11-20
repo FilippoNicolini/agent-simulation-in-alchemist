@@ -105,7 +105,7 @@ Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger `\leftarrow'(e, [b_
 Il linguaggio appena definito è ciò che è messo a disposizione del programmatore dell'agente per descrivere il suo comportamento. Oltre questo, sono state definite altre sintassi che permettano al programmatore di gestire ogni evento o situazione per l'agente.
 Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \begin{itemize}
-\item $init :- \ldots$
+\item $init \impliedBy \ldots$
 \item $self(A).$
 \item $agent$
 \item $node$
@@ -125,7 +125,7 @@ Di seguito vengono analizzate ed esposte.
 Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
 
 \paragraph*{}
-La regola $`init'$ è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
+La regola `$init$' è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
 
 \paragraph*{}
 Il fatto $`self(A)'$ permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
@@ -159,7 +159,7 @@ La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul
 
 La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $intention(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
 Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
-\\
+
 La regola $execute$ si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
 \begin{itemize}
 \item le azioni vengono eseguite direttamente;
@@ -174,14 +174,14 @@ Il linguaggio appena descritto è stato esteso per permettere di utilizzare il m
 \item $writeTuple(T).$
 \item $readTuple(TT).$
 \item $takeTuple(TT).$
-\item $onResponseMessage(M) :- \ldots$
+\item $onResponseMessage(M) \impliedBy \ldots$
 \end{itemize}
 Le regole dell'elenco sono tutte riferite all'inserimento, all'interno del linguaggio, del modello di coordinazione LINDA e più precisamente del modello Spatial Tuples.
 Con questa estensione, viene data la possibilità agli agenti di poter inserire e recuperare informazioni posizionate nello spazio. Le regole messe a disposizione mappano le primitive dei modelli che vogliono implementare `\textit{in}', `\textit{rd}', `\textit{out}' rispettivamente in $`writeTuple(T)'$, $`readTuple(TT)'$, $`takeTuple(TT)'$ dove $T$ è la tupla da inserire e $TT$ è il template da ricercare.
-\\
+
 Utilizzando $`writeTuple(T)'$ il programmatore è in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalità: $`readTuple(TT)'$ e $`takeTuple(TT)'$. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece $`takeTuple(TT)'$, si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
-\\
-Entrambe le due modalità che recuperano le informazioni, ovvero $readTuple(TT)$ e $takeTuple(TT)$, seguono la semantica standard dei modelli basati su tuple, e quindi sono:
+%
+Entrambe le modalità che recuperano le informazioni, ovvero $readTuple(TT)$ e $takeTuple(TT)$, seguono la semantica standard dei modelli basati su tuple, e quindi sono:
 \begin{itemize}
 \item sospensive: se non ci sono tuple che si abbinano al template l'operazione è bloccata finchè non viene trovata una tupla;
 \item non deterministiche: se ci sono più tuple che si abbinano al template una è scelta in modo non deterministico.
