@@ -1,4 +1,4 @@
-\chapter{AgentSpeak in tuProlog}
+\chapter{AgentSpeak in tuProlog}\label{chap:agentspeak-2p}
 Nel capitolo precedente è stato descritto lo stato attuale di lavori correlati che utilizzano il modello ad agenti BDI per costruirne altri più complessi ed espressivi o implementano linguaggi basati sugli agenti. Inoltre, è stato mostrato lo stato dell'arte delle tecnologie che sono state utilizzate.
 
 In questo lavoro di tesi si è voluto definire un nuovo linguaggio che fosse \textit{`platform indipendent'}, ovvero indipendente dall'ambiente sul quale viene utilizzato: è stato definito al pari di una libreria, senza nessun riferimento all'ambiente. Nei capitoli successivi verrà mostrato come, partendo dal linguaggio, è stata colmata la distanza con l'ambiente scelto.
@@ -122,31 +122,31 @@ Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \end{itemize}
 
 Di seguito vengono analizzate ed esposte.
-\\
 Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
 
+\paragraph*{}
 La regola $`init'$ è messa a disposizione per permettere di far effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
 
-\medskip
+\paragraph*{}
 Il fatto $`self(A)'$ permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
 
-\medskip
+\paragraph*{}
 I due letterali $`agent'$ e $`node'$ sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linguaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile $`agent'$ fa riferimento all'oggetto dell'agente stesso, mentre $`node'$ si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
 
-\medskip
+\paragraph*{}
 Le regole $`addBelief(B)'$ e $`removeBelief(B)'$ sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare $`onAddBelief(B)'$, $`onRemoveBelief(B)'$. Più precisamente $`onAddBelief(B)'$ viene invocato quando viene aggiunto un belief, mentre $`onRemoveBelief(B)'$ è chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile $B$ corrisponde al belief inserito o rimosso.
-\\
+
 Diversamente, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato $`onReceivedMessage(S, M)'$, dove $S$ rappresenta il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
 
-\medskip
+\paragraph*{}
 Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali $`achievement'$, $`test'$ sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
 In combinazione, i due letterali appena citati possono essere usati in combinazione con $`concurrent'$, mostrato nella Definizione \ref{defn:triggeringEvents}, che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione può essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
 
-\medskip
+\paragraph*{}
 Per rendere disponibile al programmatore dell'agente varie possibilità per accedere a informazioni quali la posizione dell'agente e la distanza degli altri agenti rispetto alla propria posizione, sono utilizzati due belief che saranno aggiornati direttamente dall'ambiente sul quale viene utilizzato il linguaggio. La posizione dell'agente viene aggiornata una volta per ogni ciclo di ragionamento e, al termine, sono modificati anche i valori dei belief appena citati. 
-\\
-Per quanto riguarda la posizione dell'agente, potrà essere invocato $`belief(position(X, Y))'$ dove $X$ è la coordinata relative alle ascisse o longitudine e $Y$ è la coordinata relativa alle ordinate o latitudine.
-\\
+
+Per quanto riguarda la posizione dell'agente, potrà essere invocato $`be\-lief(po\-si\-tion(X, Y))'$ dove $X$ è la coordinata relative alle ascisse o longitudine e $Y$ è la coordinata relativa alle ordinate o latitudine.
+
 La distanza da altri agenti può essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief $`belief(distance(A, ND))'$, dove $A$ è il nome dell'agente nel vicinato e $ND$ è la distanza che li separa. Se, invece, un agente era già nella lista del vicinato e vi rimane, allora viene inserito il belief $`belief(distance(A, ND, OD))'$, dove $A$ è il nome dell'agente nel vicinato, $ND$ è la nuova distanza che li separa e $OD$ è la distanza che li divideva precedentemente.
 
 \subsection{Gestione intenzioni}

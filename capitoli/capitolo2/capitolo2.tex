@@ -1,5 +1,5 @@
 % crea il CAPITOLO
-\chapter{Stato dell'arte}
+\chapter{Stato dell'arte}\label{chap:soa}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
 % mette i numeri arabi
@@ -184,39 +184,50 @@ Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(
 \subsubsection{Ciclo di ragionamento}\label{ssctn:cicloRagionamentoAgentSpeak}
 Il ciclo di ragionamento è il modo in cui l'agente prende le sue decisioni e mette in pratica le azioni. Esso è composto di otto fasi: le prime tre sono quelle che riguardano l'aggiornamento dei belief relativi al mondo e agli altri agenti, mentre altre descrivono la selezione di un evento che permette l'esecuzione di un'intenzione dell'agente.
 
+\newcounter{reasoningCycleCounter}%[section]
+\setcounter{reasoningCycleCounter}{0}
+
 %/---AGGIORNAMENTO BELIEF BASE---/
-\subsubsection{a. Percezione ambiente}
+\paragraph{\alph{reasoningCycleCounter}) Percezione ambiente.}
+\stepcounter{reasoningCycleCounter}
 La percezione effettuata dall'agente all'interno del ciclo di ragionamento è utilizzata per poter aggiornare il suo stato. L'agente interroga dei componenti capaci di rilevare i cambiamenti nell'ambiente \cite{JasonAgentSpeak} e di emettere dati consultabili utilizzando opportune interfacce.
 
-\subsubsection{b. Aggiornamento beliefs}
+\paragraph{\alph{reasoningCycleCounter}) Aggiornamento beliefs.}
+\stepcounter{reasoningCycleCounter}
 Ottenuta la lista delle percezioni è necessario aggiornare la `belief base'. Ogni percezione non ancora presente nel set viene aggiunta e al contrario quelle presenti nel set e che non sono nella lista delle percezioni vengono rimosse \cite{JasonAgentSpeak}.
 Ogni cambiamento effettuato nella `belief base' produce un evento: quelli generati da percezioni dell'ambiente sono detti eventi esterni; quelli interni, rispetto agli altri, hanno associata un'intenzione.
 
-\subsubsection{c. Ricezione e selezione messaggi}
+\paragraph{\alph{reasoningCycleCounter}) Ricezione e selezione messaggi.}
+\stepcounter{reasoningCycleCounter}
 L'altra sorgente di informazioni per un agente sono gli altri agenti presenti nel sistema. L'interprete controlla i messaggi diretti all'agente e li rende a lui disponibili \cite{JasonAgentSpeak}: ad ogni iterazione del ciclo può essere processato solo un messaggio. Inoltre, può essere assegnata una priorità ai messaggi in coda definendo una funzione di prelazione per l'agente.
 \\
 Prima di essere processati i messaggi passano all'interno di una funzione di selezione che definisce quali messaggi possono essere accettati dall'agente \cite{JasonAgentSpeak}. Questa funzione può essere implementata ad esempio per far ricevere solo i messaggi di un certo agente.
 
 %/---SELEZIONE EVENTO E ESECUZIONE INTENZIONE---/
-\subsubsection{d. Selezione evento}
+\paragraph{\alph{reasoningCycleCounter}) Selezione evento.}
+\stepcounter{reasoningCycleCounter}
 Gli eventi rappresentano la percezione del cambiamento nell'ambiente o dello stato interno dell'agente \cite{JasonAgentSpeak}, come il goal. Ci possono essere vari eventi in attesa ma in ogni ciclo di ragionamento può esserne gestito uno solo, il quale viene scelto dalla funzione di selezione degli eventi che ne seleziona uno dalla lista di quelli in attesa. Se la lista di eventi fosse vuota si passa direttamente alla penultima fase del ciclo di ragionamento \cite{JasonAgentSpeak}, ovvero la selezione di un'intenzione.
 
-\subsubsection{e. Recupero piani rilevanti}
+\paragraph{\alph{reasoningCycleCounter}) Recupero piani rilevanti.}
+\stepcounter{reasoningCycleCounter}
 Una volta selezionato l'evento è necessario trovare un piano che permetta all'agente di agire per gestirlo. Per fare ciò viene recuperata dalla `Plan Library' la lista dei piani rilevanti, verificando quali possano essere unificati con l'evento selezionato \cite{JasonAgentSpeak}. L'unificazione è il confronto relativo a predicati e termini. Al termine di questa fase si otterrà un set di piani rilevanti per l'evento selezionato che verrà raffinato successivamente.
 
-\subsubsection{f. Selezione piano appplicabile}
+\paragraph{\alph{reasoningCycleCounter}) Selezione piano appplicabile.}
+\stepcounter{reasoningCycleCounter}
 Ogni piano ha un contesto che definisce con quali informazioni dell'agente può essere usato.
 Per piano applicabile si intende quel piano che, in relazione allo stato dell'agente, può avere una possibilità di successo.
 Viene quindi controllato che il contesto sia una conseguenza logica della `belief base' dell'agente \cite{JasonAgentSpeak}. Vi possono anche essere più piani in grado di gestire un evento ma l'agente deve selezionarne uno solo ed impegnarsi ad eseguirlo.
-\\
+
 La selezione viene fatta tramite un'apposita funzione che, inoltre, tiene conto dell'ordinamento dei piani in base alla loro posizione nel codice sorgente oppure dell'ordine di inserimento. Quando un piano è scelto, viene creata un'istanza di quel piano che viene inserita nel set delle intenzioni \cite{JasonAgentSpeak}: sarà l'istanza ad essere manipolata dall'interprete e non il piano nella libreria.
 
 Ci sono due possibili modalità per la creazione di un'intenzione e dipende dal fatto che l'evento selezionato sia esterno o interno \cite{JasonAgentSpeak}. Nel primo caso viene semplicemente creata l'intenzione, altrimenti viene inserita un'altra intenzione in testa a quella che ha generato l'evento, poichè è necessario eseguire fino al completamento un piano per raggiungere tale goal.
 
-\subsubsection{g. Selezione intenzione}
+\paragraph{\alph{reasoningCycleCounter}) Selezione intenzione.}
+\stepcounter{reasoningCycleCounter}
 A questo punto, se erano presenti eventi da gestire, è stata aggiunta un'altra intenzione nello stack. Un agente ha tipicamente più di un'intenzione nel set delle intenzioni che potrebbe essere eseguita, ognuna delle quali rappresenta un diverso punto di attenzione \cite{JasonAgentSpeak}. Ad ogni ciclo di ragionamento avviene l'esecuzione di una sola intenzione, la cui scelta è importante per come l'agente opererà nell'ambiente.
 
-\subsubsection{h. Esecuzione intenzione}
+\paragraph{\alph{reasoningCycleCounter}) Esecuzione intenzione.}
+\stepcounter{reasoningCycleCounter}
 L'intenzione, scelta nello step precedente, non è altro che il corpo di un piano formato da una sequenza di istruzioni, ognuna delle quali, una volta eseguita, viene rimossa dall'istanza del piano.
 Terminata l'esecuzione di un'intenzione, quest'ultima viene restituita al set delle intenzioni a meno che non debba aspettare un messaggio o un feedback dell'azione \cite{JasonAgentSpeak}: in questo caso viene memorizzata in una struttura e restituita una volta ricevuta la risposta.
 Se un'intenzione è sospesa non può essere selezionata per l'esecuzione nel ciclo di ragionamento.
@@ -289,7 +300,7 @@ Per quanto riguarda le simulazioni, queste sono realizzate tramite una configura
 \subsection{Meta-modello}
 Il meta-modello di Alchemist può essere compreso osservando la figura \ref{fig:alchemistModel}.
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure} % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=12.5cm]{images/AlchemistModel.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
@@ -307,7 +318,7 @@ La \textbf{\textit{Molecola}} è il nome di un dato, paragonabile a quello che r
 Il valore da associare ad una molecola è detto \textbf{\textit{Concentrazione}}.
 
 %crea l'ambiente figura;
-\begin{figure}[h] % [h] sta per here, cioè la figura va qui
+\begin{figure} % [h] sta per here, cioè la figura va qui
 \begin{center} % centra nel mezzo della pagina la figura
 \includegraphics[width=14cm]{images/AlchemistReaction.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
