@@ -65,36 +65,6 @@
 \usepackage{chngcntr}
 \counterwithout{footnote}{chapter}
 
-% example style for lstlistoflistings
-% tabsize = 2, %% Sets tab space width.
-% showstringspaces = false, %% Prevents space marking in strings, string is defined as the text that is generally printed directly to the console.
-% numbers = left, %% Displays line numbers on the left.
-% commentstyle = \color{green}, %% Sets comment color.
-% keywordstyle = \color{blue}, %% Sets  keyword color.
-% stringstyle = \color{red}, %% Sets  string color.
-% rulecolor = \color{black}, %% Sets frame color to avoid being affected by text color.
-% basicstyle = \small \ttfamily , %% Sets listing font and size.
-% breaklines = true, %% Enables line breaking.
-% numberstyle = \tiny,
-%...................................
-% backgroundcolor=\color{white},
-% commentstyle=\color{green},
-% keywordstyle=\color{blue},
-% numberstyle=\footnotesize\color{black},
-% stringstyle=\color{red},
-% basicstyle=\footnotesize,
-% breakatwhitespace=false,
-% breaklines=true,
-% captionpos=b,
-% keepspaces=true,
-% numbers=left,
-% numbersep=10pt,
-% showspaces=false,
-% showstringspaces=false,
-% showtabs=false,
-% tabsize=2
-
-
 % impostano i margini
 \oddsidemargin=30pt
 \evensidemargin=20pt
@@ -111,70 +81,57 @@
 \cfoot{}
 
 
-
 \newcommand{\impliedBy}{\ \text{\texttt{:-}}\ }
-\newcommand{\leftArrow}{\text{\texttt{'<-'}}}
+\newcommand{\leftArrow}{\text{\texttt{`<-'}}}
 
-%\newcommand{\switchToJava}[1]{\lstset{
-%	numberstyle=\footnotesize\color{black},
-%	basicstyle=\ttfamily#1,
-%	breakatwhitespace=true,
-%	breaklines=true,
-%	captionpos=b,
-%	keepspaces=true,
-%	numbers=left,
-%	numbersep=7pt,
-%	showspaces=false,
-%	showstringspaces=false,
-%	showtabs=false,
-%	tabsize=2,
-%	frame=tb,
-%	language=Java,
-%	commentstyle=\color{gray},
-%	keywordstyle=\color{blue},
-%	stringstyle=\color{red}
-%}}
-% \switchToJava{}{}
+\newcommand{\switchToJava}[1]{
+\lstset{
+	numberstyle=\footnotesize\color{black},
+	basicstyle=\ttfamily#1,
+	breakatwhitespace=true,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=7pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	frame=tb,
+	language=Java,
+	commentstyle=\color{gray},
+	keywordstyle=\color{blue},
+	stringstyle=\color{red}
+}}
+% \switchToJava{}{\small}
 
+\newcommand{\switchToProlog}{
+\lstset{
+	numberstyle=\footnotesize\color{black},
+	basicstyle=\ttfamily,
+	breakatwhitespace=true,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=7pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	frame=tb,
+	language=Java,
+	commentstyle=\color{black},
+	keywordstyle=\color{black},
+	stringstyle=\color{black}
+}}
+% \switchToProlog{}
 \begin{document}
 	
 \input{front.tex}
 
 \frontmatter
-
-%\begin{titlepage}
-%% crea un ambiente libero da vincoli di margini e grandezza caratteri: si pu\`o modificare
-%% quello che si vuole, tanto fuori da questo ambiente tutto viene ristabilito
-%
-%% elimina il numero della pagina
-%\thispagestyle{empty}
-%
-%% imposta il margina superiore a 6.5cm
-%\topmargin=6.5cm
-%
-%% incolonna la scrittura a destra
-%\raggedleft
-%
-%% aumenta la grandezza del carattere a 14pt
-%\large
-%
-%% emfatizza (corsivo) il carattere
-%\em
-%
-%%\ldots lascia tre puntini
-%%\ldots
-%
-%% va in una pagina nuova
-%\newpage
-%
-%% non numera l'ultima pagina sinistra
-%\clearpage{\pagestyle{empty}\cleardoublepage}
-%\end{titlepage}
-%
-%%-----------------------------------------
-%%-----------------------------------------
-%% mette i numeri arabi
-%\pagenumbering{arabic}
 
 \include{abstract/abstract}
 
@@ -200,26 +157,6 @@
 %-----------------------------------------
 %-----------------------------------------
 
-% imposta l'intestazione di pagina
-%\renewcommand{\chaptermark}[1]{\markright{\thechapter \ #1}{}}
-%\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
-%\appendix % imposta le appendici
-
-% crea l'appendice
-%\chapter{Prima Appendice}
-% \verb"" è equivalente all'ambiente verbatim, ma si utilizza all'interno di un discorso.
-%\verb"\clearpage{\pagestyle{empty}\cleardoublepage}"
-
-% imposta l'intestazione di pagina
-%\rhead[\fancyplain{}{\bfseries \thechapter \:Prima Appendice}]
-%{\fancyplain{}{\bfseries\thepage}}
-
-% crea l'appendice
-%\chapter{Seconda Appendice}
-
-% imposta l'intestazione di pagina
-%\rhead[\fancyplain{}{\bfseries \thechapter \:Seconda Appendice}]
-%{\fancyplain{}{\bfseries\thepage}}
 \backmatter	
 
 \bibliographystyle{plain}

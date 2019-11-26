@@ -23,7 +23,7 @@ Un sistema basato su JADE può essere distribuito su diverse macchine (anche con
 %Dietro alla parte di astrazione degli agenti, JADE fornisce un semplice e potente modello di esecuzione e composizione dei task, la comunicazione peer to peer tra gli agenti basata sul paradigma di scambio di messaggi asincrono.
 
 L'architettura di comunicazione offre uno scambio di messaggi privati di ogni agente flessibile ed efficiente, dove JADE crea e gestisce una coda di messaggi ACL in entrata.
-\`E stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto \cite{JADE}.
+È stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto \cite{JADE}.
 Il meccanismo di trasporto, in particolare, è come un camaleonte perchè si adatta ad ogni situazione scegliendo in modo trasparente il miglior protocollo disponibile.
 
 \subsection*{SPADE}
@@ -76,7 +76,7 @@ I beliefs correnti di un agente sono relativi al suo stato attuale, all'envirome
 Vengono ora mostrate le definizioni che formalizzano questo linguaggio di programmazione.
 Di seguito, nelle prime cinque definizioni, viene formalizzato il linguaggio e, nelle restanti, la semantica operazionale.
 
-\medskip
+\paragraph*{}
 Le specifiche del linguaggio consistono in un set di beliefs e in un set di piani. Quest'ultimi sono sensibili al contesto e richiamati da eventi che permettono la scomposizione gerarchica degli obiettivi e l'esecuzione di azioni.
 
 L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di funzione, simboli di predicati, simboli di azioni, quantificatori e simboli di punteggiatura. Oltre alle logiche del primo ordine, sono usati `!' (per achievement), `?' (per test), `;' (per operazioni sequenziali), `$\leftarrow$' (per implicazione) \cite{AgentSpeak}.
@@ -111,7 +111,7 @@ Se $a$ è un simbolo di azione e $t_1, \ldots, t_n$ sono termini del primo ordin
 Se $e$ è un \textit{evento di attivazione}, $b_1, \ldots, b_m$ sono letterali di belief e $h_1; \ldots; h_n$ sono goals o azioni, allora $e : b_1 \land \ldots \land b_m \leftarrow h_1; \ldots; h_n$ è un piano. L'espressione alla sinistra della freccia è la testa del piano e l'espressione alla destra è il corpo del piano. L'espressione sulla destra dei due punti, nella testa del piano, è il contesto. Per convenienza si può definire un corpo vuoto con $true$.
 \end{defn}
 
-\smallskip
+\paragraph*{}
 Durante l'esecuzione un agente è composto da un set di beliefs $B$, un set di piani $P$, un set di intenzioni $I$, un set di eventi $E$, un set di azioni $A$ e un set di funzioni di selezione $S$, il quale è formato da $S_E$ (funzione di selezione degli eventi), $S_O$ (funzione di selezione del piano), $S_I$ (funzione di selezione dell'intenzione).
 
 \smallskip
@@ -184,7 +184,7 @@ Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(
 \subsubsection{Ciclo di ragionamento}\label{ssctn:cicloRagionamentoAgentSpeak}
 Il ciclo di ragionamento è il modo in cui l'agente prende le sue decisioni e mette in pratica le azioni. Esso è composto di otto fasi: le prime tre sono quelle che riguardano l'aggiornamento dei belief relativi al mondo e agli altri agenti, mentre altre descrivono la selezione di un evento che permette l'esecuzione di un'intenzione dell'agente.
 
-\newcounter{reasoningCycleCounter}%[section]
+\newcounter{reasoningCycleCounter}
 \setcounter{reasoningCycleCounter}{0}
 
 %/---AGGIORNAMENTO BELIEF BASE---/
@@ -253,8 +253,8 @@ Jason è la maggiore implementazione di AgentSpeak e, oltre ad implementare le s
 
 %----------------------------
 \section{tuProlog}
-tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java \cite{tuProlog}. \`E progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{2p-alpnews2013}.
-tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. \`E un software Open Source e rilasciato sotto licenza LGPL.
+tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java \cite{tuProlog}. È progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{2p-alpnews2013}.
+tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. È un software Open Source e rilasciato sotto licenza LGPL.
 
 \subsection{Caratteristiche tuProlog}
 tuProlog ha diverse caratteristiche e qui di seguito verranno illustrate solo alcune di esse, ovvero quelle utilizzate all'interno di questo lavoro.
@@ -265,7 +265,7 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 \item predicati della teoria: inseriti in una teoria che viene caricata nel motore tuProlog. Le teorie tuProlog sono semplicemente collezioni di clausole Prolog. Le teorie possono essere liberamente aggiunte all'inizio o rimosse dinamicamente durante l'esecuzione.
 \end{itemize}
 
-In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java `alice.tuprolog', e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
+In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java \texttt{`alice.tuprolog’}, e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
 
 La funzionalità più caratteristica di tuProlog è la programmazione multi-paradigma.
 Progettato intenzionalmente per supportare un'integrazione semplice, pervasiva, multi-linguaggio/multi-paradigma \cite{2p-alpnews2013}, tuProlog permette di:
@@ -310,7 +310,7 @@ Il meta-modello di Alchemist può essere compreso osservando la figura \ref{fig:
 
 L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi \cite{Alchemist}. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
 
-\`E detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
+È detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
 
 Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment \cite{Alchemist}.
 
@@ -347,9 +347,6 @@ Un'\textbf{\textit{Azione}} è la definizione di una serie di operazioni che mod
 Ogni volta che viene fatta una nuova definizione delle entità del meta-modello viene automaticamente definita una nuova incarnazione di Alchemist \cite{alchemist-jos2013}.
 In Alchemist un'incarnazione è un'istanza concreta del meta-modello appena descritto e che implementa una serie di componenti base come: la definizione di una molecola e del tipo di dati della concentrazione, un set di condizioni, le azioni e le reazioni. Incarnazioni diverse possono modellare universi completamente differenti.
 Per ogni incarnazione, è possibile definire una serie di azioni, condizioni, reazioni e nodi specififci e tutte le entità già definite per un tipo di entità più generico possono essere riutilizzate \cite{alchemist-jos2013}.
-
-%TODO \subsection{Esempi (?)}
-
 
 %----------------------------
 \section{LINDA}

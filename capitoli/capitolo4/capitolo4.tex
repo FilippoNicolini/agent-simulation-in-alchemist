@@ -23,9 +23,9 @@ Dopo aver analizzato le due possibili alternative presentate, è stato scelto il
 \section{Descrizione interprete linguaggio}\label{sctn:interpreteLinguaggio}
 Una volta scelto il mapping si è iniziato lo sviluppo dell'interprete del linguaggio sul meta-simulatore al fine di creare una `incarnazione', ovvero il nome con cui sono chiamate le implementazioni dei modelli in Alchemist.
 
-Alchemist è un meta-simulatore che, proprio per la sua natura di simulatore, ha un meccanismo di generazione degli eventi e fornisce quindi la possibilità di gestire lo scheduling dei cicli di ragionamento degli agenti. Più precisamente, in Alchemist è possibile definire una distribuzione temporale per ogni reazione, la quale, nell'incarnazione che si vuole realizzare e secondo il mapping scelto, corrisponde ad un agente. \`E quindi possibile decidere quante volte viene programmata l'iterazione del ciclo di ragionamento di ogni singolo agente. La scelta fatta per gestire la distribuzione temporale è ricaduta sull'utilizzo di un pettine di Dirac che è una distribuzione periodica degli eventi costruita da una somma di delta di Dirac, la quale è una funzione generalizzata che dipende da un parametro reale utilizzata per rappresentare dei picchi, le iterazioni del ciclo di ragionamento.
+Alchemist è un meta-simulatore che, proprio per la sua natura di simulatore, ha un meccanismo di generazione degli eventi e fornisce quindi la possibilità di gestire lo scheduling dei cicli di ragionamento degli agenti. Più precisamente, in Alchemist è possibile definire una distribuzione temporale per ogni reazione, la quale, nell'incarnazione che si vuole realizzare e secondo il mapping scelto, corrisponde ad un agente. È quindi possibile decidere quante volte viene programmata l'iterazione del ciclo di ragionamento di ogni singolo agente. La scelta fatta per gestire la distribuzione temporale è ricaduta sull'utilizzo di un pettine di Dirac che è una distribuzione periodica degli eventi costruita da una somma di delta di Dirac, la quale è una funzione generalizzata che dipende da un parametro reale utilizzata per rappresentare dei picchi, le iterazioni del ciclo di ragionamento.
 
-Si è pensato come organizzare le invocazioni delle regole base, definite dal linguaggio, per migliorare l'usabilità dell'interprete. \`E stato deciso di creare una classe astratta all'interno della quale implementare le funzionalità principali dell'agente, le quali saranno utili al programmatore dell'agente nella realizzazione delle classi specifiche degli agenti poichè sarà sufficiente richiamare queste funzioni se non sono necessari comportamenti specifici.
+Si è pensato come organizzare le invocazioni delle regole base, definite dal linguaggio, per migliorare l'usabilità dell'interprete. È stato deciso di creare una classe astratta all'interno della quale implementare le funzionalità principali dell'agente, le quali saranno utili al programmatore dell'agente nella realizzazione delle classi specifiche degli agenti poichè sarà sufficiente richiamare queste funzioni se non sono necessari comportamenti specifici.
 
 \subsection{Implementazione del linguaggio}\label{sctn:ImplementazioneLinguaggio}
 Il primo passo è stato quello di definire la libreria dell'agente, ovvero l'implementazione delle chiamate messe a disposizione del programmatore dell'agente. Sono state quindi definite, utilizzando le funzionalità base di tuProlog, le regole per aggiungere o rimuovere un belief, per eseguire un'intenzione.
@@ -33,7 +33,7 @@ Il primo passo è stato quello di definire la libreria dell'agente, ovvero l'imp
 La definizione di queste regole è stata necessaria per permettere la gestione dei cicli di ragionamento, cioè per consentire ad Alchemist di riprendere il controllo alla fine del ciclo di ragionamento di ogni agente evitando così che un agente possa eseguire le sue operazioni entrando in un loop infinito.
 Ad esempio la definizione per l'aggiunta e la rimozione dei belief è quella mostrata nel Codice sorgente \ref{lst:ImplementazioneRegoleModificaBeliefBase} nella quale sono eseguite due operazioni: la prima riguarda l'effettiva modifica della `belief base' con il belief passato, mentre la seconda inserisce un belief fittizio recuperato dall'interprete per permettere di innescare l'evento di modifica del relativo belief al prossimo ciclo di ragionamento.
 
-\medskip
+\switchToProlog{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:ImplementazioneRegoleModificaBeliefBase},caption={Implementazione regole modifica della `belief base'}]
 addBelief(B) :-
   assertz(belief(B)),
@@ -46,7 +46,7 @@ removeBelief(B) :-
 
 Una modalità analoga è stata utilizzata per gestire anche altri eventi, sempre per poter separare l'invocazione della regola dall'attivazione dell'evento. Gli eventi in questione sono quelli relativi alla realizzazione dell'estensione Spatial Tuples e che sono stati implementati come mostrato nel Codice sorgente \ref{lst:ImplementazioneRegoleSpatialTuples}. In questo caso sono aggiunti dei fatti il cui contenuto è la tupla o il template da utilizzare nella richiesta verso lo spazio di tuple.
 
-\medskip
+\switchToProlog{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:ImplementazioneRegoleSpatialTuples},caption={Implementazione regole estensione Spatial Tuples}]
 writeTuple(T) :-
   assertz(write(T)).
@@ -59,7 +59,7 @@ takeTuple(T) :-
 \end{lstlisting}
 
 \subsection{Invocazione regole ed esecuzione intenzioni}\label{sctn:InvocazioneEsecuzioneIntenzioni}
-Terminata la definizione delle regole per la gestione degli eventi è stata aggiunta la libreria `alice.tuprolog' dalla quale è stato importato all'interno della classe dell'agente il motore tuProlog per la realizzazione delle invocazioni verso la teoria dell'agente.
+Terminata la definizione delle regole per la gestione degli eventi è stata aggiunta la libreria \texttt{`alice.tuprolog’} dalla quale è stato importato all'interno della classe dell'agente il motore tuProlog per la realizzazione delle invocazioni verso la teoria dell'agente.
 Le API di tuProlog permettono a Java di sfruttare il motore Prolog: gli oggetti istanziati che rappresentano entità Prolog (termini, atomi, liste, variabili, numeri e anche teorie e librerie) che possono essere utilizzate per effettuare interrogazioni e ottenere il risultato lato Java \cite{2p-alpnews2013}.
 Ogni istanza dell'agente ha un motore tuProlog al cui interno è caricata la libreria che implementa il nuovo linguaggio e una teoria specifica scritta dal programmatore dell'agente che descrive il comportamento dell'agente.
 
@@ -79,7 +79,7 @@ Terminata la costruzione del template è il momento di effettuare l'interrogazio
 
 Per quanto riguarda invece l'esecuzione dell'intenzione sono state definite una serie di regole che, utilizzando l'identificativo, recuperano l'intenzione e ne prelevano la lista di operazioni collegate. Se la lista è vuota allora l'intenzione viene rimossa. Altrimenti si preleva l'operazione in testa, la quale viene eseguita e restituisce una lista con eventuali operazioni da eseguire scaturite dal suo processamento (ed esempio se l'azione è un goal). La nuova lista di operazioni viene quindi aggiunta in testa alla lista delle operazioni già presenti nell'intenzione e poi quest'ultima viene aggiornata. Quanto appena descritto è mostrato nel Codice sorgente \ref{lst:ImplementazioneRegoleInvocazioneEsecuzioneIntenzione}.
 
-\`E inoltre necessario descrivere in che modo vengono selezionati i piani applicabili e le intenzioni per completare la descrizione degli step che sono effettuati.
+È inoltre necessario descrivere in che modo vengono selezionati i piani applicabili e le intenzioni per completare la descrizione degli step che sono effettuati.
 
 Per quanto riguarda la selezione delle azioni internamente viene utilizzata la selezione del motore tuProlog che sfrutta l'ordinamento con cui sono definite le regole e i fatti nella teoria. Una volta selezionata l'azione viene eseguita.
 Per quanto riguarda la selezione dei piani relativi agli eventi e ai goal, la selezione avviene utilizzando il contesto, ovvero la guardia, che permette di definire se un piano è applicabile a quella certa situazione.
@@ -88,7 +88,7 @@ Una volta selezionato il piano viene creata un'intenzione che è opportunamente 
 Diversamente, per quanto riguarda l'intenzione da eseguire avviene la seguente gestione.
 Nella teoria dell'agente sono salvate tutte le intenzioni mentre nell'interprete viene salvata una lista contenente solamente gli identificativi delle rispettive intenzioni presenti nella teoria. La tipologia di selezione è Round-Robin, ogni intenzione avrà lo stesso spazio di esecuzione delle altre. L'intenzione da eseguire viene presa dalla testa dello stack e una volta finita la sua esecuzione viene posizionata in coda: in questo modo si assicura che ogni intenzione possa essere eseguita.
 
-\medskip
+\switchToProlog{}
 \begin{lstlisting}[float, firstnumber=1,label={lst:ImplementazioneRegoleInvocazioneEsecuzioneIntenzione},caption={Implementazione regole per invocazione esecuzione di un'intenzione}]
 execute(I) :-
     intention(I, []), !,
@@ -106,7 +106,7 @@ L'esecuzione vera e propria dell'intenzione è gestita da altre regole che sono 
 
 In caso l'azione da eseguire fosse un $achievement$ allora, una volta verificata la correttezza del contesto (detto anche guardia), il contenuto del corpo di quella regola (una serie di invocazioni a fatti o altre regole) verrà recuperato e restituito per essere aggiunto in testa allo stack dell'intenzione da cui è pervenuta l'invocazione di quell'azione. Lo stesso comportamento verrà tenuto per azioni di tipo $test$.
 
-Diversamente, se si tratta dell'azione $concurrent$, sia che essa racchiuda $achievement$ o $test$, il suo obiettivo è quello di creare un intenzione concorrente a quella dalla quale è pervenuta l'invocazione dell'azione. Per fare questo, per prima cosa si ottiene la regola verificandone la correttezza del contesto e poi si recupera la sua lista di operazioni, che è contenuta nel corpo.
+Diversamente, se si tratta dell'azione $concurrent$, sia che essa racchiuda $achieve\-ment$ o $test$, il suo obiettivo è quello di creare un intenzione concorrente a quella dalla quale è pervenuta l'invocazione dell'azione. Per fare questo, per prima cosa si ottiene la regola verificandone la correttezza del contesto e poi si recupera la sua lista di operazioni, che è contenuta nel corpo.
 A questo punto viene generato un nuovo identificativo univoco per l'intenzione ed infine è creato il fatto dell'intenzione così formato: $intention(id, [op_1, \ldots, op_n])$, dove $id$ è l'identificativo generato e $[op_1, \ldots, op_n]$ la lista di operazioni contenute nel corpo della regola invocata.
 
 Per quanto riguarda le azioni interne ed esterne, cioè che rispettivamente accadono nell'agente o nell'ambiente, il programmatore dell'interprete è in grado di definirne di nuove in base al contesto applicativo in cui si deve calare il linguaggio e l'interprete. Un esempio di definizione di un'azione interna è quello relativo all'azione per inviare dei messaggi. Per realizzarlo è stata definita la sintassi $iSend(S,M)$, dove $S$ è il mittente e $M$ messaggio. Quando un'azione interna o esterna viene richiamata per l'esecuzione deve essere verificata la sua esistenza prima che possa essere eseguita: per fare questo possono essere definiti dei fatti, come ad esempio $is\_internal(iSend(S,M))$, per essere utilizzati come template per la validazione della sintassi. Il controllo funziona come una guardia e, se ha successo, l'operazione interna può essere eseguita richiamando un'apposita funzione implementata all'interno della classe dell'agente invocabile tramite l'oggetto $agent$ presente nella teoria. Per comodità si potrebbe implementare all'interno dell'agente un'unica funzione, ad esempio $executeInternalAction(action)$ che viene sempre richiamata per l'esecuzione di azioni interne e che, in base al parametro in ingresso, sceglie quale azione eseguire.
@@ -120,26 +120,7 @@ Nell'implementazione che è stata effettuata si sono utilizzate due variabili, m
 
 La funzione che calcola la nuova posizione del nodo è descritta nel Codice sorgente \ref{lst:ImplementazioneAggiornamentoPosizioneNodo}. Date la posizione attuale del nodo $(P_X,P_Y)$, la direzione in radianti $D$, la velocità del nodo $V$ e il tau (tempo della simulazione) $T_0$ dell'ultimo aggiornamento della posizione. Viene costruito un cerchio che ha come centro $(P_X,P_Y)$ e il cui raggio ha distanza uguale a $V * (T_1 - T_0)$, dove $T_1$ è il tempo corrente della simulazione. Sulla circonferenza appena creata viene individuata la prossima posizione del nodo calcolando il punto che corrisponde alla direzione $D$ attualmente memorizzata nel nodo.
 
-\lstset{
-  numberstyle=\footnotesize\color{black},
-  basicstyle=\ttfamily,
-  breakatwhitespace=true,
-  breaklines=true,
-  captionpos=b,
-  keepspaces=true,
-  numbers=left,
-  numbersep=7pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  tabsize=2,
-  frame=tb,
-  language=Java,
-  commentstyle=\color{gray},
-  keywordstyle=\color{blue},
-  stringstyle=\color{red}
-}
-\medskip
+\switchToJava{}{\small}
 \begin{lstlisting}[float,firstnumber=1,label={lst:ImplementazioneAggiornamentoPosizioneNodo},caption={Implementazione aggiornamento posizione nodo}]
 void changeNodePosition(Time t1) {
   Position currPos = this.getNodePosition();
