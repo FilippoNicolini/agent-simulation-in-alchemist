@@ -1,0 +1,206 @@
+\documentclass[handout]{beamer}\mode<presentation>{\usetheme{AMSCesenaBleu}}
+
+\usepackage{multicol}
+\usepackage{common}
+\usepackage{pgfpages}
+\usepackage{subfigure}
+\usepackage{media9}
+\usepackage{xargs} % Use more than one optional parameter in a new commands % Coloured text etc.
+\usepackage[colorinlistoftodos,prependcaption]{todonotes}
+
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=ForestGreen,backgroundcolor=ForestGreen!25,bordercolor=ForestGreen,#1]{#2}}
+\newcommandx{\marianiSays}[2][1=]{\todo[linecolor=Orange,backgroundcolor=Orange!25,bordercolor=Orange,#1]{#2}}
+
+%\setbeameroption{show notes on second screen=right}
+
+% \graphicspath{{res/img/}}
+
+%\AtBeginSection[]
+%{
+%\begin{frame}<beamer>[c]\frametitle{A seguire\ldots}
+%		\tableofcontents[currentsection,hideallsubsections]
+%\end{frame}
+%}
+
+\newenvironment{nscenter}
+{\parskip=1pt\par\nopagebreak\centering}
+{\par\noindent\ignorespacesafterend}
+
+\title[Prolog BDI agents on Alchemist]{Simulating Prolog-based BDI agents on Alchemist}
+\author[Filippo Nicolini]{Tesi in: Sistemi Autonomi\\
+[0.5cm]
+\textit{Relatore:} \hspace{6.55cm} \textit{Presentata da:}\\
+Chiar.mo Prof. \hspace{5.5cm} Filippo Nicolini\\
+Andrea Omicini \hspace{7.6cm} \phantom{g}\\
+\textit{\\Correlatori:} \hspace{8.25cm} \phantom{g}\\
+Dott. Giovanni Ciatto \hspace{6.5cm} \phantom{g}\\
+Dott. Danilo Pianini \hspace{6.7cm} \phantom{g}\\
+}
+\institute[]{
+\textsc{Alma Mater Studiorum} -- Università di Bologna \\
+Campus di Cesena}
+\date{12 Dicembre 2019}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Introduzione}
+
+\subsection{Obiettivo}
+%Slide 1
+\begin{frame}
+\frametitle{L'obiettivo della tesi}
+\begin{block}{Obiettivo della tesi}
+\alert{Unificare} piattaforme orientate alla \alert{programmazione di agenti} con ambienti di \alert{simulazione di agenti}.
+\end{block}
+
+\begin{block}{Interprete tuProlog}
+Estensione modello BDI di AgentSpeak sfruttando tuProlog per poter implementare interpreti sia su ambienti reali che simulati.
+\end{block}
+
+\begin{block}{Interprete Alchemist}
+Realizzazione di un interprete nel simulatore Alchemist che utilizza le logiche del ciclo di ragionamento di Jason.
+\end{block}
+\end{frame}
+
+
+\section{Struttura agente}
+
+\subsection{Stato dell'arte}
+
+%Slide 2
+\begin{frame}
+\frametitle{AgentSpeak e modello BDI}
+\begin{block}{Modello BDI}
+Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
+\end{block}
+\begin{block}{AgentSpeak}
+Linguaggio orientato agli agenti basato su modello BDI e programmazione logica.
+\end{block}
+\end{frame}
+
+%Slide 3
+\begin{frame}
+\frametitle{tuProlog}
+\begin{block}{tuProlog}
+Libreria che permette di utilizzare Prolog all'interno di applicazioni e infrastrutture distribuite sfruttando un core minimale.
+\end{block}
+
+\begin{block}{Caratteristiche}
+Supporta integrazioni semplice e pervasiva multi-linguaggio e multi-paradigma (es. Prolog -- linguaggi OO).
+
+\end{block}
+\end{frame}
+
+
+\subsection{Interprete Prolog}
+
+%Slide 4
+\begin{frame}
+\frametitle{Interprete tuProlog di AgentSpeak}
+\begin{block}{Formalizzazione}
+Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alcune sintassi.
+\end{block}
+
+\begin{block}{API}
+\begin{itemize}
+\item inizializzazione agente
+\item invocazioni verso linguaggio OO
+\item gestione `belief base'
+\item gestione eventi e posizionamento
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+\section{Comportamento agente}
+
+\subsection{Stato dell'arte}
+
+%Slide 5
+\begin{frame}
+\frametitle{Jason}
+\begin{block}{Jason}
+Interprete di una versione estesa di AgentSpeak, implementa linguaggio e piattaforma per sviluppare sistemi multi-agente.
+\end{block}
+\end{frame}
+
+%Slide 6
+\begin{frame}
+\frametitle{Ciclo di ragionamento}
+\begin{block}{Percezioni}
+Informazioni ricevute tramite un apparato con le quali l'agente percepisce i cambiamenti dell'ambiente.
+\end{block}
+
+\begin{block}{Eventi}
+Sono relativi a percezioni che l'agente ha ricevuto e possono essere catturati dall'agente.
+\end{block}
+
+\begin{block}{Piani}
+Definiscono come l'agente agisce per raggiungere goal.
+\end{block}
+
+\begin{block}{Intenzioni}
+Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
+\end{block}
+\end{frame}
+
+%Slide 7
+\begin{frame}
+\frametitle{Ciclo di ragionamento}
+\begin{figure}
+\hspace*{-0.35cm}
+\includegraphics[width=12.5cm]{images/reasoningCicle.png}
+\end{figure}
+\end{frame}
+
+%Slide 8
+\begin{frame}
+\frametitle{Alchemist}
+\begin{block}{Alchemist}
+Simulatore per il calcolo pervasivo, aggregato e naturale che si basa su un meta-modello flessibile e che permette implementazioni di modelli diversi tra loro.
+\end{block}
+\begin{block}{Meta-modello}
+\begin{itemize}
+\item Node
+\item Environment
+\item Reaction (Time Distribution, Condition, Action)
+\item Linking Rule
+\end{itemize}
+\end{block}
+\end{frame}
+
+%Slide 9
+\begin{frame}
+\frametitle{Meta-modello}
+\begin{figure}
+\includegraphics[width=6cm]{images/alchemistModel.png}
+\end{figure}
+\begin{figure}
+\includegraphics[width=6cm]{images/alchemistReaction.png}
+\end{figure}
+\end{frame}
+
+
+\subsection{Interprete Alchemist}
+%Slide 10
+\begin{frame}
+\frametitle{Unione modelli}
+\begin{block}{Mapping}
+Agente mappato come reazione, quindi l'ambiente è contenitore di nodi che a loro volta contengono uno o più agenti.
+\end{block}
+\begin{block}{Caratteristiche}
+Ricercata la massima espressività lavorando su più strati: nodo può essere inteso come device contenitore di agenti.
+\end{block}
+\end{frame}
+
+\section{}
+\subsection{}
+\maketitle
+
+\end{document}

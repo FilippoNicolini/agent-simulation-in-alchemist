@@ -11,5 +11,20 @@
 */*.synctex.gz
 */*.toc
 
-# esterno
-template.tex
+*.aux
+*.toc
+*.log
+*.lot
+*.gz
+*.lof
+*.lol
+*.bbl
+*.blg
+*.out
+
+
+# presentazione
+*.nav
+*.snm
+*.pages
+
