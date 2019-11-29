@@ -198,6 +198,7 @@ Questa funzione è fornita dalla libreria JavaLibrary, la quale è organizzata s
    \item una mappatura tra tipi di oggetto e tipi Prolog adeguati \cite{2p-alpnews2013};
    \item un set di predicati per eseguire operazioni su oggetti Java \cite{2p-alpnews2013}.
 \end{itemize}
+La JavaLibrary consente ai componenti Java di accedere e utilizzare direttamente Prolog in modo semplice ed efficace, offrendo così tutta la potenza del software Java alla sorgente di tuProlog \cite{tuPrologLight-weight}.
 
 Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che si riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
 
@@ -265,7 +266,7 @@ Ottenuta la lista di azioni $body$ si inizia la vera e propria creazione dell'az
 Per lo sviluppo di questo progetto, oltre all'utilizzo di ambienti applicativi per l'implementazione dell'interprete, ci si è appoggiati ad altri strumenti esterni per la gestione e verifica del codice sorgente prodotto. Qui di seguito sono citati e descritti gli strumenti utilizzati.
 
 \subsubsection{Gradle}
-Gradle è un sistema open source che permette l'automazione dello sviluppo focalizzandosi su flessibilità ed efficienza \cite{Gradle}. I vantaggi offerti sono:
+Gradle è un sistema open source che permette l'automazione dello sviluppo focalizzandosi su flessibilità ed efficienza \footnote{Gradle: \url{https://gradle.org}}. I vantaggi offerti sono:
 \begin{itemize}
 \item alta personalizzazione: è modellato in modo da poter essere personalizzabile ed esteso;
 \item veloce: completa task velocemente riutilizzando gli output da precedenti esecuzioni, processando solamente i cambiamenti ed eseguendo task in parallelo;
@@ -283,10 +284,11 @@ GitHub è un servizio di hosting per progetti software. Le principali funzionali
 \item documentazione
 \end{itemize}
 
-Alla base vi è sicuramente la possibilità di ospitare codice sorgente all'interno di vari repository che possono essere pubblici, privati o open source con la possibilità di versionare ogni singola modifica e tenendo traccia di chi l'abbia prodotta \cite{GitHub}.
+Alla base vi è sicuramente la possibilità di ospitare codice sorgente all'interno di vari repository che possono essere pubblici, privati o open source con la possibilità di versionare ogni singola modifica e tenendo traccia di chi l'abbia prodotta \footnotemark.
 Tramite questo meccanismo è più semplice revisionare il codice e gestire eventuali risoluzioni di bug o miglioramenti, potenzialmente suggeriti anche da persone esterne se il repository lo permette.
 
-GitHub permette di mantenere una documentazione allegata al progetto consentendo di creare singole pagine collegabili tra loro oppure caricare l'intera documentazione posizionata nella cartella `docs/' nel branch `master' \cite{GitHub}.
+GitHub permette di mantenere una documentazione allegata al progetto consentendo di creare singole pagine collegabili tra loro oppure caricare l'intera documentazione posizionata nella cartella `docs/' nel branch `master' \footnotemark[\value{footnote}].
+\footnotetext{GitHub: \url{https://github.com}}
 
 Un'altra funzionalità è quella della gestione del progetto con la quale consente di assegnare task ad uno specifico membro all'interno di un team e controllarne l'evoluzione nel tempo, catturando istantanee sulla situazione attuale del progetto.
 
@@ -295,10 +297,10 @@ GitHub inoltre permette di utilizzare al suo interno delle integrazioni di altre
 \subsubsection{Travis CI}
 Travis CI è un servizio di Continuous Integration (CI) usato per creare build e test di progetti software ospitati su GitHub.
 La CI è la pratica di unire frequentemente piccole modifiche al codice piuttosto che una grande quantità alla fine dello sviluppo. Questa metodologia consente di produrre un software più sano sviluppando e testando cambiamenti più piccoli.
-Travis CI supporta il processo di sviluppo creando e testando automaticamente le modifiche apportate al codice, fornendo un feedback immediato sul successo della modifica \cite{TravisCI}.
+Travis CI supporta il processo di sviluppo creando e testando automaticamente le modifiche apportate al codice, fornendo un feedback immediato sul successo della modifica \footnotemark.
 Quando si esegue una build, Travis CI clona il repository GitHub in un nuovo ambiente virtuale ed esegue una serie di attività per creare e testare il codice: se una o più di queste attività falliscono la compilazione viene considerata interrotta, altrimenti la generazione viene considerata completata e Travis CI può distribuire il codice.
-Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si possono prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni \cite{TravisCI}.
-
+Le build possono automatizzare altre parti del flusso di consegna del lavoro, ovvero si possono prevedere parti che dipendano le une dalle altre con fasi di compilazione, impostazione di notifiche, preparazione delle distribuzioni dopo le compilazioni \footnotemark[\value{footnote}].
+\footnotetext{TravisCI: \url{https://travis-ci.org}}
 
 
 \section{Scrivere una simulazione}\label{sctn:ScrivereUnaSimulazione}

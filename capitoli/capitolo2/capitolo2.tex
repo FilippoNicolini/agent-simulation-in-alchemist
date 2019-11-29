@@ -23,7 +23,7 @@ Un sistema basato su JADE può essere distribuito su diverse macchine (anche con
 %Dietro alla parte di astrazione degli agenti, JADE fornisce un semplice e potente modello di esecuzione e composizione dei task, la comunicazione peer to peer tra gli agenti basata sul paradigma di scambio di messaggi asincrono.
 
 L'architettura di comunicazione offre uno scambio di messaggi privati di ogni agente flessibile ed efficiente, dove JADE crea e gestisce una coda di messaggi ACL in entrata.
-È stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto \cite{JADE}.
+È stato implementato il modelllo FIPA completo e i suoi componenti sono stati ben distinti e pienamente integrati: interazione, protocolli, preparazione pacchetti, ACL, contenuto dei linguaggi, schemi di codifica, ontologie e protocollo di trasporto \cite{JADE-FIPA}.
 Il meccanismo di trasporto, in particolare, è come un camaleonte perchè si adatta ad ogni situazione scegliendo in modo trasparente il miglior protocollo disponibile.
 
 \subsection*{SPADE}
@@ -34,24 +34,26 @@ Il modello ad agenti è composto da un meccanismo di connessione alla piattaform
 
 La connessione alla piattaforma è gestita internamente tramite il protocollo XMPP, il quale fornisce un meccanismo per registrare e autenticare gli utenti al server XMPP. Ogni agente potrà quindi mantenere aperto e persistente uno stream di comunicazioni con la piattaforma.
 
-Ogni agente ha al suo interno un componente dispatcher per i messaggi che opera come un postino: quando arriva un messaggio per l'agente, lo posizione nella corretta casella di posta; quando l'agente deve inviare un messaggio, il dispatcher si occupa di inserirlo nello stream di comunicazione \cite{Spade}.
+Ogni agente ha al suo interno un componente dispatcher per i messaggi che opera come un postino: quando arriva un messaggio per l'agente, lo posizione nella corretta casella di posta; quando l'agente deve inviare un messaggio, il dispatcher si occupa di inserirlo nello stream di comunicazione \footnotemark .
 
-Un agente può avere più comportamenti simultaneamente. Un comportamento è un operazione che l'agente può eseguire usando il pattern di ripetizione. Spade fornisce alcuni comportamenti predefiniti: Cyclic, Periodic (utili per eseguire operazioni ripetitive); One-Shot, Time-Out (usati per eseguire operazioni casuali); Finite State Machine (permette di costruire comportamenti complessi) \cite{Spade}.
+Un agente può avere più comportamenti simultaneamente. Un comportamento è un operazione che l'agente può eseguire usando il pattern di ripetizione. Spade fornisce alcuni comportamenti predefiniti: Cyclic, Periodic (utili per eseguire operazioni ripetitive); One-Shot, Time-Out (usati per eseguire operazioni casuali); Finite State Machine (permette di costruire comportamenti complessi) \footnotemark [\value{footnote}] .
 Quando un messaggio arriva all'agente, il dispatcher lo indirizza alla coda del comportamento corretto: il dispatcher utilizza il template di messaggi di ogni comportamento per capire qual è il giusto destinatario. Quindi un comportamento può definire il tipo di messaggi che vuole ricevere.
 
+\footnotetext{SPADE: \url{https://pypi.org/project/spade/}}
+
 \subsection*{Jason}
-Jason è un interprete per la versione estesa di AgentSpeak che implementa la semantica operazionale di tale linguaggio e fornisce una piattaforma per lo sviluppo di sistemi multi-agente \cite{Jason}. AgentSpeak è uno dei principali linguaggi orientati agli agenti basati sull'architettura BDI. Il linguaggio interpretato da Jason è un'estensione del linguaggio di programmazione astratto AgentSpeak(L).
+Jason è un interprete per la versione estesa di AgentSpeak che implementa la semantica operazionale di tale linguaggio e fornisce una piattaforma per lo sviluppo di sistemi multi-agente \cite{JasonAgentSpeak}. AgentSpeak è uno dei principali linguaggi orientati agli agenti basati sull'architettura BDI. Il linguaggio interpretato da Jason è un'estensione del linguaggio di programmazione astratto AgentSpeak(L).
 Gli agenti BDI (Belief-Desires-Intentions) forniscono un meccanismo per separare le attività di selezione di un piano, fra quelli disponibili, dall'esecuzione del piano attivo, permettendo di bilanciare il tempo per la scelta del piano e quello per eseguirlo.
 
 \subsection*{SARL}
-SARL è un linguaggio di programmazione ad agenti tipizzato staticamente. SARL mira a fornire le astrazioni fondamentali per affrontare la concorrenza, la distribuzione, l'interazione, il decentramento, la reattività e la riconfigurazione dinamica. Queste funzionalità di alto livello sono adesso considerate i principali requisiti per un'implementazione facile e pratica delle moderne applicazioni software complesse \cite{SARL}.
+SARL è un linguaggio di programmazione ad agenti tipizzato staticamente. SARL mira a fornire le astrazioni fondamentali per affrontare la concorrenza, la distribuzione, l'interazione, il decentramento, la reattività e la riconfigurazione dinamica. Queste funzionalità di alto livello sono adesso considerate i principali requisiti per un'implementazione facile e pratica delle moderne applicazioni software complesse \footnote{SARL: \url{http://www.sarl.io}}.
 
 \subsection*{JADEX}
 Il framework di componenti attivi Jadex fornisce funzionalità di programmazione e di esecuzione per sistemi distribuiti e concorrenti. L'idea generale è di considerare che il sistema sia composto da componenti che agiscono come fornitori di servizi e consumatori \cite{JADEX}.
 Rispetto a SCA (Service Component Architecture) i componenti sono sempre entità attive, mentre in confronto agli agenti la comunicazione è preferibilmente eseguita utilizzando chiamate ai servizi.
 
 \subsection*{ASTRA}
-ASTRA è un linguaggio di programmazione ad agenti per creare sistemi intelligenti distrubuiti/concorrenti costruiti su Java \cite{Astra}.
+ASTRA è un linguaggio di programmazione ad agenti per creare sistemi intelligenti distrubuiti/concorrenti costruiti su Java \footnote{ASTRA: \url{http://astralanguage.com/wordpress/}}.
 %
 ASTRA è basato su AgentSpeak(L), ovvero fornisce tutte le stesse funzionalità base, ed inoltre le aumenta con una serie di feature orientate a creare un linguaggio di programmazione ad agenti più pratico.
 
@@ -70,7 +72,8 @@ Gli \textbf{eventi} innescano le attività reattive, ovvero la caratteristica di
 
 \subsection{Definizione}
 \textbf{AgentSpeak} è un linguaggio di programmazione basato su un linguaggio del primo ordine con eventi e azioni \cite{AgentSpeak}. Il comportamento degli agenti è dettato da quanto definito nel programma scritto in AgentSpeak.
-I beliefs correnti di un agente sono relativi al suo stato attuale, all'enviroment e agli altri agenti. Gli stati che un agente vuole determinare sulla base dei suoi stimoli esterni e interni sono i desideri \cite{AgentSpeak}. L'adozione di programmi per soddisfare tali stimoli è detta intenzioni.
+Un agente ha beliefs di se stesso, di altri agenti e dell'ambiente in cui è immerso \cite{fomal-AgentSpeak}. Gli stati che un agente vuole determinare sulla base dei suoi stimoli esterni e interni sono i desideri \cite{AgentSpeak}.
+Gli agenti mantengono un repository di piani disponibili, noto come libreria, e rispondono ai cambiamenti nei loro obiettivi selezionando dei piani per ogni modifica, istanziando un piano come intenzione \cite{fomal-AgentSpeak}.
 
 \subsection{Descrizione formale}
 Vengono ora mostrate le definizioni che formalizzano questo linguaggio di programmazione.
@@ -253,7 +256,7 @@ Jason è la maggiore implementazione di AgentSpeak e, oltre ad implementare le s
 
 %----------------------------
 \section{tuProlog}
-tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java \cite{tuProlog}. È progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{2p-alpnews2013}.
+tuProlog è un interprete Prolog per le applicazioni e le infrastrutture Internet basato su Java \cite{tuprolog-multi-paradigm}. È progettato per essere facilmente utilizzabile, leggero, configurabile dinamicamente, direttamente integrato in Java e facilmente interoperabile \cite{2p-alpnews2013}.
 tuProlog è sviluppato e mantenuto da `aliCE' un gruppo di ricerca dell'Alma Mater Studiorum - Università di Bologna, sede di Cesena. È un software Open Source e rilasciato sotto licenza LGPL.
 
 \subsection{Caratteristiche tuProlog}
@@ -266,6 +269,7 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 \end{itemize}
 
 In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java \texttt{`alice.tuprolog’}, e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
+Poichè Prolog viene interpretato mentre Java è compilato, un programma Java guidato da Prolog è in qualche modo `semi-interpretato' in cui Prolog può guidare in modo interpretato il flusso computazionale delle azioni Java compilato \cite{tuprolog-multi-paradigm}.
 
 La funzionalità più caratteristica di tuProlog è la programmazione multi-paradigma.
 Progettato intenzionalmente per supportare un'integrazione semplice, pervasiva, multi-linguaggio/multi-paradigma \cite{2p-alpnews2013}, tuProlog permette di:
@@ -277,9 +281,10 @@ Progettato intenzionalmente per supportare un'integrazione semplice, pervasiva, 
 
 Una peculiare modalità di utilizzo di tuProlog sfruttata in questo progetto è stata la registrazione di oggetti Java all'interno della teoria dell'agente. In questo modo è possibile utilizzare uno stesso oggetto sia nella parte Java che in quella tuProlog. Nello specifico, come verrà mostrato nella parte relativa all'implementazione, questa funzionalità è stata utilizzata per registrare la classe stessa dell'agente in tuProlog e consentendo l'invocazione di metodi implementati lato Java direttamente dalla teoria dell'agente.
 
+
 %----------------------------
 \section{Alchemist}
-Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla natura \cite{Alchemist}. Esso fornisce un ambiente di simulazione sul quale è possibile sviluppare nuove incarnazioni, cioè nuove definizioni di modelli implementati su di esso. Ad oggi sono disponibili le funzionalità per:
+Alchemist è un simulatore per il calcolo pervasivo, aggregato e ispirato alla natura \cite{alchemist-jos2013}. Esso fornisce un ambiente di simulazione sul quale è possibile sviluppare nuove incarnazioni, cioè nuove definizioni di modelli implementati su di esso. Ad oggi sono disponibili le funzionalità per:
 \begin{itemize}
 \item simulare un ambiente bidimensionale;
 \item simulare mappe del mondo reale, con supporto alla navigazione e importazione di tracciati in formato gpx;
@@ -308,11 +313,11 @@ Il meta-modello di Alchemist può essere compreso osservando la figura \ref{fig:
 \end{center}
 \end{figure}
 
-L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi \cite{Alchemist}. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
+L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
 
 È detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
 
-Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment \cite{Alchemist}.
+Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment.
 
 La \textbf{\textit{Molecola}} è il nome di un dato, paragonabile a quello che rappresenta il nome di una variabile per i linguaggi imperativi.
 Il valore da associare ad una molecola è detto \textbf{\textit{Concentrazione}}.
@@ -350,7 +355,9 @@ Per ogni incarnazione, è possibile definire una serie di azioni, condizioni, re
 
 %----------------------------
 \section{LINDA}
-LINDA è un modello di coordinazione e comunicazione tra diversi processi paralleli che operano su oggetti immagazzinati e recuperati dalla memoria associativa, virtuale, condivisa. Nel modello diverse primitive operano su una sequenza ordinata di oggetti, le `tuple', che vengono aggiunte ad un linguaggio sequenziale e una memoria associativa logica globale, detta spazio di tuple, nel quale i processi immagazzinano e recuperano le tuple.
+LINDA è un modello di coordinazione e comunicazione tra diversi processi paralleli che operano su oggetti immagazzinati e recuperati dalla memoria associativa, virtuale, condivisa.
+Come linguaggio di coordinazione è responsabile esclusivamente dei requisiti di coordinamento e comunicazione di un'applicazione, basandosi su un linguaggio ospitante per esprimere i requisiti computazionali dell'applicazione \cite{coord-language-linda}.
+Il modello LINDA comprende un archivio di memoria concettualmente condiviso (spazio di tuple) in cui i dati sono memorizzati come record (tuple) \cite{coord-language-linda}, sui quali operano le diverse primitive che li immagazzinano e li recuperano.
 
 Il modello LINDA originale definisce quattro operazioni consentite sulle tuple e lo spazio di tuple:
 \begin{itemize}
@@ -361,6 +368,7 @@ Il modello LINDA originale definisce quattro operazioni consentite sulle tuple e
 \end{itemize}
 
 LINDA è un modello di coordinazione utilizzato per definire altri modelli e tecnologie di coordinazione, dove gli agenti distribuiti interagiscono e si coordinano tramite scambio di messaggi utilizzando spazi di informazione condivisa e sfruttando la comunicazione generativa.
+In altre parole, un modello di coordinamento fornisce un quadro in cui si può esprimere l'interazione di entità attive e indipendenti come gli agenti \cite{coord-model-ciancarini}.
 
 Di seguito è descritta un'estensione del modello appena citato che è chiamata Spatial Tuples dove le informazioni base assumono una posizione e un'estensione nello spazio fisico.
 
