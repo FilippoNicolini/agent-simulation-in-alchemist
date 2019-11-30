@@ -58,7 +58,7 @@ Campus di Cesena}
 \alert{Unificare} piattaforme orientate alla \alert{programmazione di agenti} con ambienti di \alert{simulazione di agenti}.
 \end{block}
 
-\begin{block}{Interprete tuProlog}
+\begin{block}{Interprete Prolog}
 Estensione modello BDI di AgentSpeak sfruttando tuProlog per poter implementare interpreti sia su ambienti reali che simulati.
 \end{block}
 
@@ -68,38 +68,33 @@ Realizzazione di un interprete nel simulatore Alchemist che utilizza le logiche 
 \end{frame}
 
 
-\section{Struttura agente}
+\section{Interprete Prolog}
 
 \subsection{Stato dell'arte}
 
 %Slide 2
 \begin{frame}
-\frametitle{AgentSpeak e modello BDI}
+\frametitle{AgentSpeak, modello BDI, tuProlog}
 \begin{block}{Modello BDI}
 Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
 \end{block}
 \begin{block}{AgentSpeak}
 Linguaggio orientato agli agenti basato su modello BDI e programmazione logica.
 \end{block}
-\end{frame}
-
-%Slide 3
-\begin{frame}
-\frametitle{tuProlog}
+%-------------
 \begin{block}{tuProlog}
 Libreria che permette di utilizzare Prolog all'interno di applicazioni e infrastrutture distribuite sfruttando un core minimale.
 \end{block}
 
-\begin{block}{Caratteristiche}
-Supporta integrazioni semplice e pervasiva multi-linguaggio e multi-paradigma (es. Prolog -- linguaggi OO).
-
-\end{block}
+%\begin{block}{Caratteristiche}
+%Supporta integrazioni semplice e pervasiva multi-linguaggio e multi-paradigma (es. Prolog -- linguaggi OO).
+%\end{block}
 \end{frame}
 
 
-\subsection{Interprete Prolog}
+\subsection{Implementazione}
 
-%Slide 4
+%Slide 3
 \begin{frame}
 \frametitle{Interprete tuProlog di AgentSpeak}
 \begin{block}{Formalizzazione}
@@ -118,11 +113,11 @@ Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alc
 
 
 
-\section{Comportamento agente}
+\section{Interprete Alchemist}
 
 \subsection{Stato dell'arte}
 
-%Slide 5
+%Slide 4
 \begin{frame}
 \frametitle{Alchemist}
 \begin{block}{Alchemist}
@@ -138,7 +133,7 @@ Simulatore per il calcolo pervasivo, aggregato e naturale che si basa su un meta
 \end{block}
 \end{frame}
 
-%Slide 6
+%Slide 5
 \begin{frame}
 \frametitle{Meta-modello}
 \begin{figure}
@@ -146,7 +141,7 @@ Simulatore per il calcolo pervasivo, aggregato e naturale che si basa su un meta
 \end{figure}
 \end{frame}
 
-%Slide 7
+%Slide 6
 \begin{frame}
 \frametitle{Spazi di tuple}
 \begin{block}{LINDA}
@@ -165,9 +160,9 @@ Operazioni consentite
 \end{block}
 \end{frame}
 
-\subsection{Interprete Alchemist}
+\subsection{Implementazione}
 
-%Slide 8
+%Slide 7
 \begin{frame}
 \frametitle{Ciclo di ragionamento}
 \begin{block}{Percezioni}
@@ -187,7 +182,7 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{block}
 \end{frame}
 
-%Slide 9
+%Slide 8
 \begin{frame}
 \frametitle{Ciclo di ragionamento}
 \begin{figure}
@@ -196,7 +191,7 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{figure}
 \end{frame}
 
-%Slide 10
+%Slide 9
 \begin{frame}
 \frametitle{Unione modelli}
 \begin{block}{Mapping}
@@ -212,28 +207,13 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \begin{block}{Caratteristiche mapping}
 Ricercata la massima espressività lavorando su più strati: nodo può essere inteso come device in cui operano più agenti.
 \end{block}
-
-
-
-
-%\begin{block}{Mapping}
-%%Agente mappato come reazione, quindi l'ambiente è contenitore di nodi che a loro volta contengono uno o più agenti.
-%\begin{center}
-%\begin{tabular}{ | c || c | c | }
-%\hline
-% Alchemist\textbackslash  AgentSpeak & Agente & Ambiente \\\hline\hline
-% Reazione & cell5 & cell6 \\\hline
-% Nodo & cell8 & cell9 \\\hline
-%\end{tabular}
-%\end{center}
-%\end{block}
 \end{frame}
 
 
 
 \section{Caso di studio}
 \subsection{Scenario}
-%Slide 11
+%Slide 10
 \begin{frame}
 \frametitle{Scenario}
 \begin{block}{Goldminers}
@@ -250,6 +230,7 @@ All'interno del problema si individuano le seguenti entità:
 \end{block}
 \end{frame}
 
+%Slide 11
 \begin{frame}
 \frametitle{Realizzazione}
 \begin{block}{Minatore}
@@ -270,6 +251,8 @@ Statico nell'ambiente, riceve la pepita tramite un messaggio.
 \end{frame}
 
 \section{Conclusioni}
+
+%Slide 12
 \begin{frame}
 \frametitle{Conclusioni e lavori futuri}
 \begin{block}{Conclusioni}
