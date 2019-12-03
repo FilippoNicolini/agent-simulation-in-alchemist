@@ -184,7 +184,7 @@ Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger f : c_1 \land \ldot
 Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger g(t) : c_1 \land \ldots \land c_y \leftarrow true]$, dove $p_{z-1}$ è $e : b_1 \land \ldots \land b_x \leftarrow !g(s); h_2; \ldots; h_n$. L'intenzione $i$ si dice che è eseguita  se e solo se esiste una sostituzione $\theta$ tale che $g(t)\theta = g(s)\theta$ e $i$ è rimpiazzato da $[p_1 \ddagger \ldots \ddagger p_{z-1} \ddagger (e : b_1 \land \ldots \land b_x)\theta \leftarrow (h_2; \ldots; h_n) \theta]$.
 \end{defn}
 
-\subsubsection{Ciclo di ragionamento}\label{ssctn:cicloRagionamentoAgentSpeak}
+\subsection*{Ciclo di ragionamento}\label{ssctn:cicloRagionamentoAgentSpeak}
 Il ciclo di ragionamento è il modo in cui l'agente prende le sue decisioni e mette in pratica le azioni. Esso è composto di otto fasi: le prime tre sono quelle che riguardano l'aggiornamento dei belief relativi al mondo e agli altri agenti, mentre altre descrivono la selezione di un evento che permette l'esecuzione di un'intenzione dell'agente.
 
 \newcounter{reasoningCycleCounter}
@@ -235,7 +235,7 @@ L'intenzione, scelta nello step precedente, non è altro che il corpo di un pian
 Terminata l'esecuzione di un'intenzione, quest'ultima viene restituita al set delle intenzioni a meno che non debba aspettare un messaggio o un feedback dell'azione \cite{JasonAgentSpeak}: in questo caso viene memorizzata in una struttura e restituita una volta ricevuta la risposta.
 Se un'intenzione è sospesa non può essere selezionata per l'esecuzione nel ciclo di ragionamento.
 
-\subsubsection{Scambio di messaggi}
+\subsection*{Scambio di messaggi}
 Lo scambio di messaggi è la comunicazione standard che avviene tra agenti per comunicare tra loro e operare in base al contenuto ricevuto.
 La comunicazione definita da AgentSpeak utilizza tre parti. La prima è la coda dei messaggi in input, ovvero una lista contenente tutti i messaggi che il sistema o interprete riceve e che sono destinati all'agente. La seconda è la coda dei messaggi di output che si allunga ogni volta che l'agente vuole inviare un messaggio ad un altro agente. L'ultima è una struttura all'interno della quale vengono memorizzate le intenzioni che sono sospese dall'esecuzione poichè aspettano una risposta dal canale di comunicazione dei messaggi.
 
@@ -315,7 +315,7 @@ Il meta-modello di Alchemist può essere compreso osservando la figura \ref{fig:
 
 L'\textbf{\textit{Environment}} è l'astrazione dello spazio ed è anche l'entità più esterna che funge da contenitore per i nodi. Conosce la posizione di ogni nodo nello spazio ed è quindi in grado di fornire la distanza tra due di essi e ne permette inoltre lo spostamento.
 
-È detta \textbf{\textit{Linking rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
+È detta \textbf{\textit{Linking-rule}} una funzione dello stato corrente dell'environment che associa ad ogni nodo un \textbf{\textit{Vicinato}}, il quale è un entità composta da un nodo centrale e da un set di nodi vicini.
 
 Un \textbf{\textit{Nodo}} è un contenitore di molecole e reazioni che è posizionato all'interno di un environment.
 
@@ -361,9 +361,9 @@ Il modello LINDA comprende un archivio di memoria concettualmente condiviso (spa
 
 Il modello LINDA originale definisce quattro operazioni consentite sulle tuple e lo spazio di tuple:
 \begin{itemize}
-\item \texttt{in}: legge una tupla e la consuma dallo spazio di tuple
-\item \texttt{rd}: legge una tupla senza consumarla dallo spazio di tuple
-\item \texttt{out}: inserisce una tupla nello spazio di tuple
+\item \texttt{in}: legge una tupla e la consuma dallo spazio di tuple;
+\item \texttt{rd}: legge una tupla senza consumarla dallo spazio di tuple;
+\item \texttt{out}: inserisce una tupla nello spazio di tuple;
 \item \texttt{eval}: crea un processo per valutare le tuple e lo inserisce nello spazio di tuple.
 \end{itemize}
 
@@ -373,7 +373,7 @@ In altre parole, un modello di coordinamento fornisce un quadro in cui si può e
 Di seguito è descritta un'estensione del modello appena citato che è chiamata Spatial Tuples dove le informazioni base assumono una posizione e un'estensione nello spazio fisico.
 
 \subsection{Spatial Tuples}
-Spatial Tuples è un estensione del modello base di tuple per i sistemi distribuiti multi-agente, dove
+Spatial Tuples è un estensione del modello base di tuple per i sistemi distribuiti multi-agente, dove:
 \begin{itemize}
 \item le tuple sono posizionate nel mondo fisico e si possono muovere \cite{SpatialTuples};
 \item il comportamento delle primitive di coordinamento può dipendere dalle proprietà spaziali del coordinamento degli agenti \cite{SpatialTuples};

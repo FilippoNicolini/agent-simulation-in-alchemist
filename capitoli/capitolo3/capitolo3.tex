@@ -50,7 +50,7 @@ Un \textit{agente} è formato da $\langle B,P,I,A,S_O,S_I \rangle$, dove $B$ è 
 \smallskip
 % Definizione 7
 \begin{defn}\label{defn:intenzione}
-Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione è definita come $intention(i, [p_1, \ldots, p_n])$, dove $i$ è l'identificativo univoco dell'intenzione e $[p_1, \ldots,p_n]$ è lo stack formata da azioni, belief o goal: $p_1$ è la coda e $p_n$ è la testa.
+Ogni intenzione ha al suo interno uno stack di piani parzialmente istanziati, ovvero dove alcune delle variabili sono state istanziate. Un'intenzione è definita come $intention(i, [p_1, \ldots, p_n])$, dove $i$ è l'identificativo univoco dell'intenzione e $[p_1, \ldots,p_n]$ è lo stack formata da azioni, belief o goal: $p_1$ è la testa e $p_n$ è la cpda.
 \end{defn}
 
 \smallskip
@@ -157,8 +157,8 @@ L'agente lato tuProlog definisce il suo comportamento tramite una serie di regol
 
 La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un inserimento all'interno di una lista, la quale poi viene restituita.
 
-La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione \texttt{in\-ten\-tion(id,[op\textsubscript{1}, \ldots, op\textsubscript{n}])} è composta da un identificativo univoco \texttt{id} e da una lista di operazioni \texttt{[op\textsubscript{1}, \ldots, op\textsubscript{n}]}. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
-Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola \texttt{execute(I)} all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo \texttt{I}, ovvero quella che è stata precedentemente selezionata.
+La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione `\texttt{in\-ten\-tion(id,[op\textsubscript{1}, \ldots, op\textsubscript{n}])}' è composta da un identificativo univoco \texttt{id} e da una lista di operazioni \texttt{[op\textsubscript{1}, \ldots, op\textsubscript{n}]}. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
+Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola `\texttt{execute(I)}' all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo \texttt{I}, ovvero quella che è stata precedentemente selezionata.
 
 La regola \texttt{execute} si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
 \begin{itemize}
