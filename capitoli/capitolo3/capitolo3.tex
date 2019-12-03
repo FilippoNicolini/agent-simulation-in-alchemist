@@ -105,49 +105,49 @@ Sia $S_I(I) = i$, dove $i$ è $[p_1 \ddagger \ldots \ddagger \text{\leftArrow}(e
 Il linguaggio appena definito è ciò che è messo a disposizione del programmatore dell'agente per descrivere il suo comportamento. Oltre questo, sono state definite altre sintassi che permettano al programmatore di gestire ogni evento o situazione per l'agente.
 Qui di seguito sono citate regole, variabili e fatti del linguaggio:
 \begin{itemize}
-\item $init \impliedBy \ldots$
-\item $self(A).$
-\item $agent$
-\item $node$
-\item $addBelief(B).$
-\item $removeBelief(B).$
-\item $\text{\leftArrow}(onAddBelief(B), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $\text{\leftArrow}(onRemoveBelief(B), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $\text{\leftArrow}(onReceivedMessage(S,M), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $\text{\leftArrow}(achievement(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $\text{\leftArrow}(test(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $\text{\leftArrow}(concurrent(T), [b_1, \ldots, b_m], [h_1, \ldots, h_n]).$
-\item $belief(position(X,Y)).$
-\item $belief(distance(A, ND, OD)).$ oppure $belief(distance(A, ND)).$
+\item \texttt{init \impliedBy \ldots}
+\item \texttt{self(A).}
+\item \texttt{agent}
+\item \texttt{node}
+\item \texttt{addBelief(B).}
+\item \texttt{removeBelief(B).}
+\item \texttt{\leftArrow(onAddBelief(B), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{\leftArrow(onRemoveBelief(B), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{\leftArrow(onReceivedMessage(S,M), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{\leftArrow(achievement(T), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{\leftArrow(test(T), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{\leftArrow(concurrent(T), [b\textsubscript{1}, \ldots, b\textsubscript{m}], [h\textsubscript{1}, \ldots, h\textsubscript{n}]).}
+\item \texttt{belief(position(X,Y)).}
+\item \texttt{belief(distance(A, ND, OD)).} oppure \texttt{belief(distance(A, ND)).}
 \end{itemize}
 
 Di seguito vengono analizzate ed esposte.
 Per ogni regola è lasciata l'implementazione del corpo al programmatore dell'agente.
 
 \paragraph*{}
-La regola `$init$' è messa a disposizione per permettere di effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
+La regola `\texttt{init}' è messa a disposizione per permettere di effettuare una configurazione iniziale dell'agente. Infatti, questa regola verrà invocata solo ed esclusivamente la prima volta che viene attivato l'agente, al posto del ciclo di ragionamento. In questo modo il programmatore dell'agente è in grado di far eseguire all'agente una serie di operazioni iniziali per impostare ad esempio la `belief base' dell'agente.
 
 \paragraph*{}
-Il fatto `$self(A)$' permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
+Il fatto `\texttt{self(A)}' permette all'agente di recuperare il suo nome. In questo modo il nome dell'agente può essere recuperato anche all'interno della teoria tuProlog.
 
 \paragraph*{}
-I due letterali `$agent$' e `$node$' sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linguaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile `$agent$' fa riferimento all'oggetto dell'agente stesso, mentre `$node$' si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
+I due letterali `\texttt{agent}' e `\texttt{node}' sono due variabili di tuProlog alle quali sono collegati gli oggetti dell'agente e del nodo, implementati nell'ambiente su cui si è scelto di utilizzare il linguaggio. Se costruiti correttamente, dalla teoria dell'agente sarà possibile richiamare metodi implementati nella classe corrispondente. La variabile `\texttt{agent}' fa riferimento all'oggetto dell'agente stesso, mentre `\texttt{node}' si riferisce all'oggetto che rappresenta lo spazio sul quale l'agente è inserito. In questo modo possono essere gestite le azioni interne ed esterne dell'agente.
 
 \paragraph*{}
-Le regole `$addBelief(B)$' e `$removeBelief(B)$' sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare `$onAddBelief(B)$', `$onRemoveBelief(B)$'. Più precisamente `$onAddBelief(B)$' viene invocato quando viene aggiunto un belief, mentre `$onRemoveBelief(B)$' è chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile $B$ corrisponde al belief inserito o rimosso.
+Le regole `\texttt{addBelief(B)}' e `\texttt{removeBelief(B)}' sono utilizzabili per aggiungere o rimuovere elementi dalla `belief base'. Il loro utilizzo scatena un evento che va ad invocare `\texttt{onAddBelief(B)}', `\texttt{onRemoveBelief(B)}'. Più precisamente `\texttt{onAddBelief(B)}' viene invocato quando viene aggiunto un belief, mentre `\texttt{onRe\-moveBe\-lief(B)}' è chiamato in seguito alla rimozione di un belief dalla `belief base'. In entrambi i casi la variabile \texttt{B} corrisponde al belief inserito o rimosso.
 
-Diversamente, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato `$onReceivedMessage(S, M)$', dove $S$ rappresenta il mittente e $M$ il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
+Diversamente, quando viene letto un messaggio ricevuto da un altro agente (o anche da se stesso), è invocato `\texttt{onReceivedMessage(S, M)}', dove \texttt{S} rappresenta il mittente e \texttt{M} il contenuto del messaggio, che consente all'agente di reagire quando viene letto un messaggio tra quelli presenti nella sua coda di ingresso.
 
 \paragraph*{}
-Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali `$achievement$', `$test$' sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
-In combinazione, i due letterali appena citati possono essere usati in combinazione con `$concurrent$', mostrato nella Definizione \ref{defn:triggeringEvents}, che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione può essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
+Come visto precedentemente nella Definizione \ref{defn:goals}, i letterali `\texttt{achievement}', `\texttt{test}' sono utilizzati per impostare dei goal nell'agente. Ciò che viene scatenato è l'inserimento della serie di operazioni definita dal goal in testa allo stack dell'intenzione.
+In combinazione, i due letterali appena citati possono essere usati in combinazione con `\texttt{concurrent}', mostrato nella Definizione \ref{defn:triggeringEvents}, che permette di inserire le operazioni definite nel goal in una nuova intenzione. In questo modo, la nuova intenzione può essere eseguita in modo concorrente o parallelo rispetto a quella `padre'.
 
 \paragraph*{}
 Per rendere disponibile al programmatore dell'agente varie possibilità per accedere a informazioni quali la posizione dell'agente e la distanza degli altri agenti rispetto alla propria posizione, sono utilizzati due belief che saranno aggiornati direttamente dall'ambiente sul quale viene utilizzato il linguaggio. La posizione dell'agente viene aggiornata una volta per ogni ciclo di ragionamento e, al termine, sono modificati anche i valori dei belief appena citati.
 
-Per quanto riguarda la posizione dell'agente, potrà essere invocato `$be\-lief(po\-si\-tion(X, Y))$' dove $X$ è la coordinata relative alle ascisse o longitudine e $Y$ è la coordinata relativa alle ordinate o latitudine.
+Per quanto riguarda la posizione dell'agente, potrà essere invocato `\texttt{be\-lief(po\-si\-tion(X, Y))}' dove \texttt{X} è la coordinata relative alle ascisse o longitudine e \texttt{Y} è la coordinata relativa alle ordinate o latitudine.
 
-La distanza da altri agenti può essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief `$belief(distance(A, ND))$', dove $A$ è il nome dell'agente nel vicinato e $ND$ è la distanza che li separa. Se, invece, un agente era già nella lista del vicinato e vi rimane, allora viene inserito il belief `$belief(distance(A, ND, OD))$', dove $A$ è il nome dell'agente nel vicinato, $ND$ è la nuova distanza che li separa e $OD$ è la distanza che li divideva precedentemente.
+La distanza da altri agenti può essere molto utile per far scegliere all'agente di effettuare o meno una certa azione. Se nella lista del vicinato entra un nuovo agente viene inserito il belief `\texttt{belief(distance(A, ND))}', dove \texttt{A} è il nome dell'agente nel vicinato e \texttt{ND} è la distanza che li separa. Se, invece, un agente era già nella lista del vicinato e vi rimane, allora viene inserito il belief `\texttt{belief(distance(A, ND, OD))}', dove \texttt{A} è il nome dell'agente nel vicinato, \texttt{ND} è la nuova distanza che li separa e \texttt{OD} è la distanza che li divideva precedentemente.
 
 \subsection{Gestione intenzioni}
 Le intenzioni sono la modalità con cui l'agente opera le sue azioni. Come descritto in precedenza, nel ciclo di ragionamento alla sezione \ref{ssctn:cicloRagionamentoAgentSpeak}, l'agente esegue una serie di passi che portano all'esecuzione di un'azione.
@@ -157,36 +157,36 @@ L'agente lato tuProlog definisce il suo comportamento tramite una serie di regol
 
 La frequenza dell'esecuzione del ciclo di ragionamento dipende dall'ambiente sul quale viene utilizzato il linguaggio. All'interno del ciclo, una volta selezionato il piano applicabile per l'evento avvenuto, l'interprete invoca delle regole per ottenere la lista delle operazioni presenti nel corpo del piano (o regola) per poterle inserire nell'intenzione. Le regole per recuperare la lista eseguono per ogni elemento del corpo una lettura e un inserimento all'interno di una lista, la quale poi viene restituita.
 
-La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione $in\-ten\-tion(id,[op_1, \ldots, op_n])$ è composta da un identificativo univoco $id$ e da una lista di operazioni $[op_1, \ldots, op_n]$. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
-Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola $execute(I)$ all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo $I$, ovvero quella che è stata precedentemente selezionata.
+La creazione dell'intenzione viene fatta dall'interprete ma salvata come fatto nella teoria dell'agente. Come descritto nella definizione \ref{defn:intenzione}, l'intenzione \texttt{in\-ten\-tion(id,[op\textsubscript{1}, \ldots, op\textsubscript{n}])} è composta da un identificativo univoco \texttt{id} e da una lista di operazioni \texttt{[op\textsubscript{1}, \ldots, op\textsubscript{n}]}. All'interno della teoria dell'agente possono essere presenti più intenzioni contemporaneamente ma ad ogni ciclo di ragionamento solo una verrà selezionata per l'esecuzione.
+Come detto precedentemente, anche la selezione dell'intenzione è gestita dall'interprete ma lato tuProlog ne viene gestita l'esecuzione. Infatti, l'interprete si limita a invocare la regola \texttt{execute(I)} all'interno della quale viene gestita l'esecuzione della prima operazione sullo stack dell'intenzione con identificativo \texttt{I}, ovvero quella che è stata precedentemente selezionata.
 
-La regola $execute$ si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
+La regola \texttt{execute} si occupa di recuperare l'intenzione riferita all'identificativo passato e quindi prendere la testa dello stack delle operazioni. Quest'ultima viene valutata ed in base alla sua natura vengono eseguite azioni diverse:
 \begin{itemize}
 \item le azioni vengono eseguite direttamente;
 \item i goal vengono recuperati lo stack di operazioni collegate viene successivamente aggiunto in testa all'intenzione di cui faceva parte il goal;
-\item i goal espressi all'interno di $concurrent$ creano una nuova intenzione che potrà essere eseguita in parallelo rispetto a quella da cui ha avuto origine la chiamata al goal.
+\item i goal espressi all'interno di \texttt{concurrent} creano una nuova intenzione che potrà essere eseguita in parallelo rispetto a quella da cui ha avuto origine la chiamata al goal.
 \end{itemize}
 
 
 \subsection{Estensione Spatial Tuples}
 Il linguaggio appena descritto è stato esteso per permettere di utilizzare il modello Spatial Tuples. Sono state quindi inserite le seguenti regole:
 \begin{itemize}
-\item $writeTuple(T).$
-\item $readTuple(TT).$
-\item $takeTuple(TT).$
-\item $onResponseMessage(M) \impliedBy \ldots$
+\item \texttt{writeTuple(T).}
+\item \texttt{readTuple(TT).}
+\item \texttt{takeTuple(TT).}
+\item \texttt{onResponseMessage(M) \impliedBy \ldots}
 \end{itemize}
 Le regole dell'elenco sono tutte riferite all'inserimento, all'interno del linguaggio, del modello di coordinazione LINDA e più precisamente del modello Spatial Tuples.
-Con questa estensione, viene data la possibilità agli agenti di poter inserire e recuperare informazioni posizionate nello spazio. Le regole messe a disposizione mappano le primitive dei modelli che vogliono implementare `\textit{in}', `\textit{rd}', `\textit{out}' rispettivamente in `$writeTuple(T)$', `$readTuple(TT)$', `$takeTuple(TT)$' dove $T$ è la tupla da inserire e $TT$ è il template da ricercare.
+Con questa estensione, viene data la possibilità agli agenti di poter inserire e recuperare informazioni posizionate nello spazio. Le regole messe a disposizione mappano le primitive dei modelli che vogliono implementare `\texttt{in}', `\texttt{rd}', `\texttt{out}' rispettivamente in `\texttt{writeTuple(T)}', `\texttt{readTuple(TT)}', `\texttt{takeTuple(TT)}' dove \texttt{T} è la tupla da inserire e \texttt{TT} è il template da ricercare.
 
-Utilizzando `$writeTuple(T)$' il programmatore è in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalità: `$readTuple(TT)$' e `$takeTuple(TT)$'. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece `$takeTuple(TT)$', si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
+Utilizzando `\texttt{writeTuple(T)}' il programmatore è in grado di inserire informazioni posizionate nello spazio degli agenti e con le quali gli stessi agenti possono interagire. Per leggere le informazioni si possono utilizzare due diverse modalità: `\texttt{readTuple(TT)}' e `\texttt{takeTuple(TT)}'. Nel primo caso viene utilizzato il template passato per confrontarlo con le tuple nell'intorno dell'agente e se ci sono risultati che combaciano con il template allora uno di questi viene restituito. Per quanto riguarda invece `\texttt{takeTuple(TT)}', si comporta ugualmente per quanto riguarda la ricerca della tupla con il template ma poi, una volta trovati i risultati ne sceglie uno e prima di restituirlo lo elimina dallo spazio di tuple in cui era presente.
 %
-Entrambe le modalità che recuperano le informazioni, ovvero $readTuple(TT)$ e $takeTuple(TT)$, seguono la semantica standard dei modelli basati su tuple, e quindi sono:
+Entrambe le modalità che recuperano le informazioni, ovvero `\texttt{readTuple(TT)}' e `\texttt{takeTuple(TT)}', seguono la semantica standard dei modelli basati su tuple, e quindi sono:
 \begin{itemize}
 \item sospensive: se non ci sono tuple che si abbinano al template l'operazione è bloccata finchè non viene trovata una tupla;
 \item non deterministiche: se ci sono più tuple che si abbinano al template una è scelta in modo non deterministico.
 \end{itemize}
-Per dare la possibilità di gestire la risposta e gestire la tupla restituita è stata introdotta `$onResponseMessage(M)$' che viene invocata ogni qualvolta che una tupla viene restituita dallo spazio di tuple. Il contenuto $M$ è la tupla incapsulata in un belief in modo che si possano gestire tuple provenienti da diversi spazi di tuple e con contenuti differenti.
+Per dare la possibilità di gestire la risposta e gestire la tupla restituita è stata introdotta `\texttt{onResponseMessage(M)}' che viene invocata ogni qualvolta che una tupla viene restituita dallo spazio di tuple. Il contenuto \texttt{M} è la tupla incapsulata in un belief in modo che si possano gestire tuple provenienti da diversi spazi di tuple e con contenuti differenti.
 
 \section{Esempi linguaggio}
 In questa sezione verranno mostrate alcuni casi d'uso del linguaggio appena descritto. Nello specifico verrà mostrato un primo scenario dove sono stati configurati gli agenti per realizzare un semplice scambio di messaggi (o Ping Pong). Nel secondo esempio, invece, viene illustrato come poter utilizzare l'estensione Spatial Tuples supportata dal linguaggio.
@@ -206,7 +206,7 @@ init :-
 '<-'(onReceivedMessage(S,pong),[true],[iSend(S, ping)]).
 \end{lstlisting}
 
-In entrambe le teorie dei due agenti è stata richiamata `$iSend(S, M)$', dove $S$ è il destinatario e $M$ è il messaggio, che è un'azione interna dichiarata e gestita nell'ambiente sul quale è utilizzato il linguaggio. Nel Codice sorgente \ref{lst:PingAgent} viene inviato all'agente Pong il messaggio `ping', mentre nel Codice sorgente \ref{lst:PongAgent} il messaggio inviato all'agente Ping è `pong'.
+In entrambe le teorie dei due agenti è stata richiamata `\texttt{iSend(S, M)}', dove \texttt{S} è il destinatario e \texttt{M} è il messaggio, che è un'azione interna dichiarata e gestita nell'ambiente sul quale è utilizzato il linguaggio. Nel Codice sorgente \ref{lst:PingAgent} viene inviato all'agente Pong il messaggio `ping', mentre nel Codice sorgente \ref{lst:PongAgent} il messaggio inviato all'agente Ping è `pong'.
 
 \switchToProlog{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:PongAgent},caption={Agente Pong}]

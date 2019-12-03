@@ -1,8 +1,8 @@
 \chapter{Test case}\label{chap:validation}
-In questo capitolo è mostato come il linguaggio e l'incarnazione realizzati sono stati applicati ad uno scenario di test noto per quanto riguarda i sistemi multi agente (MAS).
+In questo capitolo è mostato come il linguaggio e l'incarnazione realizzati sono stati applicati ad uno scenario di test noto per quanto riguarda i sistemi multi-agente (MAS).
 Viene per prima cosa descritto il problema e successivamente analizzati i vari ruoli all'interno della scena.
 
-La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente $iSend(R,M)$ sostituendola con $writeTuple(R,T)$, dove $R$ è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio $M$ in una tupla $T$.
+La soluzione proposta è una ma non l'unica possibile. Una possibile alternativa può esser ad esempio la modifica del modo in cui le pepite sono consegnate. Trasformando il deposito in uno spazio di tuple si dovrà quindi modificare l'azione dell'agente \texttt{iSend(R,M)} sostituendola con \texttt{writeTuple(R,T)}, dove \texttt{R} è il destinatario, ovvero il deposito, e la pepita si trasforma da un messaggio \texttt{M} in una tupla \texttt{T}.
 
 \section{Descrizione problema}
 Il quesito che è stato preso in esame per presentare le funzionalità del progetto sviluppato è noto come `Goldminers' ed è stato definito da Jomi H\"ubner e Rafael Bordini come segue:
@@ -89,15 +89,15 @@ loadNuggets(NUGGETS) :-
     agent <- setConcentration.
 \end{lstlisting}
 
-Nel corpo della regola $init$ viene inizialmente recuperato un numero random, attraverso l'invocazione del metodo $generateNextRandom()$ definito nell'agente, che rappresenta le pepite da posizionare all'interno della miniera.
-Il caricamento delle risorse viene fatto tramite l'invocazione della regola $loadNuggets(NUGGETS)$ con la quale sono inseriti i fatti nello spazio di tuple: se le risorse sono state tutte caricate viene invocato il metodo $setConcentration()$, definito appositamente all'interno dell'agente, che viene utilizzato per impostare le molecole per lo stile grafico dello spazio di tuple nella simulazione.
+Nel corpo della regola \texttt{init} viene inizialmente recuperato un numero random, attraverso l'invocazione del metodo \texttt{generateNextRandom()} definito nell'agente, che rappresenta le pepite da posizionare all'interno della miniera.
+Il caricamento delle risorse viene fatto tramite l'invocazione della regola \texttt{loadNuggets(NUGGETS)} con la quale sono inseriti i fatti nello spazio di tuple: se le risorse sono state tutte caricate viene invocato il metodo \texttt{setConcentration()}, definito appositamente all'interno dell'agente, che viene utilizzato per impostare le molecole per lo stile grafico dello spazio di tuple nella simulazione.
 
 \subsubsection{Implementazione classe miniera}
-Per quanto riguarda la classe della miniera si è deciso, come detto poco sopra, di utilizzare lo spazio di tuple. La classe astratta AbstractSpatialTuple definisce al suo interno la struttura base dello spazio di tuple e le funzioni per eseguire i suoi comportamenti caratteristici $in$, $rd$ e $out$, rispettivamente trasformati nelle azioni $writeTuple$, $readTuple$, $takeTuple$.
+Per quanto riguarda la classe della miniera si è deciso, come detto poco sopra, di utilizzare lo spazio di tuple. La classe astratta AbstractSpatialTuple definisce al suo interno la struttura base dello spazio di tuple e le funzioni per eseguire i suoi comportamenti caratteristici \texttt{in}, \texttt{rd} e \texttt{out}, rispettivamente trasformati nelle azioni \texttt{writeTuple}, \texttt{readTuple}, \texttt{takeTuple}.
 Per definire la miniera è stata quindi definita la classe Goldmine che estende la classe astratta implementando quindi un semplice spazio di tuple.
-Oltre ad essere uno spazio di tuple, la classe però implementa anche la super classe astratta AbstractAgent che fa essere Goldmine anche un agente: è quindi necessario implementare all'interno della classe anche i metodi $execute()$ e $cloneAction(node, reaction)$. Il primo di questi due metodi è quello più importante, poichè definisce in che modo lo spazio di tuple opererà nel suo ciclo di ragionamento permettendo a quest'ultimo di reagire alle richieste ricevute.
+Oltre ad essere uno spazio di tuple, la classe però implementa anche la super classe astratta AbstractAgent che fa essere Goldmine anche un agente: è quindi necessario implementare all'interno della classe anche i metodi \texttt{execute()} e \texttt{cloneAction(node, reaction)}. Il primo di questi due metodi è quello più importante, poichè definisce in che modo lo spazio di tuple opererà nel suo ciclo di ragionamento permettendo a quest'ultimo di reagire alle richieste ricevute.
 
-Per lo stile all'interno della simulazione è stato implementato il metodo $setCon\-cen\-tra\-tion()$. Questo metodo, come già accennato nella sezione precedente, viene utilizzato per inserire un oggetto molecola nel nodo, la quale è utilizzata per lo stile della simulazione. La molecola viene creata ed inserita con le istruzioni presenti nel Codice sorgente \ref{lst:CreazioneInserimentoMolecola} solo dopo aver verificato che nella teoria dell'agente sono effettivamente presenti delle risorse.
+Per lo stile all'interno della simulazione è stato implementato il metodo \texttt{setCon\-cen\-tra\-tion()}. Questo metodo, come già accennato nella sezione precedente, viene utilizzato per inserire un oggetto molecola nel nodo, la quale è utilizzata per lo stile della simulazione. La molecola viene creata ed inserita con le istruzioni presenti nel Codice sorgente \ref{lst:CreazioneInserimentoMolecola} solo dopo aver verificato che nella teoria dell'agente sono effettivamente presenti delle risorse.
 
 \switchToJava{}{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:CreazioneInserimentoMolecola},caption={Creazione e inserimento molecola}]
@@ -108,12 +108,12 @@ La stringa `nugget' è quella che deve essere inserita nella casella di testo a 
 
 \paragraph*{}
 
-Per via della necessità di associare uno stile alla simulazione, si è dovuto sovrascrivere il metodo dello spazio di tuple relativo alla funzionalità $out$, o $takeTuple$.
+Per via della necessità di associare uno stile alla simulazione, si è dovuto sovrascrivere il metodo dello spazio di tuple relativo alla funzionalità \texttt{out}, o \texttt{takeTuple}.
 Qui di seguito è descritta la funzionalità già implementata nella classe astratta. Nel paragrafo successivo viene invece riportata la modifica effettuata per definire lo stile della miniera all'interno della simulazione.
 
 Nell'implementazione della funzionalità già definita all'interno della classe astratta, la procedura è la seguente:
 \begin{enumerate}
-\item recupero di una tupla che corrisponda al template tramite il predicato $retract$;
+\item recupero di una tupla che corrisponda al template tramite il predicato \texttt{retract};
 \item interrogazione per ottenere dal termine estratto il template popolato con i valori recuperati;
 \item invio del template popolato tramite un messaggio all'agente che lo aveva richiesto.
 \end{enumerate}
@@ -121,7 +121,7 @@ Nel caso l'operazione di recupero della tupla non vada a successo quella richies
 Nel caso in cui la richiesta del template è andata a successo e questa è presente nell'elenco di quelle in attesa allora la stessa viene rimossa prima di procedere con l'operazione indicata nell'elenco con il numero 2.
 
 La modifica effettuata è relativa solamente allo stile, cioè all'inserimento o alla rimozione di un oggetto molecola, e quindi la funzionalità principale rimane quella appena descritta.
-Il codice aggiunto è stato inserito prima di effettuare l'operazione di invio del messaggio all'agente. L'aggiunta consiste in un'interrogazione per verificare se dopo aver estratto una risorsa ci sono ancora pepite, presenti nella teoria sotto forma di fatti, all'interno della miniera. In caso affermativo viene lasciata la molecola che era stata impostata precedentemente invocando dalla teoria la funzionalità $setConcentration()$. Diversamente, se non sono più presenti risorse nella miniera la molecola viene rimossa e, se lo stile della simulazione è opportunamente configurata, il cambiamento porterà ad una modifica visiva del nodo.
+Il codice aggiunto è stato inserito prima di effettuare l'operazione di invio del messaggio all'agente. L'aggiunta consiste in un'interrogazione per verificare se dopo aver estratto una risorsa ci sono ancora pepite, presenti nella teoria sotto forma di fatti, all'interno della miniera. In caso affermativo viene lasciata la molecola che era stata impostata precedentemente invocando dalla teoria la funzionalità \texttt{setConcentration()}. Diversamente, se non sono più presenti risorse nella miniera la molecola viene rimossa e, se lo stile della simulazione è opportunamente configurata, il cambiamento porterà ad una modifica visiva del nodo.
 
 \subsection{Minatore -- Miner}
 Il minatore è l'agente con il comportamento più complesso per lo scenario preso in esempio.
@@ -137,11 +137,11 @@ Il comportamento del minatore è stato scomposto in 4 fasi o stati:
 \subsubsection{Teoria tuProlog minatore}
 Le fasi descritte sono state poi riportate all'interno della teoria dell'agente, mostrata nel Codice sorgente \ref{lst:Goldmine}, per definirne il comportamento in relazione agli eventi innescati dall'interprete. Le invocazioni evidenziate in blu sono relative a regole definite all'interno della teoria dell'agente e che non sono state mostrate.
 
-Le regole $ randomDirection(D)$ e $randomSpeed(S)$ restituiscono nella variabile passata, rispettivamente $D$ e $S$, il valore ottenuto dall'invocazione combinata delle funzioni definite all'interno della classe AbstractAgent, e quindi disponibile in tutte le implementazioni di un agente, che generano un valore random e lo applicano alla distribuzione di Levy.
+Le regole \texttt{randomDirection(D)} e \texttt{randomSpeed(S)} restituiscono nella variabile passata, rispettivamente \texttt{D} e \texttt{S}, il valore ottenuto dall'invocazione combinata delle funzioni definite all'interno della classe AbstractAgent, e quindi disponibile in tutte le implementazioni di un agente, che generano un valore random e lo applicano alla distribuzione di Levy.
 
-La regola $handlePosition$ si occupa, in modo molto simile a quello che viene fatto nella regola $init$, di generare una nuova velocità e un delta per la direzione da impostare nel nodo, mentre $changeDirection(X,Y)$ modifica solamente la direzione calcolando il valore corretto per raggiungere il punto (X,Y) data la posizione corrente.
+La regola \texttt{handlePosition} si occupa, in modo molto simile a quello che viene fatto nella regola \texttt{init}, di generare una nuova velocità e un delta per la direzione da impostare nel nodo, mentre \texttt{changeDirection(X,Y)} modifica solamente la direzione calcolando il valore corretto per raggiungere il punto (X,Y) data la posizione corrente.
 
-La regola $checkMineDistance$ definisce la guardia che verifica che l'agente, dopo aver consegnato la pepita al deposito e essersi diretto alla miniera, è effettivamente arrivato a destinazione e può tornare nello stato `harvesting'.
+La regola \texttt{checkMineDistance} definisce la guardia che verifica che l'agente, dopo aver consegnato la pepita al deposito e essersi diretto alla miniera, è effettivamente arrivato a destinazione e può tornare nello stato `harvesting'.
 
 \switchToProlog{}
 \lstset{
@@ -171,15 +171,15 @@ init :-
 '<-'(onAddBelief(distance(deposit,ND)), [removeBelief(toDeposit)], [iSend(deposit,nugget), addBelief(toMine), belief(mine(X,Y)), changeDirection(X,Y)]).
 \end{lstlisting}
 
-Nella fase di configurazione iniziale, regola $init$, vengono impostati all'interno della teoria del minatore il belief relativo alla posizione del deposito e quello relativo allo stato iniziale dell'agente, `harvesting'. Successivamente sono generati i valori per direzione e velocità che poi sono impostati nel nodo.
+Nella fase di configurazione iniziale, regola \texttt{init}, vengono impostati all'interno della teoria del minatore il belief relativo alla posizione del deposito e quello relativo allo stato iniziale dell'agente, `harvesting'. Successivamente sono generati i valori per direzione e velocità che poi sono impostati nel nodo.
 
-Dopo la regola $init$ sono descritti i fatti che definiscono il comportamento dell'agente, mostrato ad inizio sezione, e che gli permettono di reagire al verificarsi di opportuni eventi.
-I fatti seguono la seguente struttura $\leftArrow(EVENT, GUARD, BODY).$, dove $EVENT$ è l'evento al quale l'agente vuole reagire, $GUARD$ identifica il contesto o la condizione per cui le azioni contenute nel $BODY$ possano essere eseguite.
+Dopo la regola \texttt{init} sono descritti i fatti che definiscono il comportamento dell'agente, mostrato ad inizio sezione, e che gli permettono di reagire al verificarsi di opportuni eventi.
+I fatti seguono la seguente struttura \texttt{\leftArrow(EVENT, GUARD, BODY).}, dove \texttt{EVENT} è l'evento al quale l'agente vuole reagire, \texttt{GUARD} identifica il contesto o la condizione per cui le azioni contenute nel \texttt{BODY} possano essere eseguite.
 
 I fatti identificati dalle fasi 1 e 4 agiscono entrambi in relazione all'evento di aggiornamento della posizione. Il contesto della fase 1 è relativo allo stato `harvesting' mentre quello della fase 4 è la vicinanza del nodo che contiene l'agente rispetto alla miniera che deve raggiungere.
 Gli altri due contesti, relazionati ad eventi quali la ricezione di un messaggio dallo spazio di tuple e l'aggiornamento della distanza dal nodo contenente l'agente deposito, sono associati alla rimozione di un certo stato che quindi risulta bloccante finchè lo stato da rimuovere non è presente all'interno della `belief base' dell'agente.
 
-Tra le azioni definite nei corpi dei vari fatti una spiegazione la merita l'utilizzo del belief $mine(X,Y)$. Questo viene utilizzato per salvare la posizione della miniera da cui è stata recuperata l'ultima risorsa, prima di andare al deposito per consegnarla, in modo tale da poter tornare direttamente alla miniera, una volta depositata la pepita, per continuare ad estrarre risorse risultando più veloce ed efficace.
+Tra le azioni definite nei corpi dei vari fatti una spiegazione la merita l'utilizzo del belief \texttt{mine(X,Y)}. Questo viene utilizzato per salvare la posizione della miniera da cui è stata recuperata l'ultima risorsa, prima di andare al deposito per consegnarla, in modo tale da poter tornare direttamente alla miniera, una volta depositata la pepita, per continuare ad estrarre risorse risultando più veloce ed efficace.
 
 \subsubsection{Implementazione classe minatore}
 Per quanto riguarda la parte lato interprete relativa all'agente minatore è stata utilizzata la classe SimpleAgent che estende da AbstractAgent. Questa classe rappresenta un esempio di come può essere immediata l'implementazione di un agente, che racchiude tutte le funzionalità principali, a partire da quello che è già stato prodotto e mostrato precedentemente in questo documento.
@@ -190,7 +190,7 @@ Per quanto riguarda la parte lato interprete relativa all'agente minatore è sta
 public void execute() {
     if (this.isInitialized()) {
         //Agent's reasoning cycle
-        
+
         this.beliefBaseChanges();
         this.readMessage();
 
@@ -205,11 +205,11 @@ public void execute() {
 }
 \end{lstlisting}
 
-Per implementare la classe SimpleAgent (denominata in questo modo perchè implementa un agente con tutte le funzionalità principali) è stato sufficiente implementare il costruttore, richiamando quello di AbstractAgent, e i due metodi $cloneAction(node, reaction)$ e $execute()$.
+Per implementare la classe SimpleAgent (denominata in questo modo perchè implementa un agente con tutte le funzionalità principali) è stato sufficiente implementare il costruttore, richiamando quello di AbstractAgent, e i due metodi \texttt{cloneAction(node, reaction)} e \texttt{execute()}.
 Nel Codice sorgente \ref{lst:SimpleAgentReasoningCycle} è mostrato come è stato definito il ciclo di ragionamento.
 Come si può notare è stata utilizzata una condizione, che utilizza un flag definito nella classe astratta, per determinare se l'agente è stato inizializzato, ovvero se ha completato la configurazione iniziale.
 
-Nel primo ciclo di ragionamento avviene appunto la configurazione iniziale. La prima funzione che viene chiamata è $initializeAgent()$ che termina la configurazione utilizzata dall'interprete, e all'interno della quale viene modificato il flag citato in precedenza, e poi viene invocata $initReasoning()$ che esegue quanto previsto dalla regola $init$ se presente nella teoria dell'agente.
+Nel primo ciclo di ragionamento avviene appunto la configurazione iniziale. La prima funzione che viene chiamata è \texttt{initializeAgent()} che termina la configurazione utilizzata dall'interprete, e all'interno della quale viene modificato il flag citato in precedenza, e poi viene invocata \texttt{initReasoning()} che esegue quanto previsto dalla regola \texttt{init} se presente nella teoria dell'agente.
 
 Dal ciclo di ragionamento successivo vengono eseguite le funzioni per:
 \begin{enumerate}
@@ -218,17 +218,17 @@ Dal ciclo di ragionamento successivo vengono eseguite le funzioni per:
 \item inviare le richieste agli spazi di tuple;
 \item eseguire un'intenzione.
 \end{enumerate}
-La funzione $beliefBaseChanges()$ recupera tutte le modifiche effettuate alla `belief base' e, per ognuna per cui esiste un comportamento nella teoria, genera un'intenzione inserita opportunamente nella teoria. In modo simile, $readMessage()$ recupera, se presente, un messaggio dalla lista di quelli in entrata e, anche in questo caso, se nella teoria è previsto un comportamento viene generata un'intenzione.
+La funzione \texttt{beliefBaseChanges()} recupera tutte le modifiche effettuate alla `belief base' e, per ognuna per cui esiste un comportamento nella teoria, genera un'intenzione inserita opportunamente nella teoria. In modo simile, \texttt{readMessage()} recupera, se presente, un messaggio dalla lista di quelli in entrata e, anche in questo caso, se nella teoria è previsto un comportamento viene generata un'intenzione.
 
-La funzione $retrieveTuples()$ recupera ed invia immediatamente tutte le richieste agli spazi di tuple opportuni.
-Per concludere viene invocata la funzione $executeIntention()$ che sceglie un'intenzione tra quelle presenti all'interno dell'agente (il metodo di selezione è Round-Robin), la esegue e poi la inserisce in coda alla lista delle intenzioni.
+La funzione \texttt{retrieveTuples()} recupera ed invia immediatamente tutte le richieste agli spazi di tuple opportuni.
+Per concludere viene invocata la funzione \texttt{executeIntention()} che sceglie un'intenzione tra quelle presenti all'interno dell'agente (il metodo di selezione è Round-Robin), la esegue e poi la inserisce in coda alla lista delle intenzioni.
 
 \subsection{Deposito -- Deposit}
 Per quanto riguarda il deposito, il suo compito è semplicemente quello di raccogliere le risorse consegnate dai minatori.
 Nella soluzione proposta il deposito è stato implementato da un agente ma, come detto nell'introduzione del capitolo, è possibile realizzare simulazioni con un'implementazione diversa.
 
 \subsubsection{Teoria tuProlog deposito}
-Per quanto riguarda la teoria del deposito non è necessario definire alcun piano poichè esso non ha compiti se non quello di accettare le risorse ricevute. Si è quindi definita una teoria contenente una regola $init$ vuota (ovvero che ha come unica istruzione del corpo `true').
+Per quanto riguarda la teoria del deposito non è necessario definire alcun piano poichè esso non ha compiti se non quello di accettare le risorse ricevute. Si è quindi definita una teoria contenente una regola \texttt{init} vuota (ovvero che ha come unica istruzione del corpo `true').
 
 \subsubsection{Implementazione classe deposito}
 La classe utilizzata per rivestire questo ruolo all'interno della simulazione è anche in questo caso la classe SimpleAgent poichè è un'implementazione di un agente completo già pronta per essere utilizzata.
@@ -278,11 +278,11 @@ Il secondo parametro impostato in configurazione è il `network-model', il param
 
 Il terzo ed ultimo parametro è `displacements' che definisce una lista con la disposizione dei nodi ed il loro contenuto.
 %
-La lista si compone di due keyword: $in$ e $programs$. La prima richiede un oggetto che definisce il tipo della geometria e i parametri per costruirla, mentre la seconda utilizza un'ulteriore lista all'interno della quale sono definite le reazioni associate ad ogni nodo.
+La lista si compone di due keyword: \texttt{in} e \texttt{programs}. La prima richiede un oggetto che definisce il tipo della geometria e i parametri per costruirla, mentre la seconda utilizza un'ulteriore lista all'interno della quale sono definite le reazioni associate ad ogni nodo.
 
 Per tutti i ruoli della scena è stato utilizzato il cerchio come geometria per posizionare i nodi, passando per ognuno dimensioni e quantità di nodi differenti.
 
-Attraverso la keyword $program$ si definiscono le reazioni che saranno inserite nei nodi: come si può notare dalla configurazione, per ogni nodo è stata definita una sola reazione.
+Attraverso la keyword \texttt{program} si definiscono le reazioni che saranno inserite nei nodi: come si può notare dalla configurazione, per ogni nodo è stata definita una sola reazione.
 Per definire una reazione sono stati utilizzati una distribuzione temporale ed una stringa; quest'ultima sarà poi utilizzata durante la creazione di istanze della classe AgentReaction e con la quale verrà istanziata all'interno della reazione la classe dell'agente relativa.
 
 Come parametro della distribuzione temporale è stato scelto 9: questo valore ha consentito, anche in base al valore di distribuzione temporale associato all'azione di spostamento posizionata in maniera intrinseca nel nodo, di ottenere un comportamento fluido durante l'esecuzione della simulazione.

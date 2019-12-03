@@ -2,30 +2,46 @@
 \chapter{Introduzione}
 % imposta l'intestazione di pagina
 \lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
-In questo lavoro di tesi si vuole realizzare un nuovo linguaggio ad agenti, che si ispira al modello BDI di AgentSpeak, che permetta di essere utilizzato in ambienti o piattaforme differenti, ovvero sia simulati che reali.
+In questo lavoro di tesi si vuole unire l'espressività della programmazione ad agenti con l'efficienza della simulazione di agenti in un unico ambiente di sviluppo per gli agenti ispirati al modello BDI.
+
+%In questo lavoro di tesi si vuole realizzare un nuovo linguaggio ad agenti, che si ispira al modello BDI di AgentSpeak, che permetta di essere utilizzato in ambienti o piattaforme differenti, ovvero sia simulati che reali.
 
 \paragraph{Obiettivo del lavoro.}
-L'obiettivo del lavoro di tesi è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
+
+L'obiettivo del lavoro di tesi è quello di sviluppare un ambiente che unisca l'espressività della programmazione ad agenti all'efficienza della simulazione di agenti.
+Si vuole quindi utilizzare la definizione di AgentSpeak, che si basa sul modello BDI, estendendola per definire un linguaggio ad agenti creando un interprete in Prolog per la programmazione ad agenti.
+Tramite l'utilizzo della libreria tuProlog si è potuta aggiungere all'interprete una forte flessibilità, poichè questa libreria ha tra le sue caratteristiche il supporto alla programmazione multi-paradigma, permettendo così di utilizzare il linguaggio su ambienti differenti, sia reali che simulati.
+
+%L'obiettivo del lavoro di tesi è quello utilizzare la definizione di agenti BDI fatta da AgentSpeak per definire un nuovo linguaggio ad agenti al quale, inoltre, si è voluto aggiungere anche una caratteristica di flessibilità. Quest'ultima è stata raggiunta grazie all'utilizzo della libreria tuProlog che ha permesso di definire un linguaggio che possa essere utilizzato da interpreti realizzati su ambienti e piattaforme differenti accomunate dall'utilizzo di questa libreria.
 
 AgentSpeak è un linguaggio orientato agli agenti basato sulla programmazione logica e l'architettura BDI per programmare agenti autonomi. Il modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano e consente di programmare agenti intelligenti.
 tuProlog è una libreria che permette di sfruttare il linguaggio Prolog, incapsulato in un core minimale, all'interno di applicazioni e infrastrutture distribuite.
 
-Si vuole mostrare, inoltre, come è possibile creare un interprete all'interno del meta-simulatore Alchemist, realizzando un'opportuna incarnazione, che sfrutta il modello di agenti BDI definito da AgentSpeak e l'implementazione di Jason, in particolare relativamente al ciclo di ragionamento, e che permette l'esecuzione di agenti, definiti tramite le teorie utilizzando il nuovo linguaggio, in un ambiente simulato.
+Come detto precedentemente, si è voluto unificare la programmazione con la simulazione per creare un unico ambiente per gli agenti che fosse espressivo e performante. Per la simulazione è implementata un'incarnazione all'interno del meta-simulatore Alchemist, collegato all'interprete Prolog tramite la libreria tuProlog, all'interno della quale è presente il ciclo di ragionamento dell'agente.
+Quest'ultimo è creato partendo da quello proposto da Jason e permette l'esecuzione di agenti e la gestione dei vari eventi che sono poi inoltrati alle specifiche teorie degli agenti.
+
+
+%Si vuole mostrare, inoltre, come è possibile creare un interprete all'interno del meta-simulatore Alchemist, realizzando un'opportuna incarnazione, che sfrutta il modello di agenti BDI definito da AgentSpeak e l'implementazione di Jason, in particolare relativamente al ciclo di ragionamento, e che permette l'esecuzione di agenti, definiti tramite le teorie utilizzando il nuovo linguaggio, in un ambiente simulato.
 
 Alchemist è un simulatore per il calcolo pervasivo, aggregato e naturale, che si basa su un meta-modello flessibile, il quale permette di realizzare implementazioni di modelli completamente diversi tra loro.
 Jason è un interprete di una versione estesa di AgentSpeak che implementa un linguaggio e fornisce una piattaforma per sviluppare sistemi multi-agente.
 
 \paragraph{Benefici dell'approccio scelto.}
-Il beneficio del linguaggio risiede intrinsecamente nell'architettura del modello ad agenti BDI poichè cerca di esprimere tutto il potenziale del paradigma ad agenti.
-In particolare con la definizione di questo nuovo linguaggio si vuole fornire una soluzione per poter sfruttare a pieno l'implementazione dell'agente separando le sue competenze da quelle, invece, puramente demandate all'interprete.
-In questo modo all'interno dell'agente saranno definiti solo i meccanismi di reazione a determinati eventi mentre la parte di scheduling e gestione del modello saranno determinati dall'implementazione dell'interprete.
-L'agente quindi si comporterà in modo diverso rispetto a come verrà realizzato l'interprete, ovvero in base all'implementazione di:
+Il beneficio che si vuole ottenere da questo lavoro è appunto la possibilità di disporre di un unico ambiente che abbia il focus sia sulla programmazione ad agenti che la simulazione di agenti permettendo da un lato di sfruttare a pieno l'espressività del modello BDI e del linguaggio AgentSpeak e dall'altro fornire una soluzione prestazionale per la simulazione di agenti grazie alla potenza computazionale di Alchemist e alla flessibilità del suo meta-modello.
+
+%Il beneficio del linguaggio risiede intrinsecamente nell'architettura del modello ad agenti BDI poichè cerca di esprimere tutto il potenziale del paradigma ad agenti.
+%In particolare con la definizione di questo nuovo linguaggio si vuole fornire una soluzione per poter sfruttare a pieno l'implementazione dell'agente separando le sue competenze da quelle, invece, puramente demandate all'interprete.
+In questo modo all'interno dell'interprete Prolog, ovvero nel linguaggio, saranno definiti solo API per reagire o scatenare determinati eventi mentre la parte di scheduling e gestione del modello saranno realizzati dall'implementazione dell'interprete.
+L'agente quindi potrà avere comportamenti diversi in base a come verrà realizzato l'interprete del linguaggio, in questo caso Alchemist, implementando:
 \begin{itemize}
 \item funzioni di prelazione relative a selezione di piani e intenzioni
 \item gestione dei messaggi
 \item gestione dell'ambiente esterno
 \item selezione degli eventi da far gestire all'agente
 \end{itemize}
+
+Inoltre, si è scelto di appoggiarsi a soluzioni, quali Alchemist e tuProlog, già ben formate e supportate da una community che ne garantisce la stabilità e il miglioramento nel tempo.
+In questo modo si è sicuri che quanto verrà realizzato all'interno del progetto potrà continuare ad essere utilizzato e migliorato con uno sforzo manutentivo sicuramente minore.
 
 \paragraph{Struttura dell'elaborato.}
 In questo capitolo è stato descritto l'obiettivo del lavoro ed i benefici che si vogliono ottenere.

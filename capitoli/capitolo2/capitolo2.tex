@@ -87,7 +87,7 @@ L'alfabeto del linguaggio formale consiste in variabili, costanti, simboli di fu
 \smallskip
 % Definizione 1
 \begin{defn}
-Se $b$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $b(t_1, \ldots, t_n)$ un atomo di belief. Se $b(t)$ e $c(s)$ sono atomi di belief, allora $b(t) \wedge c(s)$ e $\neg b(t)$ sono beliefs. Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief. Un atomo di belief base sarà chiamato \emph{belief base}.
+Se $b$ è un simbolo di predicato e $t_1, \ldots, t_n$ sono termini, allora $b(t_1, \ldots, t_n)$ un atomo di belief. Se $b(t)$ e $c(s)$ sono atomi di belief, allora $b(t) \wedge c(s)$ e $\neg b(t)$ sono beliefs. Un atomo di belief oppure la sua negazione sono riferiti al letterale del belief. Un atomo di belief base sarà chiamato \textit{belief base}.
 \end{defn}
 
 \smallskip
@@ -271,7 +271,7 @@ Il motore tuProlog fornisce e riconosce i seguenti tipi di predicati:
 In questo lavoro è stato utilizzato il motore tuProlog, fornito tramite la libreria Java \texttt{`alice.tuprolog’}, e le funzionalità collegate per monitorare e modificare la teoria di ogni agente.
 Poichè Prolog viene interpretato mentre Java è compilato, un programma Java guidato da Prolog è in qualche modo `semi-interpretato' in cui Prolog può guidare in modo interpretato il flusso computazionale delle azioni Java compilato \cite{tuprolog-multi-paradigm}.
 
-La funzionalità più caratteristica di tuProlog è la programmazione multi-paradigma.
+La funzionalità più caratteristica di tuProlog è la programmazione multi-pa\-ra\-di\-gma.
 Progettato intenzionalmente per supportare un'integrazione semplice, pervasiva, multi-linguaggio/multi-paradigma \cite{2p-alpnews2013}, tuProlog permette di:
 \begin{itemize}
    \item utilizzare oggetti, librerie e classi Java/.NET direttamente dal codice Prolog \cite{2p-alpnews2013};
@@ -361,10 +361,10 @@ Il modello LINDA comprende un archivio di memoria concettualmente condiviso (spa
 
 Il modello LINDA originale definisce quattro operazioni consentite sulle tuple e lo spazio di tuple:
 \begin{itemize}
-\item \textit{in}: legge una tupla e la consuma dallo spazio di tuple
-\item \textit{rd}: legge una tupla senza consumarla dallo spazio di tuple
-\item \textit{out}: inserisce una tupla nello spazio di tuple
-\item \textit{eval}: crea un processo per valutare le tuple e lo inserisce nello spazio di tuple.
+\item \texttt{in}: legge una tupla e la consuma dallo spazio di tuple
+\item \texttt{rd}: legge una tupla senza consumarla dallo spazio di tuple
+\item \texttt{out}: inserisce una tupla nello spazio di tuple
+\item \texttt{eval}: crea un processo per valutare le tuple e lo inserisce nello spazio di tuple.
 \end{itemize}
 
 LINDA è un modello di coordinazione utilizzato per definire altri modelli e tecnologie di coordinazione, dove gli agenti distribuiti interagiscono e si coordinano tramite scambio di messaggi utilizzando spazi di informazione condivisa e sfruttando la comunicazione generativa.
@@ -393,13 +393,13 @@ Inoltre, una tupla può essere associata anche ad un componente situato. In ques
 In Spatial Tuples viene introdotto un linguaggio di descrizione dello spazio per specificare le informazioni spaziali che decorano le tuple. Questo linguaggio è ortogonale al linguaggio di comunicazione e ha lo scopo di fornire l'ontologia di base che definisce i concetti spaziali.
 
 \subsubsection{Primitive spaziali}
-Gli operatori base di Spatial Tuples sono: $out(t), rd(tt), in(tt)$ dove $t$ è la tupla e $tt$ è un template di tupla. Il funzionamento delle primitive è il seguente:
+Gli operatori base di Spatial Tuples sono: \texttt{out(t)}, \texttt{rd(tt)}, \texttt{in(tt)} dove \texttt{t} è la tupla e \texttt{tt} è un template di tupla. Il funzionamento delle primitive è il seguente:
 \begin{itemize}
-\item $out$, permette di associare la tupla ad una regione o posizione;
-\item $rd$, cerca le tuple che corrispondono al template e ne ritorna una copia;
-\item $in$, come $rd$, cerca le tuple che corrispondo al template ma poi ne restituisce una consumandola dalla sorgente.
+\item \texttt{out}, permette di associare la tupla ad una regione o posizione;
+\item \texttt{rd}, cerca le tuple che corrispondono al template e ne ritorna una copia;
+\item \texttt{in}, come \texttt{rd}, cerca le tuple che corrispondo al template ma poi ne restituisce una consumandola dalla sorgente.
 \end{itemize}
-Le primitive $rd$ e $out$ sono dette `getter' e, in Spatial Tuples, sono:
+Le primitive \texttt{rd} e \texttt{out} sono dette `getter' e, in Spatial Tuples, sono:
 \begin{itemize}
 \item sospensive, se non ci sono tuple che fanno match con il template l'operazione è bloccata finchè non viene trovata una tupla
 \item non deterministiche, se vi sono più tuple che fanno match con il template una è scelta in modo non deterministico.

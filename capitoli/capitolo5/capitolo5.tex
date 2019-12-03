@@ -16,8 +16,8 @@ L'immagine presente in Figura \ref{fig:UMLGerarchiaClassi} mostra lo schema UML 
 %crea l'ambiente figura;
 \begin{figure} % [h] sta per here, cioè la figura va qui
 %\begin{center} % centra nel mezzo della pagina la figura
-\hspace*{-1cm}
-\includegraphics[width=18cm]{images/UML_agenti.png} % inserisce una figura larga 12.5cm
+\hspace*{-2.5cm}
+\includegraphics[width=19.5cm]{images/UML_agenti.png} % inserisce una figura larga 12.5cm
 % inserisce la legenda ed etichetta la figura con \label{fig:prima}
 \caption[Ricostruzione UML della gerarchia delle classi]{Ricostruzione UML della gerarchie delle classi} \label{fig:UMLGerarchiaClassi}
 %\end{center}
@@ -53,10 +53,10 @@ Per creare una `normale' Reazione viene per prima cosa creata un'istanza della c
 
 Nel caso della reazione per lo spostamento, sono create sul momento le istanze degli oggetti che andranno a crearla e con il seguente ordine:
 \begin{itemize}
-\item[1.] TimeDistribution, tramite invocazione del metodo $createTimeDistribution$ implementato nella classe AgentIncarnation;
+\item[1.] TimeDistribution, tramite invocazione del metodo \texttt{createTimeDistribution} implementato nella classe AgentIncarnation;
 \item[2.] AgentReaction;
 \item[3.] MovementAgent;
-\item[4.] Condition, tramite invocazione del metodo $createCondition$ implementato nella classe AgentIncarnation.
+\item[4.] Condition, tramite invocazione del metodo \texttt{createCondition} implementato nella classe AgentIncarnation.
 \end{itemize}
 %L'ordine è importante poichè la distribuzione è utilizzata all'interno della reazione, che a sua volta è utilizzata per creare l'azione e la condizione ad essa relativi.
 Con la stessa modalità descritta appena sopra, le istanze di azione e condizione sono inserite all'interno di specifici set della reazione che, infine, viene inserita nel nodo. Questa è una reazione particolare poichè viene costruita `manualmente' (non tramite apposita funzione) e viene inserita `nativamente' nel nodo per comandare il suo movimento.
@@ -64,7 +64,7 @@ Con la stessa modalità descritta appena sopra, le istanze di azione e condizion
 Inoltre, un passaggio che viene eseguito nella funzione di creazione della Reazione, è l'invocazione di un metodo, implementato nel nodo, il quale registra ogni nuovo agente all'interno di una struttura dati. Questo passaggio consente ad ogni nodo di mantenere traccia di tutti gli agenti presenti al suo interno e rende possibile recuperare il riferimento di ogni agente, anche esternamente rispetto al nodo a cui appartiene, in qualsiasi momento.
 L'agente per lo spostamento non viene inserito nella struttura dati descritta e potrà essere individuato solamente recuperandolo dal nodo tramite le funzioni messe a disposizione da Alchemist.
 
-La creazione della condizione è gestita in modo che questa risulti sempre vera e che quindi, secondo il meta-modello di Alchemist, vengano sempre scatenate le azioni collegate alla relazione a cui appartiene quella certa condizione. L'oggetto condizione che viene restituito dal metodo $createCondition$, invocato dall'interprete, è un'istanza della classe AbstractCondition che viene completata implementando la definizione del contesto (che impatta sulle performance della simulazione) e della condizione di validità (che come accennato poc'anzi è impostata per essere sempre vera).
+La creazione della condizione è gestita in modo che questa risulti sempre vera e che quindi, secondo il meta-modello di Alchemist, vengano sempre scatenate le azioni collegate alla relazione a cui appartiene quella certa condizione. L'oggetto condizione che viene restituito dal metodo \texttt{createCondition}, invocato dall'interprete, è un'istanza della classe AbstractCondition che viene completata implementando la definizione del contesto (che impatta sulle performance della simulazione) e della condizione di validità (che come accennato poc'anzi è impostata per essere sempre vera).
 
 Infine parliamo della creazione di oggetti dell'entità Azione. Per la creazione di queste istanze in base ad una valutazione del parametro ricevuto, che è stato passato dalla creazione della reazione, viene definita quale sia la classe dell'istanza da creare.
 L'istanza dell'oggetto opportunamente inizializzata viene quindi ritornata per essere utilizzata all'interno di una reazione.
@@ -87,7 +87,7 @@ La struttura dati scelta è una mappa formata da una serie di coppie di valori c
 Oltre alle proprietà, all'interno della classe sono presenti i metodi per la gestione della posizione, della mappa che monitora gli agenti e del vicinato calcolato in base a diversi criteri.
 
 È quindi possibile impostare o recuperare i valori di direzione e velocità oppure ottenere la posizione stessa del nodo. Ovviamente è presente il metodo mostrato nel Codice sorgente \ref{lst:ImplementazioneAggiornamentoPosizioneNodo} che effettua il calcolo per ottenere le coordinate della nuova posizione del nodo.
-Inoltre, è implementato il metodo $updateAgentsPosition()$ che innesca l'aggiornamento dei fatti, quali posizione e distanza dagli altri agenti, per ogni agente all'interno del nodo. Secondo l'implementazione attuale, questo metodo viene invocato solamente dall'agente `Movement', inserito alla creazione del nodo, che, nel suo ciclo di ragionamento, ha come unico compito quello di invocare questo metodo per scatenare l'aggiornamento. Gli agenti quindi verranno aggiornati quando lo scheduler di Alchemist farà eseguire il ciclo di ragionamento dell'agente `Movement'.
+Inoltre, è implementato il metodo \texttt{updateAgentsPosition()} che innesca l'aggiornamento dei fatti, quali posizione e distanza dagli altri agenti, per ogni agente all'interno del nodo. Secondo l'implementazione attuale, questo metodo viene invocato solamente dall'agente `Movement', inserito alla creazione del nodo, che, nel suo ciclo di ragionamento, ha come unico compito quello di invocare questo metodo per scatenare l'aggiornamento. Gli agenti quindi verranno aggiornati quando lo scheduler di Alchemist farà eseguire il ciclo di ragionamento dell'agente `Movement'.
 
 Per la gestione della mappa, utilizzata per il monitoraggio degli agenti, sono presenti due metodi: uno per effettuare l'inserimento, invocato come descritto nella sezione \ref{sctn:AgentIncarnation} durante la creazione di istanze dell'entità Reazione, e uno per ottenere la struttura completa.
 
@@ -100,10 +100,10 @@ Il secondo caso è il più immediato poichè si recupera l'elenco di tutti gli a
 
 Diversamente, per quanto riguarda la scrittura, serve individuare lo spazio di tuple più vicino, recuperandolo tramite la mappa di agenti del nodo che lo contiene. Utilizzando l'ambiente, vengono confrontate le distanze di tutti i nodi rispetto a quello attuale e, si recupera quello più vicino che contiene almeno un'agente che sia istanza della classe astratta AbstractSpatialTuple. Di quel nodo viene selezionato il primo agente trovato che corrisponde ai canoni poichè verosimilmente, in base alle scelte implementative, in ogni nodo vi è un solo spazio di tuple.
 
-Un altro metodo implementato all'interno della classe AgentsContainerNode è $postman()$ per la gestione dei messaggi, in modo simile a quanto realizzato per lo spostamento del nodo. Un'agente dedicato, chiamato `Postman' invoca un metodo che recupera tutti i messaggi in uscita da tutti gli agenti dell'ambiente e li consegna al corretto destinatario. Maggiori dettagli di questa funzionalità sono descritti nella sezione \ref{sctn:DettaglioImplementazioni}.
+Un altro metodo implementato all'interno della classe AgentsContainerNode è \texttt{postman()} per la gestione dei messaggi, in modo simile a quanto realizzato per lo spostamento del nodo. Un'agente dedicato, chiamato `Postman' invoca un metodo che recupera tutti i messaggi in uscita da tutti gli agenti dell'ambiente e li consegna al corretto destinatario. Maggiori dettagli di questa funzionalità sono descritti nella sezione \ref{sctn:DettaglioImplementazioni}.
 
 Inoltre, sempre all'interno della classe del nodo, è stato scelto di implementare il metodo, invocabile dalla teoria dell'agente, per la gestione delle azioni esterne.
-La scelta di implementare questa funzionalità all'interno del nodo è dovuta alla sua posizione nell'ambiente rispetto al modello e al mapping scelto poichè è lo snodo in cui si ha la possibilità di interagire sia con l'ambiente che con gli agenti di altri nodi. Si è quindi implementato il metodo $executeExternalAction(String action)$ all'interno del quale, in base all'azione ricevuta come parametro, viene selezionata una serie di operazioni che portano al raggiungimento di quella certa azione. Come invocare funzionalità implementate in Alchemist dalla teoria è mostrato nella sezione \ref{sctn:DettaglioImplementazioni}.
+La scelta di implementare questa funzionalità all'interno del nodo è dovuta alla sua posizione nell'ambiente rispetto al modello e al mapping scelto poichè è lo snodo in cui si ha la possibilità di interagire sia con l'ambiente che con gli agenti di altri nodi. Si è quindi implementato il metodo \texttt{executeExternalAction(String action)} all'interno del quale, in base all'azione ricevuta come parametro, viene selezionata una serie di operazioni che portano al raggiungimento di quella certa azione. Come invocare funzionalità implementate in Alchemist dalla teoria è mostrato nella sezione \ref{sctn:DettaglioImplementazioni}.
 
 \subsection{L'agente -- Azione}\label{sctn:AbstractAgent}
 L'agente è il punto centrale dell'incarnazione che è stata realizzata, dal quale sono partiti tutti i ragionamenti per il design dell'interprete e la mappatura del modello ad agenti sul meta-modello di Alchemist.
@@ -114,19 +114,19 @@ Per la realizzazione della classe dell'agente si è scelto, anche in questo caso
 
 La scelta successiva è stata quella relativa al design della classe da implementare. Dopo un'accurata analisi è stato scelto di realizzare, invece che un'implementazione definitiva, una classe astratta che descrive le proprietà base dell'agente e ne implementa le funzionalità principali (inizializzazione dell'agente e gestione di messaggi, di `belief base', di intenzioni e di operazioni negli spazi di tuple), lasciando comunque al programmatore la scelta della caratterizzazione dell'agente. La scelta di creare una classe astratta è dovuto al fatto di non voler dare nessuna implementazione del ciclo di ragionamento ma fornire implementazioni dei comportamenti e azioni basilari che lo compongono: in questo modo è possibile facilmente definire nuovi comportamenti o creare agenti partendo da quelli già realizzati.
 
-Non sono quindi implementati i metodi $execute()$, $cloneAction(node, reaction)$, definiti dall'interfaccia Action, dalla cui implementazione è caratterizzato il comportamento dell'agente. In particolare, il metodo $execute()$, che è quello che rappresenta il ciclo di ragionamento, è invocato periodicamente dal core di Alchemist (questo perchè le Condizioni collegate alla stessa Reazione sono impostate per essere sempre vere) per lo svolgimento delle azioni.
+Non sono quindi implementati i metodi \texttt{execute()}, \texttt{cloneAction(node, re\-ac\-tion)}, definiti dall'interfaccia Action, dalla cui implementazione è caratterizzato il comportamento dell'agente. In particolare, il metodo \texttt{execute()}, che è quello che rappresenta il ciclo di ragionamento, è invocato periodicamente dal core di Alchemist (questo perchè le Condizioni collegate alla stessa Reazione sono impostate per essere sempre vere) per lo svolgimento delle azioni.
 
 All'interno della classe sono definite le seguenti proprietà: due code per i messaggi (una per quelli in entrata e una per quelli in uscita), il motore tuProlog, lo stack contenente gli identificativi delle intenzioni presenti nella teoria, riferimenti alla reazione e al generatore random.
 
 La classe astratta dell'agente gestisce, inoltre, la teoria dell'agente e sfrutta il motore tuProlog importato tramite l'apposita libreria \texttt{`alice.tuprolog’}. Attraverso questo componente è possibile caricare una teoria ed effettuare interrogazioni della stessa permettendo all'agente di operare raccogliendo i risultati per creare intenzioni o inserire nuove informazioni.
 
-Per inizializzare un agente sono state definite una serie di operazioni posizionate poi all'interno dei metodi $initializeAgent()$ e $initReasoing()$.
+Per inizializzare un agente sono state definite una serie di operazioni posizionate poi all'interno dei metodi \texttt{initializeAgent()} e \texttt{initReasoing()}.
 Questi due metodi hanno come obiettivo quello di inizializzare l'agente: il primo lo fa dalla parte dell'interprete mentre il secondo configura l'inizializzazione dello stato iniziale dell'agente.
 Entrambi, per la corretta configurazione dell'agente in relazione all'implementazione attuale, dovrebbero essere richiamati all'interno del ciclo di ragionamento solamente una volta, ovvero alla prima iterazione, per completare la configurazione dell'agente iniziata nel costruttore.
 
-All'interno del metodo $initializeAgent()$ viene caricata nel motore tuProlog la libreria dell'agente, quella descritta nel capitolo precedente e che implementa il linguaggio definito in questo lavoro di tesi, a cui segue il caricamento della teoria specifica che definisce il comportamento di un certo agente. Successivamente, sempre all'interno dello stesso metodo, viene eseguita la registrazione di oggetti Java all'interno della teoria (questa azione verrà descritta in dettaglio nella sezione \ref{sctn:DettaglioImplementazioni}) e l'inserimento all'interno della teoria dell'agente del fatto $self(nome\_agente)$ che completa la procedura di inizializzazione da parte dell'interprete.
+All'interno del metodo \texttt{initializeAgent()} viene caricata nel motore tuProlog la libreria dell'agente, quella descritta nel capitolo precedente e che implementa il linguaggio definito in questo lavoro di tesi, a cui segue il caricamento della teoria specifica che definisce il comportamento di un certo agente. Successivamente, sempre all'interno dello stesso metodo, viene eseguita la registrazione di oggetti Java all'interno della teoria (questa azione verrà descritta in dettaglio nella sezione \ref{sctn:DettaglioImplementazioni}) e l'inserimento all'interno della teoria dell'agente del fatto \texttt{self(nome\_agente)} che completa la procedura di inizializzazione da parte dell'interprete.
 
-Nel metodo $initReasoning()$ viene eseguita una sola operazione, ovvero l'invocazione della regola $init$ che permette al programmatore dell'agente di eseguire una configurazione dello stato iniziale dell'agente.
+Nel metodo \texttt{initReasoning()} viene eseguita una sola operazione, ovvero l'invocazione della regola \texttt{init} che permette al programmatore dell'agente di eseguire una configurazione dello stato iniziale dell'agente.
 Al termine di queste due operazioni si può considerare l'agente completamente inizializzato e pronto per reagire a tutti i possibili eventi per cui è stato programmato.
 
 All'interno dell'agente, utilizzando il generatore random, è definita una proprietà per la gestione della casualità che è un'istanza della classe LevyDistribution, definita nel package \texttt{`org.apache.commons.math3.distribution'}, la quale permette di creare una distribuzione random a partire da un randomizzatore. Questa distribuzione è messa a disposizione insieme al randomizzatore per fornire all'agente casualità da utilizzare nelle sue operazioni. Ad esempio può essere utilizzata per generare valori per la velocità e la direzione del nodo che contiene l'agente.
@@ -141,24 +141,24 @@ La funzione implementata per la gestione della `belief base' utilizza i fatti ge
 Nel capitolo precedente è stata descritta la procedura che porta all'esecuzione e alla rimozione delle intenzioni presenti nella teoria dell'agente. Però non è stato descritto qual è il procedimento che porta alla creazione di un'intenzione.
 Nella sezione \ref{sctn:DettaglioImplementazioni} verrà mostrato come è possibile creare un'intenzione partendo da un termine e poi cercando nella teoria dell'agente una regola adatta ad esso.
 
-Il funzionamento delle azioni interne è stato descritto in maniera approfondita nella sezione \ref{sctn:GestioneAzioni} utilizzando come esempio l'azione per l'invio di un messaggio. All'interno della classe dell'agente è quindi presente questa funzione $ex\-e\-cuteIn\-ter\-nalAc\-tion(action)$ con la quale l'interprete implementato esegue una sequenza di operazioni che portano al compimento dell'azione. Come invocare funzionalità implementate in Alchemist dalla teoria è mostrato nella sezione \ref{sctn:DettaglioImplementazioni}.
+Il funzionamento delle azioni interne è stato descritto in maniera approfondita nella sezione \ref{sctn:GestioneAzioni} utilizzando come esempio l'azione per l'invio di un messaggio. All'interno della classe dell'agente è quindi presente questa funzione \texttt{ex\-e\-cuteIn\-ter\-nalAc\-tion(action)} con la quale l'interprete implementato esegue una sequenza di operazioni che portano al compimento dell'azione. Come invocare funzionalità implementate in Alchemist dalla teoria è mostrato nella sezione \ref{sctn:DettaglioImplementazioni}.
 
-L'aggiornamento della posizione che avviene nell'agente è scatenato dal metodo $updateAgentsPosition()$ del nodo che a sua volta viene innescato dall'esecuzione dell'agente `Movement'. All'interno dell'agente sono definite le due funzionalità che sono richiamate dal metodo del nodo: $up\-da\-teA\-ge\-ntPo\-si\-tion(po\-si\-tion)$ e $updateAgentsDistances()$. La prima si occupa dell'aggiornamento nella `belief base' dei fatti relativi alle nuove coordinate e della creazione di un'intenzione relativa all'evento di aggiornamento della posizione per consentire all'agente di reagire al nuovo stato.
+L'aggiornamento della posizione che avviene nell'agente è scatenato dal metodo \texttt{updateAgentsPosition()} del nodo che a sua volta viene innescato dall'esecuzione dell'agente `Movement'. All'interno dell'agente sono definite le due funzionalità che sono richiamate dal metodo del nodo: \texttt{up\-da\-teA\-ge\-ntPo\-si\-tion(po\-si\-tion)} e \texttt{updateAgentsDistances()}. La prima si occupa dell'aggiornamento nella `belief base' dei fatti relativi alle nuove coordinate e della creazione di un'intenzione relativa all'evento di aggiornamento della posizione per consentire all'agente di reagire al nuovo stato.
 La seconda funzione adegua le distanze dell'agente corrente rispetto agli altri agenti del vicinato inserendo due diversi fatti: se l'agente è un nuovo vicino viene inserito il belief con il nome e la distanza tra i due agenti; altrimenti se l'agente era già presente all'interno del vicinato il belief inserito contiene anche la vecchia distanza tra i due agenti, fornendo quindi un'informazione utile in alcuni domini applicativi.
 
 Come già accennato nella sezione \ref{sctn:ImplementazioneSpatialTuples}, all'interno dell'interprete è stato implementato anche il modello Spatial Tuples.
 All'interno dell'agente sono state implementate due funzioni per l'invio e la ricezione di richieste per gestire la comunicazione con lo spazio di tuple.
 
-Per quanto riguarda il metodo per l'invio della richiesta, l'agente recupera i fatti presenti all'interno della teoria e per ognuno costruisce una richiesta formata da un termine, l'istanza dell'agente e la primitiva($in$, $rd$, $out$) che esegue quel termine. Come già descritto, la scelta implementativa è stata quella di inserire la richiesta di scrittura sullo spazio di tuple più vicino, mentre quelle delle altre primitive su tutti gli spazi di tuple del vicinato.
+Per quanto riguarda il metodo per l'invio della richiesta, l'agente recupera i fatti presenti all'interno della teoria e per ognuno costruisce una richiesta formata da un termine, l'istanza dell'agente e la primitiva(\texttt{in}, \texttt{rd}, \texttt{out}) che esegue quel termine. Come già descritto, la scelta implementativa è stata quella di inserire la richiesta di scrittura sullo spazio di tuple più vicino, mentre quelle delle altre primitive su tutti gli spazi di tuple del vicinato.
 
-Il metodo che consente all'agente di ricevere il risultato della richiesta è stato implementato fornendo in ingresso solamente un parametro, il termine recuperato dallo spazio di tuple. In questo modo all'interno della teoria dell'agente sarà sufficiente trovare una regola $onResponseMessage(T)$, dove $T$ è il parametro ricevuto, idonea al contesto per poi creare una nuova intenzione da inserire tra quelle da eseguire.
+Il metodo che consente all'agente di ricevere il risultato della richiesta è stato implementato fornendo in ingresso solamente un parametro, il termine recuperato dallo spazio di tuple. In questo modo all'interno della teoria dell'agente sarà sufficiente trovare una regola \texttt{onResponseMessage(T)}, dove \texttt{T} è il parametro ricevuto, idonea al contesto per poi creare una nuova intenzione da inserire tra quelle da eseguire.
 
 \subsection{Dettaglio implementazioni}\label{sctn:DettaglioImplementazioni}
 In questa sezione verranno descritti alcuni dettagli relativi all'implementazione realizzata quali il funzionamento dell'agnete `Postman', la referenziazione e l'utilizzo di oggetti Java in tuProlog, la creazione delle intenzioni.
 
 \subsubsection{Agente `Postman'}
 Per la gestione dei messaggi, l'agente implementa al suo interno i metodi per prelevarli e inserirli da entrambe le code. Internamente utilizza solo le funzioni per leggere nuovi messaggi e per aggiungere quelli da inviare nella coda di quelli in uscita.
-Il vero e proprio scambio di messaggi è demandato all'agente `Postman' creato specificatamente per questo compito. Questo agente nel suo ciclo di ragionamento ha come unico compito quello di invocare la funzione $postman()$ implementata nel nodo, e mostrato nel Codice sorgente \ref{lst:ImplementazioneFunzionePostman}.
+Il vero e proprio scambio di messaggi è demandato all'agente `Postman' creato specificatamente per questo compito. Questo agente nel suo ciclo di ragionamento ha come unico compito quello di invocare la funzione \texttt{postman()} implementata nel nodo, e mostrato nel Codice sorgente \ref{lst:ImplementazioneFunzionePostman}.
 
 \switchToJava{}{\small}
 \begin{lstlisting}[float,firstnumber=1,label={lst:ImplementazioneFunzionePostman},caption={Implementazione funzione Postman}]
@@ -200,7 +200,7 @@ Questa funzione è fornita dalla libreria JavaLibrary, la quale è organizzata s
 \end{itemize}
 La JavaLibrary consente ai componenti Java di accedere e utilizzare direttamente Prolog in modo semplice ed efficace, offrendo così tutta la potenza del software Java alla sorgente di tuProlog \cite{tuPrologLight-weight}.
 
-Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili $agent$ e $node$ disponibili nella teoria tuProlog e che si riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
+Nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} è mostrato come sono state configurate le due variabili \texttt{agent} e \texttt{node} disponibili nella teoria tuProlog e che si riferiscono alle istanze di agente e nodo presenti nel simulatore Alchemist.
 
 \switchToJava{}{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:BindingOggettiJavaIntuProlog},caption={Binding oggetti Java in tuProlog}]
@@ -219,12 +219,12 @@ Library lib = engine.getLibrary("alice.tuprolog.lib.OOLibrary");
 \end{lstlisting}
 
 Nella classe astratta dell'agente è stata recuperata la libreria ad oggetti utilizzando l'istanza del motore tuProlog.
-È stata poi utilizzata la funzione $register(id, obj)$ messa a disposizione dalla libreria che permette di registrare al suo interno identificativi di variabili utilizzabili in tuProlog riferiti ad oggetti Java.
-Come si può vedere nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} recuperato dalla classe dell'agente, all'interno della libreria viene prima registrata la variabile $agent$ referenziata alla classe stessa e poi la variabile $node$ riferita al nodo, recuperato attraverso il riferimento dell'agente.
+È stata poi utilizzata la funzione \texttt{register(id, obj)} messa a disposizione dalla libreria che permette di registrare al suo interno identificativi di variabili utilizzabili in tuProlog riferiti ad oggetti Java.
+Come si può vedere nel Codice sorgente \ref{lst:BindingOggettiJavaIntuProlog} recuperato dalla classe dell'agente, all'interno della libreria viene prima registrata la variabile \texttt{agent} referenziata alla classe stessa e poi la variabile \texttt{node} riferita al nodo, recuperato attraverso il riferimento dell'agente.
 
 Lato tuProlog l'utilizzo di questo strumento è molto intuitivo. Dopo aver registrato gli oggetti, nel modo appena mostrato, è sufficiente invocare i metodi implementati all'interno della classe come mostrato nel Codice sorgente \ref{lst:UtilizzoBindingIntuProlog}. Qui di seguito daremo una descrizione degli esempi mostrati.
-Nella prima riga viene fatta un'invocazione di una funzione $doSomething()$ che non ha parametri in ingresso.
-Nel secondo esempio l'invocazione riguarda la funzione $doSome\-thingWithParams(string, term)$ che riceve parametri di tipo String e Term. La signature del metodo Java è fondamentale: se il tipo degli oggetti attesi non corrisponde a quelli passati il metodo risulterà non invocato.
+Nella prima riga viene fatta un'invocazione di una funzione \texttt{doSomething()} che non ha parametri in ingresso.
+Nel secondo esempio l'invocazione riguarda la funzione \texttt{doSome\-thingWithParams(string, term)} che riceve parametri di tipo String e Term. La signature del metodo Java è fondamentale: se il tipo degli oggetti attesi non corrisponde a quelli passati il metodo risulterà non invocato.
 Nell'ultimo caso è mostrato come si possono invocare funzioni che ritornano un risultato come output e come quest'ultimo possa essere inserito all'interno di una nuova variabile da poter utilizzare all'interno della regola.
 
 \switchToProlog{}
@@ -244,14 +244,14 @@ TMP is R * 0.5.
 Le intenzioni sono utilizzate per la gestione dei comportamenti dell'agente. Un'intenzione, come detto nella sezione \ref{sctn:AgentiBDI}, rappresenta un'insieme di azioni che l'agente deve compiere per completare un certo comportamento, e cioè per reagire ad eventi per cui l'agente è stato programmato.
 
 Le azioni all'interno dell'interprete vengono create quindi in relazione agli eventi o alla creazioni di nuovi goal.
-La procedura per creare un'intenzione inizia dalla definizione della struttura del template utilizzata per cercare il piano adatto per reagire a quell'evento. Invocando la funzione $createPlanStruct(term)$, dove $tem$ è l'evento per il quale si sta creando l'intenzione, viene restituito un oggetto strutturato come mostrato nel Codice sorgente \ref{lst:OggettoStrutturaPiano}.
+La procedura per creare un'intenzione inizia dalla definizione della struttura del template utilizzata per cercare il piano adatto per reagire a quell'evento. Invocando la funzione \texttt{createPlanStruct(term)}, dove \texttt{tem} è l'evento per il quale si sta creando l'intenzione, viene restituito un oggetto strutturato come mostrato nel Codice sorgente \ref{lst:OggettoStrutturaPiano}.
 
 \switchToJava{}{}
 \begin{lstlisting}[float,firstnumber=1,label={lst:OggettoStrutturaPiano},caption={Oggetto che definisce la struttura del piano}]
 return new Struct('<-', term, new Var('GUARD'), new Var('BODY'))
 \end{lstlisting}
 
-L'oggetto $struct$ che è stato creato viene poi passato all'invocazione del metodo $createIntention(term, errMsg)$, dove $errMsg$ è una stringa contenente un messaggio utilizzato in caso di errore.
+L'oggetto \texttt{struct} che è stato creato viene poi passato all'invocazione del metodo \texttt{createIntention(term, errMsg)}, dove \texttt{errMsg} è una stringa contenente un messaggio utilizzato in caso di errore.
 All'interno del metodo viene utilizzata la struttura all'interno del motore tuProlog per interrogare la teoria dell'agente e recuperare una lista di piani rilevanti (nella teoria sono definiti come fatti).
 
 Successivamente per ogni piano recuperato viene controllata la veridicità della guardia attraverso l'utilizzo di regole opportunamente definite nella libreria tuProlog dell'agente che è stata creata. La guardia definisce il contesto e quindi determina se un piano rilevante è anche applicabile.
@@ -259,7 +259,7 @@ Se la guardia non è verificata il piano viene scartato altrimenti si passa al r
 
 Le azioni possono essere descritte in due diverse modalità: si può trovare una lista di azioni, caso in cui viene recuperato un fatto che descrive un piano per reagire ad un evento, oppure può essere il corpo di una regola. Nel primo caso la lista viene semplicemente recuperata mentre nel secondo caso il corpo viene trasformato in una lista di azioni.
 
-Ottenuta la lista di azioni $body$ si inizia la vera e propria creazione dell'azione: per prima cosa viene generato un identificativo univoco $id$ e successivamente viene creata la struttura $intention(id,body)$ che poi è inserita all'interno della teoria dell'agente. Se l'inserimento è completato con successo l'$id$ è inserito anche nella lista lato Java che mantiene gli identificativi di tutte le intenzioni presenti nella teoria dell'agente, e che è utilizzata per gestire l'esecuzione delle intenzioni con metodo Round-Robin.
+Ottenuta la lista di azioni \texttt{body} si inizia la vera e propria creazione dell'azione: per prima cosa viene generato un identificativo univoco \texttt{id} e successivamente viene creata la struttura \texttt{intention(id,body)} che poi è inserita all'interno della teoria dell'agente. Se l'inserimento è completato con successo l'\texttt{id} è inserito anche nella lista lato Java che mantiene gli identificativi di tutte le intenzioni presenti nella teoria dell'agente, e che è utilizzata per gestire l'esecuzione delle intenzioni con metodo Round-Robin.
 
 
 \subsection{Tool di sviluppo}
@@ -310,7 +310,7 @@ Il linguaggio da utilizzare per scrivere le simulazioni in Alchemist è YAML e q
 
 Nei prossimi paragrafi verrà mostrato quali sezioni si possono inserire e come utilizzarle per creare la simulazione che si vuole realizzare.
 
-La sezione \textbf{incarnation} è obbligatoria. Il parser YAML si aspetta una stringa che rappresenta il nome dell'incarnazione da utilizzare per la simulazione.
+La sezione \texttt{incarnation} è obbligatoria. Il parser YAML si aspetta una stringa che rappresenta il nome dell'incarnazione da utilizzare per la simulazione.
 \medskip
 \begin{lstlisting}[firstnumber=1, caption={Incarnazione}]
   incarnation: agent
@@ -329,7 +329,7 @@ Per dichiarare variabili che poi potranno essere richiamate all'interno del file
       par: "value"
 \end{lstlisting}
 
-Utilizzando la keyword \textbf{environment} si può scegliere quale definizione di ambiente utilizzare per la simulazione.
+Utilizzando la keyword \texttt{environment} si può scegliere quale definizione di ambiente utilizzare per la simulazione.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Environment}]
   environment:
@@ -343,14 +343,14 @@ Questo parametro è opzionale e di default è uno spazio continuo bidimensionale
     type: Continuous2DEnvironment
 \end{lstlisting}
 
-La keyword \textbf{positions} consente di specificare il tipo delle coordinate della simulazione. La posizione riflette lo spazio fisico: per esempio non si potrà utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una città visto che dati due punti A e B, nel mondo reale la distanza AB è diversa da quella BA.
+La keyword \texttt{positions} consente di specificare il tipo delle coordinate della simulazione. La posizione riflette lo spazio fisico: per esempio non si potrà utilizzare la distanza \textit{Continuous2DEuclidean} se si considera la mappa di una città visto che dati due punti A e B, nel mondo reale la distanza AB è diversa da quella BA.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Posizioni}]
   positions:
     type: LatLongPosition
 \end{lstlisting}
 
-I collegamenti tra i nodi che verranno utilizzati nella simulazione sono specificati nella sezione \textbf{network-model}. Un esempio per la costruzione di collegamenti è il seguente.
+I collegamenti tra i nodi che verranno utilizzati nella simulazione sono specificati nella sezione \texttt{network-model}. Un esempio per la costruzione di collegamenti è il seguente.
 \medskip
 \begin{lstlisting}[firstnumber=1,caption={Funzione linking-rule}]
   network-model:
@@ -364,13 +364,13 @@ Anche questo è un parametro opzionale e di default non ci sono collegamenti, ov
     type: NoLinks
 \end{lstlisting}
 
-Il posizionamento dei nodi viene gestito dalla sezione \textbf{displacements}. Questa sezione può contenere uno o più definizioni di disposizioni per i nodi.
-Il parametro `in' definisce la geometria all'interno della quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro `programs' definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
+Il posizionamento dei nodi viene gestito dalla sezione \texttt{displacements}. Questa sezione può contenere uno o più definizioni di disposizioni per i nodi.
+Il parametro \texttt{in} definisce la geometria all'interno della quale verranno disposti i nodi, utilizzando ad esempio punti o figure come cerchi o rettangoli, mentre il parametro \texttt{programs} definisce le reazioni da associare ad ogni nodo di quella certa disposizione.
 
-Esempi di classi utilizzabili nel parametro `in' sono Point e Circle.
+Esempi di classi utilizzabili nel parametro \texttt{in} sono Point e Circle.
 La classe Circle necessita di quattro parametri, da passare nel seguente ordine: il numero di nodi da disporre, la coordinata x del centro, la coordinata y del centro, il raggio del cerchio. Per la classe Point è sufficiente fornire in ordine la coordinata x e la coordinata y.
 
-Il parametro `programs' rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un esempio di definizione di una reazione è utilizzando `time-distribution' (valore utilizzato per settare la frequenza) e `program' (parametro che viene passato alla creazione della reazione e che può essere utilizzato per istanziare condizioni e azioni).
+Il parametro \texttt{programs} rappresenta le reazioni da associare ai nodi ed accetta una lista di reazioni, le quali a loro volta sono formate da una lista di parametri. Un esempio di definizione di una reazione è utilizzando \texttt{time-distribution} (valore utilizzato per settare la frequenza) e \texttt{program} (parametro che viene passato alla creazione della reazione e che può essere utilizzato per istanziare condizioni e azioni).
 Un esempio di displacements è quello mostrato nel Codice sorgente \ref{lst:EsempioDisplacement}.
 \medskip
 \begin{lstlisting}[firstnumber=1,label={lst:EsempioDisplacement},caption={Disposizione nodi e reazioni associate}]
