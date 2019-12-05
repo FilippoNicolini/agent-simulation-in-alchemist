@@ -28,7 +28,7 @@
 {\parskip=1pt\par\nopagebreak\centering}
 {\par\noindent\ignorespacesafterend}
 
-\title[Prolog BDI agents on Alchemist]{Simulazione di agenti BDI basati su Prolog in Alchemist}
+\title[Prolog BDI agents on Alchemist]{Simulazione di Agenti BDI basati su Prolog in Alchemist}
 \author[Filippo Nicolini]{Tesi in: Sistemi Autonomi\\
 [0.5cm]
 \textit{Relatore:} \hspace{6.55cm} \textit{Presentata da:}\\
@@ -50,20 +50,52 @@ Campus di Cesena}
 
 \section{Introduzione}
 
-\subsection{Obiettivo}
+\subsection{Contesto}
 %Slide 1
 \begin{frame}
-\frametitle{L'obiettivo della tesi}
-\begin{block}{Obiettivo della tesi}
+\frametitle{Contesto}
+\begin{block}{Oggi}
+Nel mondo ad agenti presenti ambienti con programmazione espressiva oppure con orientamento alle prestazioni delle simulazioni.
+\end{block}
+
+\begin{block}{Jason}
+Interprete di versione estesa di AgentSpeak che migliora abilità degli agenti e semplifica il linguaggio.
+\end{block}
+
+\begin{block}{Multi-Agent Research and Simulation -- MARS}
+Framework per simulazioni distribuite di agenti programmati ad alto livello.
+\end{block}
+\end{frame}
+
+\subsection{Obiettivo}
+\begin{frame}
+\frametitle{Obiettivo della tesi}
+\begin{block}{Obiettivo}
 \alert{Unificare} piattaforme orientate alla \alert{programmazione di agenti} con ambienti di \alert{simulazione di agenti}.
 \end{block}
 
-\begin{block}{Interprete Prolog}
-Estensione modello BDI di AgentSpeak sfruttando tuProlog per poter implementare interpreti sia su ambienti reali che simulati.
+\begin{block}{Ambiente}
+Per unificare programmazione e simulazione si è voluto portare il modello di agenti BDI all'interno di Alchemist.
 \end{block}
 
-\begin{block}{Interprete Alchemist}
-Realizzazione di un interprete nel simulatore Alchemist che utilizza le logiche del ciclo di ragionamento di Jason.
+\begin{block}{Interprete}
+Per portare il modello BDI in Alchemist si è scelto di utilizzare tuProlog per creare un interprete multi-paradigma.
+\end{block}
+\end{frame}
+
+\subsection{Tecnologie}
+\begin{frame}
+\frametitle{Scelte tecnologiche}
+\begin{block}{Motivazione}
+Alchemist e tuProlog sono solidi e supportati da gruppi in modo attivo che semplificano la manutenibilità del progetto. 
+\end{block}
+
+\begin{block}{Alchemist}
+Meta-modello flessibile per implementare modelli diversi e potenza di calcolo per eseguire simulazioni.
+\end{block}
+
+\begin{block}{tuProlog}
+È multi-paradigma, ovvero permette di integrare un interprete Prolog con piattaforme/linguaggi OO.
 \end{block}
 \end{frame}
 
@@ -101,12 +133,19 @@ Libreria che permette di utilizzare Prolog all'interno di applicazioni e infrast
 Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alcune sintassi.
 \end{block}
 
-\begin{block}{API}
+\begin{block}{API -- agente}
 \begin{itemize}
 \item inizializzazione agente
 \item invocazioni verso linguaggio OO
 \item gestione `belief base'
 \item gestione eventi e posizionamento
+\end{itemize}
+\end{block}
+
+\begin{block}{API -- interprete}
+\begin{itemize}
+\item verifica contesto e recupero corpo del piano
+\item esecuzione intenzione, azioni o goal
 \end{itemize}
 \end{block}
 \end{frame}
