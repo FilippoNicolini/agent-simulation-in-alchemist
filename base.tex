@@ -59,7 +59,7 @@ Nel mondo ad agenti presenti ambienti con programmazione espressiva oppure con o
 \end{block}
 
 \begin{block}{Jason}
-Interprete di versione estesa di AgentSpeak che migliora abilità degli agenti e semplifica il linguaggio.
+Interprete di una versione estesa di AgentSpeak che migliora le abilità degli agenti e semplifica il linguaggio.
 \end{block}
 
 \begin{block}{Multi-Agent Research and Simulation -- MARS}
@@ -68,6 +68,7 @@ Framework per simulazioni distribuite di agenti programmati ad alto livello.
 \end{frame}
 
 \subsection{Obiettivo}
+%Slide 2
 \begin{frame}
 \frametitle{Obiettivo della tesi}
 \begin{block}{Obiettivo}
@@ -84,49 +85,41 @@ Per portare il modello BDI in Alchemist si è scelto di utilizzare tuProlog per 
 \end{frame}
 
 \subsection{Tecnologie}
+%Slide 3
 \begin{frame}
 \frametitle{Scelte tecnologiche}
 \begin{block}{Motivazione}
-Alchemist e tuProlog sono solidi e supportati da gruppi in modo attivo che semplificano la manutenibilità del progetto. 
+Alchemist e tuProlog sono solidi e supportati da community in modo attivo che semplificano la manutenibilità del progetto. 
 \end{block}
 
 \begin{block}{Alchemist}
-Meta-modello flessibile per implementare modelli diversi e potenza di calcolo per eseguire simulazioni.
+Meta-modello flessibile per implementare modelli diversi ed avente potenza di calcolo per eseguire simulazioni.
 \end{block}
 
 \begin{block}{tuProlog}
-È multi-paradigma, ovvero permette di integrare un interprete Prolog con piattaforme/linguaggi OO.
+Libreria con core minimale che include un motore Prolgo utilizzabile per applicazioni e infrastrutture distribuite: è multi-paradigma, ovvero permette di integrare Prolog con piattaforme e linguaggi OO.
 \end{block}
 \end{frame}
+
 
 
 \section{Interprete Prolog}
 
 \subsection{Stato dell'arte}
-
-%Slide 2
+%Slide 4
 \begin{frame}
-\frametitle{AgentSpeak, modello BDI, tuProlog}
+\frametitle{AgentSpeak, modello BDI}
 \begin{block}{Modello BDI}
 Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
 \end{block}
 \begin{block}{AgentSpeak}
-Linguaggio orientato agli agenti basato su modello BDI e programmazione logica.
+Linguaggio orientato agli agenti basato su modello BDI e programmazione logica per programmare agenti autonomi.
 \end{block}
-%-------------
-\begin{block}{tuProlog}
-Libreria che permette di utilizzare Prolog all'interno di applicazioni e infrastrutture distribuite sfruttando un core minimale.
-\end{block}
-
-%\begin{block}{Caratteristiche}
-%Supporta integrazioni semplice e pervasiva multi-linguaggio e multi-paradigma (es. Prolog -- linguaggi OO).
-%\end{block}
 \end{frame}
 
 
 \subsection{Implementazione}
-
-%Slide 3
+%Slide 5
 \begin{frame}
 \frametitle{Interprete tuProlog di AgentSpeak}
 \begin{block}{Formalizzazione}
@@ -145,7 +138,7 @@ Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alc
 \begin{block}{API -- interprete}
 \begin{itemize}
 \item verifica contesto e recupero corpo del piano
-\item esecuzione intenzione, azioni o goal
+\item esecuzione intenzione
 \end{itemize}
 \end{block}
 \end{frame}
@@ -155,8 +148,7 @@ Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alc
 \section{Interprete Alchemist}
 
 \subsection{Stato dell'arte}
-
-%Slide 4
+%Slide 6
 \begin{frame}
 \frametitle{Alchemist}
 \begin{block}{Alchemist}
@@ -164,44 +156,61 @@ Simulatore per il calcolo pervasivo, aggregato e naturale che si basa su un meta
 \end{block}
 \begin{block}{Meta-modello}
 \begin{itemize}
-\item Node
 \item Environment
-\item Reaction (Time Distribution, Condition, Action)
+\item Node
 \item Linking Rule
+\item Molecola
+\item Concentrazione
+\item Reaction: composta da Distribuzione temporale, Condizioni, Azioni
 \end{itemize}
 \end{block}
 \end{frame}
 
-%Slide 5
+%Slide 7
 \begin{frame}
 \frametitle{Meta-modello}
 \begin{figure}
-\includegraphics[width=9cm]{images/alchemistModel.png}
+\includegraphics[width=9.5cm]{images/alchemistModel.png}
 \end{figure}
 \end{frame}
 
-%Slide 6
+%Slide 8
+\begin{frame}
+\frametitle{Meta-modello}
+\begin{figure}
+\includegraphics[width=9.5cm]{images/alchemistReaction.png}
+\end{figure}
+\end{frame}
+
+
+
+%Slide 9
 \begin{frame}
 \frametitle{Spazi di tuple}
 \begin{block}{LINDA}
 Modello di coordinazione e comunicazione tra processi paralleli con memoria associativa, virtuale, condivisa.
+\\\vspace{0.2cm}
+Primitive
+\begin{itemize}
+\item in: legge la tupla e la consuma
+\item rd: legge la tupla senza consumarla
+\item out: inserisce la tupla
+\end{itemize}
 \end{block}
 \begin{block}{Spatial Tuples}
 Estensione del modello base di tuple per i sistemi distribuiti multi-agente.
-\vspace{0.2cm}
-
-Operazioni consentite
+\\
 \begin{itemize}
-\item in: legge tupla e la consuma
-\item rd: legge tupla senza consumarla
-\item out: inserisce tupla
+\item tuple posizionate nel mondo fisico
+\item comportamento delle primitive può dipendere dalle proprietà spaziali
+\item livello virtuale che aumenta la realtà fisica
 \end{itemize}
+
 \end{block}
 \end{frame}
 
 \subsection{Implementazione}
-
-%Slide 7
+%Slide 10
 \begin{frame}
 \frametitle{Ciclo di ragionamento}
 \begin{block}{Percezioni}
@@ -221,7 +230,8 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{block}
 \end{frame}
 
-%Slide 8
+
+%Slide 11
 \begin{frame}
 \frametitle{Ciclo di ragionamento}
 \begin{figure}
@@ -230,18 +240,16 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{figure}
 \end{frame}
 
-%Slide 9
+%Slide 12
 \begin{frame}
 \frametitle{Unione modelli}
 \begin{block}{Mapping}
 \begin{center}
-\alert{Environment} $\rightarrow$ Spazio agenti \hspace{1.5cm} \alert{Nodo} $\rightarrow$ Contenitore agenti \\
+\alert{Environment} $\rightarrow$ Spazio agenti \hspace{1.5cm} \alert{Nodo} $\rightarrow$ Contenitore agenti
+\\\vspace{0.4cm}
 \alert{Reazione} $\rightarrow$ Agente
 \end{center}
 \end{block}
-\begin{figure}
-\includegraphics[width=7cm]{images/alchemistReaction.png}
-\end{figure}
 
 \begin{block}{Caratteristiche mapping}
 Ricercata la massima espressività lavorando su più strati: nodo può essere inteso come device in cui operano più agenti.
@@ -252,7 +260,7 @@ Ricercata la massima espressività lavorando su più strati: nodo può essere in
 
 \section{Caso di studio}
 \subsection{Scenario}
-%Slide 10
+%Slide 13
 \begin{frame}
 \frametitle{Scenario}
 \begin{block}{Goldminers}
@@ -269,15 +277,15 @@ All'interno del problema si individuano le seguenti entità:
 \end{block}
 \end{frame}
 
-%Slide 11
+%Slide 14
 \begin{frame}
 \frametitle{Realizzazione}
 \begin{block}{Minatore}
 Comportamento diviso in 4 stati:
 \begin{itemize}
 \item \alert{ricerca}: spostamento casuale emettendo richieste di tuple;
-\item \alert{ricezione tupla}: salva posizione miniera e si dirige al deposito;
-\item \alert{arrivo deposito}: invio pepita e si dirige posizione miniera salvata;
+\item \alert{ricezione tupla}: salva posizione della miniera e si dirige al deposito;
+\item \alert{arrivo deposito}: invio pepita e si dirige alla posizione della miniera;
 \item \alert{arrivo miniera}: torna stato ricerca. 
 \end{itemize}
 \end{block}
@@ -289,15 +297,57 @@ Statico nell'ambiente, riceve la pepita tramite un messaggio.
 \end{block}
 \end{frame}
 
+%Slide 14
+\begin{frame}
+\frametitle{Simulazione}
+\vspace*{-0.25cm}
+\begin{figure}
+\includegraphics[width=10cm]{images/simul.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simulazione - Linking Rule}
+\vspace*{-0.25cm}
+\begin{figure}
+\includegraphics[width=10cm]{images/simul_link.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simulazione - Inizializzazione}
+\vspace*{-0.25cm}
+\begin{figure}
+\includegraphics[width=10cm]{images/simul_init.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simulazione - Esecuzione}
+\vspace*{-0.25cm}
+\begin{figure}
+\includegraphics[width=10cm]{images/simul_harvest.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simulazione - Esecuzione}
+\vspace*{-0.25cm}
+\begin{figure}
+\includegraphics[width=10cm]{images/simul_harvest2.png}
+\end{figure}
+\end{frame}
+
+
 \section{Conclusioni}
 
-%Slide 12
+%Slide 15
 \begin{frame}
 \frametitle{Conclusioni e lavori futuri}
 \begin{block}{Conclusioni}
 \begin{itemize}
 \item Realizzazione di interprete per programmare e simulare agenti
-\item Forte espressività modello e interprete (Prolog e OO)
+\item Grande espressività modello e interprete (Prolog e OO)
 \item Estensione agenti in spazi di tuple 
 \end{itemize}
 \end{block}
