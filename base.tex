@@ -28,7 +28,7 @@
 {\parskip=1pt\par\nopagebreak\centering}
 {\par\noindent\ignorespacesafterend}
 
-\title[Prolog BDI agents on Alchemist]{Simulazione di Agenti BDI basati su Prolog in Alchemist}
+\title[Agenti BDI basati su Prolog in Alchemist]{Simulazione di Agenti BDI basati su Prolog in Alchemist}
 \author[Filippo Nicolini]{Tesi in: Sistemi Autonomi\\
 [0.5cm]
 \textit{Relatore:} \hspace{6.55cm} \textit{Presentata da:}\\
@@ -55,15 +55,15 @@ Campus di Cesena}
 \begin{frame}
 \frametitle{Contesto}
 \begin{block}{Oggi}
-Nel mondo ad agenti sono presenti ambienti con programmazione espressiva oppure con orientamento alle prestazioni delle simulazioni.
+Nel mondo ad agenti sono presenti ambienti con focus sulla programmazione oppure con orientamento alle prestazioni delle simulazioni.
 \end{block}
 
 \begin{block}{Jason}
-Interprete di una versione estesa di AgentSpeak che migliora le abilità degli agenti e semplifica il linguaggio.
+Interprete di una versione estesa di AgentSpeak che fornisce una piattaforma per sistemi multi-agente.
 \end{block}
 
 \begin{block}{Multi-Agent Research and Simulation -- MARS}
-Framework per simulazioni distribuite di agenti programmati ad alto livello.
+Piattaforma per simulazioni distribuite di agenti programmati ad alto livello.
 \end{block}
 \end{frame}
 
@@ -89,15 +89,15 @@ Per portare il modello BDI in Alchemist si è scelto di utilizzare tuProlog per 
 \begin{frame}
 \frametitle{Scelte tecnologiche}
 \begin{block}{Motivazione}
-Alchemist e tuProlog sono solidi e supportati da community in modo attivo che semplificano la manutenibilità del progetto. 
+Alchemist e tuProlog sono solidi e supportati da community in modo attivo: diminuisce il costo di manutenibilità del progetto. 
 \end{block}
 
 \begin{block}{Alchemist}
-Strutturato su un meta-modello flessibile per implementare modelli diversi ed inoltre ha grande potenza di calcolo per eseguire simulazioni.
+Strutturato su un meta-modello flessibile per implementare modelli diversi ed ha grande potenza di calcolo per eseguire simulazioni.
 \end{block}
 
 \begin{block}{tuProlog}
-Libreria con core minimale che include un motore Prolgo utilizzabile per applicazioni e infrastrutture distribuite: è multi-paradigma, ovvero permette di integrare Prolog con piattaforme e linguaggi OO.
+Libreria Java con core minimale che include un motore Prolog utilizzabile per applicazioni e infrastrutture distribuite: è multi-paradigma, ovvero permette di integrare Prolog con piattaforme e linguaggi OO.
 \end{block}
 \end{frame}
 
@@ -108,7 +108,7 @@ Libreria con core minimale che include un motore Prolgo utilizzabile per applica
 \subsection{Stato dell'arte}
 %Slide 4
 \begin{frame}
-\frametitle{AgentSpeak, modello BDI}
+\frametitle{Modello BDI, AgentSpeak}
 \begin{block}{Modello BDI}
 Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
 \end{block}
@@ -123,7 +123,7 @@ Linguaggio orientato agli agenti basato su modello BDI e programmazione logica p
 \begin{frame}
 \frametitle{Interprete tuProlog di AgentSpeak}
 \begin{block}{Formalizzazione}
-Estenzione di AgentSpeak realizzando un'interprete attraverso definizione di alcune sintassi.
+Estensione di AgentSpeak realizzando un'interprete attraverso definizione di alcune sintassi.
 \end{block}
 
 \begin{block}{API -- agente}
@@ -192,9 +192,9 @@ Modello di coordinazione e comunicazione tra processi paralleli con memoria asso
 \\\vspace{0.2cm}
 Primitive
 \begin{itemize}
-\item in: legge la tupla e la consuma
-\item rd: legge la tupla senza consumarla
-\item out: inserisce la tupla
+\item \alert{in}: legge la tupla e la consuma
+\item \alert{rd}: legge la tupla senza consumarla
+\item \alert{out}: inserisce la tupla
 \end{itemize}
 \end{block}
 \begin{block}{Spatial Tuples}
@@ -346,9 +346,9 @@ Statico nell'ambiente, riceve la pepita tramite un messaggio.
 \frametitle{Conclusioni e lavori futuri}
 \begin{block}{Conclusioni}
 \begin{itemize}
-\item Realizzazione di interprete per programmare e simulare agenti
+\item Realizzazione di interpreti per programmare e simulare agenti
 \item Grande espressività modello e interprete (Prolog e OO)
-\item Estensione agenti in spazi di tuple 
+\item Estensione di spazi di tuple 
 \end{itemize}
 \end{block}
 \begin{block}{Lavori futuri}
