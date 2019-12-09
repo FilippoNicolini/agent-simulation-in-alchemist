@@ -58,11 +58,11 @@ Campus di Cesena}
 Nel mondo ad agenti sono presenti ambienti con focus sulla programmazione oppure con orientamento alle prestazioni delle simulazioni.
 \end{block}
 
-\begin{block}{Jason}
+\begin{block}{Esempio Jason}
 Interprete di una versione estesa di AgentSpeak che fornisce una piattaforma per sistemi multi-agente.
 \end{block}
 
-\begin{block}{Multi-Agent Research and Simulation -- MARS}
+\begin{block}{Esempio MARS}
 Piattaforma per simulazioni distribuite di agenti programmati ad alto livello.
 \end{block}
 \end{frame}
@@ -75,11 +75,11 @@ Piattaforma per simulazioni distribuite di agenti programmati ad alto livello.
 \alert{Unificare} piattaforme orientate alla \alert{programmazione di agenti} con ambienti di \alert{simulazione di agenti}.
 \end{block}
 
-\begin{block}{Ambiente}
+\begin{block}{Come}
 Per unificare programmazione e simulazione si è voluto portare il modello di agenti BDI all'interno di Alchemist.
 \end{block}
 
-\begin{block}{Interprete}
+\begin{block}{Scelte tecnologiche}
 Per portare il modello BDI in Alchemist si è scelto di utilizzare tuProlog per creare un interprete multi-paradigma.
 \end{block}
 \end{frame}
@@ -89,7 +89,7 @@ Per portare il modello BDI in Alchemist si è scelto di utilizzare tuProlog per 
 \begin{frame}
 \frametitle{Scelte tecnologiche}
 \begin{block}{Motivazione}
-Alchemist e tuProlog sono solidi e supportati da community in modo attivo: diminuisce il costo di manutenibilità del progetto. 
+Alchemist e tuProlog sono progetti solidi e sviluppati indipendentemente, il cui impiego semplifica la manutenibilità del progetto. 
 \end{block}
 
 \begin{block}{Alchemist}
@@ -114,6 +114,13 @@ Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del
 \end{block}
 \begin{block}{AgentSpeak}
 Linguaggio orientato agli agenti basato su modello BDI e programmazione logica per programmare agenti autonomi.
+\\\vspace{0.2cm}
+Struttura agente:
+\begin{itemize}
+\item \alert{stato}: informazioni su se stesso e sull'ambiente che lo circonda
+\item \alert{piani}: comportamento dell'agente per reagire ad eventi
+\item \alert{intenzioni}: istanze di piani per perseguire attivamente un goal
+\end{itemize}
 \end{block}
 \end{frame}
 
@@ -131,7 +138,7 @@ Estensione di AgentSpeak realizzando un'interprete attraverso definizione di alc
 \item inizializzazione agente
 \item invocazioni verso linguaggio OO
 \item gestione `belief base'
-\item gestione eventi e posizionamento
+\item gestione eventi e posizionamento nell'ambiente virtuale
 \end{itemize}
 \end{block}
 
@@ -152,7 +159,7 @@ Estensione di AgentSpeak realizzando un'interprete attraverso definizione di alc
 \begin{frame}
 \frametitle{Alchemist}
 \begin{block}{Alchemist}
-Simulatore per il calcolo pervasivo, aggregato e naturale che si basa su un meta-modello flessibile e che permette implementazioni di modelli diversi tra loro.
+Simulatore che si basa su un meta-modello flessibile e che permette implementazioni di modelli diversi tra loro.
 \end{block}
 \begin{block}{Meta-modello}
 \begin{itemize}
@@ -252,7 +259,7 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{block}
 
 \begin{block}{Caratteristiche mapping}
-Ricercata la massima espressività lavorando su più strati: nodo può essere inteso come device in cui operano più agenti.
+Ricercata la massima flessibilità lavorando su più strati: nodo può essere inteso come device in cui operano più agenti.
 \end{block}
 \end{frame}
 
@@ -347,7 +354,7 @@ Statico nell'ambiente, riceve la pepita tramite un messaggio.
 \begin{block}{Conclusioni}
 \begin{itemize}
 \item Realizzazione di interpreti per programmare e simulare agenti
-\item Grande espressività modello e interprete (Prolog e OO)
+\item Grande flessibilità modello e interprete (Prolog e OO)
 \item Estensione di spazi di tuple 
 \end{itemize}
 \end{block}
