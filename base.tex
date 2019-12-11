@@ -8,6 +8,8 @@
 \usepackage{xargs} % Use more than one optional parameter in a new commands % Coloured text etc.
 \usepackage[colorinlistoftodos,prependcaption]{todonotes}
 
+\usepackage{varwidth}
+
 \newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
 \newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 \newcommandx{\improvement}[2][1=]{\todo[linecolor=ForestGreen,backgroundcolor=ForestGreen!25,bordercolor=ForestGreen,#1]{#2}}
@@ -55,7 +57,7 @@ Campus di Cesena}
 \begin{frame}
 \frametitle{Contesto}
 \begin{block}{Oggi}
-Nel mondo ad agenti sono presenti ambienti con focus sulla programmazione oppure con orientamento alle prestazioni delle simulazioni.
+Nel mondo ad agenti sono presenti ambienti con focus sulla programmazione oppure con orientamento alle simulazioni.
 \end{block}
 
 \begin{block}{Esempio Jason}
@@ -110,7 +112,7 @@ Libreria Java con core minimale che include un motore Prolog utilizzabile per ap
 \begin{frame}
 \frametitle{Modello BDI, AgentSpeak}
 \begin{block}{Modello BDI}
-Modello BDI (Beliefs, Desires, Intentions) implementa gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
+Modello BDI (Beliefs, Desires, Intentions) mima gli aspetti principali del ragionamento umano per programmare agenti intelligenti.
 \end{block}
 \begin{block}{AgentSpeak}
 Linguaggio orientato agli agenti basato su modello BDI e programmazione logica per programmare agenti autonomi.
@@ -129,8 +131,8 @@ Struttura agente:
 %Slide 5
 \begin{frame}
 \frametitle{Interprete tuProlog di AgentSpeak}
-\begin{block}{Formalizzazione}
-Estensione di AgentSpeak realizzando un'interprete attraverso definizione di alcune sintassi.
+\begin{block}{Modellazione}
+Riscrittura di AgentSpeak attraverso la definizione di API per la creazione di un interprete Prolog.
 \end{block}
 
 \begin{block}{API -- agente}
@@ -189,33 +191,6 @@ Simulatore che si basa su un meta-modello flessibile e che permette implementazi
 \end{figure}
 \end{frame}
 
-
-
-%Slide 9
-\begin{frame}
-\frametitle{Spazi di tuple}
-\begin{block}{LINDA}
-Modello di coordinazione e comunicazione tra processi paralleli con memoria associativa, virtuale, condivisa.
-%\\\vspace{0.2cm}
-%Primitive
-%\begin{itemize}
-%\item \alert{in}: legge la tupla e la consuma
-%\item \alert{rd}: legge la tupla senza consumarla
-%\item \alert{out}: inserisce la tupla
-%\end{itemize}
-\end{block}
-\begin{block}{Spatial Tuples}
-Estensione del modello base di tuple per i sistemi distribuiti multi-agente.
-\\
-\begin{itemize}
-\item tuple posizionate nel mondo fisico
-\item comportamento delle primitive può dipendere dalle proprietà spaziali
-\item livello virtuale che aumenta la realtà fisica
-\end{itemize}
-
-\end{block}
-\end{frame}
-
 \subsection{Implementazione}
 %Slide 10
 \begin{frame}
@@ -259,7 +234,7 @@ Operazioni che l'agente vuole eseguire per portare a termine un certo goal.
 \end{block}
 
 \begin{block}{Caratteristiche mapping}
-Ricercata la massima flessibilità lavorando su più strati: nodo può essere inteso come device in cui operano più agenti.
+Ricercata la massima flessibilità lavorando su più strati: il nodo può essere inteso come device in cui operano più agenti.
 \end{block}
 \end{frame}
 
@@ -273,16 +248,34 @@ Ricercata la massima flessibilità lavorando su più strati: nodo può essere in
 \begin{block}{Goldminers}
 Un gruppo di minatori deve recuperare pepite d'oro da miniere sparse nell'ambiente e riportarle in un deposito.
 \end{block}
+
+\begin{block}{Spatial Tuples}
+Estensione del modello LINDA per i sistemi distribuiti multi-agente.
+\begin{itemize}
+\item tuple posizionate nel mondo fisico
+\item comportamento delle primitive può dipendere dalle proprietà spaziali
+\item livello virtuale che aumenta la realtà fisica
+\end{itemize}
+\end{block}
+
 \begin{block}{Entità $\rightarrow$ ruoli}
-All'interno del problema si individuano le seguenti entità:
+Le entità sono state implementate come segue:
+\begin{varwidth}[t]{.4\textwidth}
 \begin{itemize}
 \item \alert{minatori} $\rightarrow$ \alert{agenti}
 \item pepite $\rightarrow$ tuple
+\end{itemize}
+\end{varwidth}
+\hspace{2em}
+\begin{varwidth}[t]{.4\textwidth}
+\begin{itemize}
 \item \alert{miniere} $\rightarrow$ \alert{spazi di tuple}
 \item deposito $\rightarrow$ agente
 \end{itemize}
+\end{varwidth}
 \end{block}
 \end{frame}
+
 
 %Slide 14
 \begin{frame}
@@ -355,13 +348,13 @@ Statico nell'ambiente, riceve la pepita tramite un messaggio.
 \begin{itemize}
 \item Realizzazione di interpreti per programmare e simulare agenti
 \item Grande flessibilità modello e interprete (Prolog e OO)
-\item Estensione di spazi di tuple 
+\item Mapping concettuale e tecnologico tra modello BDI e meta-modello di Alchemist
 \end{itemize}
 \end{block}
 \begin{block}{Lavori futuri}
 \begin{itemize}
-\item Implementazione interprete OO in piattaforme per ambiente reale
-\item Ricerca per migliorie sia nell'interprete Prolog che nell'interprete OO
+\item Porting dell'interprete Prolog in altre piattaforme (desktop e mobile)
+\item Generatore di codice per rendere più comoda la programmazione degli agenti
 \end{itemize}
 \end{block}
 \end{frame}
